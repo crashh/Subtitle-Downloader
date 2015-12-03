@@ -5,46 +5,36 @@ using System.Text.RegularExpressions;
 
 namespace SubtitleDownloader
 {
-    class IOParsingHelper
+    public class IOParsing
     {
         /// <summary>
-        /// Retrieves all files/directories at current set directory, excluded those which already
-        /// contains subtitles or are ignored.
+        /// Returns the given directory listing, with excluded names and, if set, folders which contain subtitles, 
+        /// removed from the list.
         /// </summary>
-        public static String[] getDirectoryListing(SettingsForm settingsForm)
+        public String[] cleanDirectoryListing(String[] dirContents, bool ignoreFlag)
         {
-            String[] directoryContents = null;
-            if (System.IO.Directory.Exists(settingsForm.torrentDownloadPath))
+            if (dirContents.Length < 1)
             {
-                directoryContents = removeFoldersWithSubtitles(
-                                                Directory.GetFileSystemEntries(settingsForm.torrentDownloadPath),
-                                                settingsForm.ignoreAlreadySubbedFolders);
+                throw new System.ArgumentException("No directory contents specified", "dirContents");
             }
-            return directoryContents;
-        }
 
-        /// <summary>
-        /// Helper method:
-        /// Remove entires that already contains subtitles, or are set to be ignored.
-        /// </summary>
-        private static String[] removeFoldersWithSubtitles(String[] directoryContents, bool ignoreFlag)
-        {
             List<String> cleanedArray = new List<String>();
             List<String> ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
-            foreach (String elem in directoryContents)
+            foreach (String elem in dirContents)
             {
-                // Attempt to get folder contents, ignore if not a folder:
                 bool subtitleExist = false;
+                // Check if directory contains subtitles:
                 try
                 {
-                    foreach (string f in Directory.GetFiles(elem))
+                    foreach (string dirEntry in Directory.GetFiles(elem))
                     {
-                        if (f.EndsWith(".srt") || f.EndsWith(".sub") || f.EndsWith(".src"))
+                        if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src"))
                         {
                             subtitleExist = true && ignoreFlag;
                         }
                     }
-                } catch (System.Exception) { /*ignore this entry*/ }
+                }
+                catch (System.Exception) { /*ignore this entry*/ }
 
                 // Add to array if ignored or had subtitle:
                 if (!subtitleExist && !ignoredFiles.Contains(Path.GetFileName(elem)) && !Path.GetFileName(elem).Contains(".srt"))
@@ -54,12 +44,10 @@ namespace SubtitleDownloader
         }
 
         /// <summary>
-        /// Attempts to isolate the gorup who released the file, to know which versio best fits this file.
+        /// Attempts to isolate the group who released the file, to know which versio best fits this file.
         /// </summary>
-        public static String[] isolateReleaseName(String[] dirContents, SettingsForm settings)
+        public String[] isolateReleaseName(String[] dirContents, List<String> expectedNames)
         {
-            // Set a series of expected names that might pop up, prioritised picks:
-            List<String> expectedNames = settings.expectedNames;
             List<String> expectedNamesSecondary = new List<String> { "TLA", "FoV", "720p", "1080p", "x264" };
             // List to story matches in, note that index maps directly to dir contents:
             List<String> releaseNames = new List<String>(); ;
@@ -67,7 +55,7 @@ namespace SubtitleDownloader
             foreach (String elem in dirContents)
             {
                 bool nameFound = false;
-                String[] split = Path.GetFileName(elem).Split(new char[] {'.', '-', '_', '[', ']', ' '});
+                String[] split = Path.GetFileName(elem).Split(new char[] { '.', '-', '_', '[', ']', ' ' });
 
                 // Look at each split element and check if match pre-set names:
                 foreach (String del in split)
@@ -108,7 +96,7 @@ namespace SubtitleDownloader
         /// Attempts to isolate episode number, if one exists.
         /// </summary>
         /// <returns></returns>
-        public static String[] isolateEpisodeNumber(String[] dirContents)
+        public String[] isolateEpisodeNumber(String[] dirContents)
         {
             List<String> episodeNumber = new List<String>(); ;
 
@@ -124,7 +112,7 @@ namespace SubtitleDownloader
         /// <summary>
         /// Attempts to isolate the actual name of the file entry.
         /// </summary>
-        public static String[] isolateTitleName(String[] dirContents)
+        public String[] isolateTitleName(String[] dirContents)
         {
             List<String> titleNames = new List<String>(); ;
 
@@ -138,7 +126,8 @@ namespace SubtitleDownloader
                 {
                     // TODO: This is very fragile, find another way.
                     if (del.Contains("S0") || del.Contains("S1") || del.Contains("201") || del.Contains("200") || del.Contains("199")
-                        || del.Contains("720") || del.Contains("1080") || del.Contains("HDTV")) break;
+                        || del.Contains("720") || del.Contains("1080") || del.Contains("HDTV"))
+                        break;
                     concatName += del + " ";
                 }
 
@@ -151,18 +140,15 @@ namespace SubtitleDownloader
         /// <summary>
         /// Checks wether a given path points to a file or a folder. Always returns path to the folder.
         /// </summary>
-        public static String checkFolderOrFile(String path)
+        public String getPath(String path)
         {
             if (path.Contains(".mkv") || path.Contains(".mp4") || path.Contains(".avi"))
             {
                 // Path points directly to a file:
                 return path.Substring(0, (path.Length - Path.GetFileName(path).Length) - 1);
-            }           
-            else
-            {
-                // Path points to a folder:
-                return path;
-            }                         
+            }
+            // Path points to a folder:
+            return path;
         }
     }
 }

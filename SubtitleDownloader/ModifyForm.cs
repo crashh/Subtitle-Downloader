@@ -46,6 +46,9 @@ namespace SubtitleDownloader
             addBtn.Visible = false;
         }
 
+        /// <summary>
+        /// OK Button
+        /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             this.returnValue1 = textBox1.Text;
@@ -55,11 +58,17 @@ namespace SubtitleDownloader
             this.DialogResult = DialogResult.OK;
         }
 
+        /// <summary>
+        /// Cancel Button
+        /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
         }
 
+        /// <summary>
+        /// Add new release name inpit field
+        /// </summary>
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             addBtn.Visible = true;
@@ -70,6 +79,9 @@ namespace SubtitleDownloader
             sf.addExpectedName(textBox3.Text);
         }
 
+        /// <summary>
+        /// Allows window to be moved.
+        /// </summary>
         private void ModifyForm_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

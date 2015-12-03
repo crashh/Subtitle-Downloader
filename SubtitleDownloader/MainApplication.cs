@@ -9,7 +9,7 @@ namespace SubtitleDownloader
     {
 
         SettingsForm settingsForm = new SettingsForm();
-        String[] directoryContents;
+        String[] dirContents;
         String[] titleName;
         String[] releaseName;
         String[] episode;
@@ -30,7 +30,7 @@ namespace SubtitleDownloader
             listView1.Columns.Add("Content missing subtitles:");
             listView1.Columns.Add("Est. Title Name");
             listView1.Columns.Add("Est. Release Name");
-            listView1.Columns.Add("Episode");            
+            listView1.Columns.Add("Episode");
         }
         private void MainApplication_Load(object sender, EventArgs e)
         {
@@ -56,17 +56,21 @@ namespace SubtitleDownloader
             listView1.Items.Clear();
 
             // Retrieve and list all content in folder:
-            if (settingsForm.torrentDownloadPath != "no directory path set")
+            IOParsing ioParsing = new IOParsing();
+            if (System.IO.Directory.Exists(settingsForm.torrentDownloadPath))
             {
-                directoryContents = IOParsingHelper.getDirectoryListing(settingsForm);
-                titleName = IOParsingHelper.isolateTitleName(directoryContents);
-                releaseName = IOParsingHelper.isolateReleaseName(directoryContents, settingsForm);
-                episode = IOParsingHelper.isolateEpisodeNumber(directoryContents);                
+                dirContents = ioParsing.cleanDirectoryListing(
+                    Directory.GetFileSystemEntries(settingsForm.torrentDownloadPath),
+                    settingsForm.ignoreAlreadySubbedFolders);
 
-                for (int i = 0; i < directoryContents.Length; i++)
+                titleName = ioParsing.isolateTitleName(dirContents);                
+                episode = ioParsing.isolateEpisodeNumber(dirContents);
+                releaseName = ioParsing.isolateReleaseName(dirContents, settingsForm.expectedNames);
+
+                for (int i = 0; i < dirContents.Length; i++)
                 {
                     ListViewItem row = new ListViewItem();
-                    row.Text = (Path.GetFileName(directoryContents[i]));
+                    row.Text = (Path.GetFileName(dirContents[i]));
                     row.SubItems.Add(titleName[i]);
                     row.SubItems.Add(Path.GetFileName(releaseName[i]));
                     row.SubItems.Add(episode[i]);
@@ -79,7 +83,7 @@ namespace SubtitleDownloader
             {
                 listView1.ForeColor = System.Drawing.Color.Red;
                 ListViewItem row = new ListViewItem();
-                row.Text = "Please set a directory, in settings.";
+                row.Text = "Invalid directory, please set a directory in settings.";
                 listView1.Items.Add(row);
                 listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
@@ -94,7 +98,7 @@ namespace SubtitleDownloader
             listView1.ForeColor = System.Drawing.Color.Black;
             listView1.Items.Clear();
 
-            if (directoryContents.Length == 0)
+            if (dirContents.Length == 0)
             {
                 listView1.ForeColor = System.Drawing.Color.Red;
                 ListViewItem row = new ListViewItem();
@@ -102,10 +106,10 @@ namespace SubtitleDownloader
                 listView1.Items.Add(row);
             }
 
-            for (int i = 0; i < directoryContents.Length; i++)
+            for (int i = 0; i < dirContents.Length; i++)
             {
                 ListViewItem row = new ListViewItem();
-                row.Text = (Path.GetFileName(directoryContents[i]));
+                row.Text = (Path.GetFileName(dirContents[i]));
                 row.SubItems.Add(titleName[i]);
                 row.SubItems.Add(Path.GetFileName(releaseName[i]));
                 row.SubItems.Add(episode[i]);
@@ -127,7 +131,7 @@ namespace SubtitleDownloader
             // Search for the given file:
             // And attempt to pick correct entry (if 1 exact, just pick it, otherwise might have to ask user?):
             textBoxProgress.Text += "Querying for " + titleName[selectedEntry] + "...\r\n\r\n";
-            String searchQuery = WebFetchHelper.accessWeb("http://subscene.com/subtitles/title?q=" + titleName[selectedEntry] + "&l=");            
+            String searchQuery = WebFetchHelper.accessWeb("http://subscene.com/subtitles/title?q=" + titleName[selectedEntry] + "&l=");
             String[] searchResult = WebFetchHelper.findCorrectEntry(searchQuery);
             textBoxProgress.Text += "Found " + searchResult.Length + " possible results...\r\n\r\n";
 
@@ -148,7 +152,7 @@ namespace SubtitleDownloader
 
             // Find correct subtitle (look under language and then filename entry):
             textBoxProgress.Text += "Querying for subtitles to " + searchResultPicked + "...\r\n\r\n";
-            String findSubQuery = WebFetchHelper.accessWeb("http://subscene.com/subtitles/" + searchResultPicked);            
+            String findSubQuery = WebFetchHelper.accessWeb("http://subscene.com/subtitles/" + searchResultPicked);
             String correctSub = WebFetchHelper.findCorrectSub(findSubQuery, releaseName[selectedEntry], episode[selectedEntry]);
             if (correctSub != null)
                 textBoxProgress.Text += "Found possible match...\r\n\r\n";
@@ -163,24 +167,24 @@ namespace SubtitleDownloader
 
             // Initiate the download:
             textBoxProgress.Text += "Querying download page...\r\n\r\n";
-            String downloadPageQuery = WebFetchHelper.accessWeb("http://subscene.com/" + correctSub);            
+            String downloadPageQuery = WebFetchHelper.accessWeb("http://subscene.com/" + correctSub);
             String downloadLink = WebFetchHelper.findDownloadLink(downloadPageQuery);
             bool result = WebFetchHelper.downloadFile(
-                "http://subscene.com" + downloadLink, directoryContents[selectedEntry], titleName[selectedEntry]
+                "http://subscene.com" + downloadLink, dirContents[selectedEntry], titleName[selectedEntry]
             );
 
             if (result)
             {
                 textBoxProgress.Text += "SUCCESS! Subtitle downloaded!\r\n\r\n";
-                textBoxProgress.Text += "Unpacking rar file..\r\n\r\n";                
-                WebFetchHelper.unrarFile(directoryContents[selectedEntry]);
+                textBoxProgress.Text += "Unpacking rar file..\r\n\r\n";
+                WebFetchHelper.unrarFile(dirContents[selectedEntry]);
             }
             else
             {
                 textBoxProgress.Text += "FAILURE! Error downloading subtitle!";
                 textBoxProgress.ForeColor = System.Drawing.Color.Red;
             }
-            
+
         }
 
         /// <summary>
@@ -189,12 +193,13 @@ namespace SubtitleDownloader
         private void listView1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count > 0)
-            {                
+            {
                 btnModify.Visible = true;
                 btnDownload.Enabled = true;
                 btnOpenFolder.Visible = true;
                 selectedEntry = listView1.SelectedItems[0].Index;
-            }else
+            }
+            else
             {
                 btnModify.Visible = false;
                 btnDownload.Enabled = false;
@@ -208,15 +213,15 @@ namespace SubtitleDownloader
         /// </summary>
         private void btnModify_Click(object sender, EventArgs e)
         {
-            if (directoryContents == null) return;
+            if (dirContents == null) return;
 
             ModifyForm modify = new ModifyForm(
-                directoryContents[selectedEntry], titleName[selectedEntry], releaseName[selectedEntry], episode[selectedEntry], settingsForm
+                dirContents[selectedEntry], titleName[selectedEntry], releaseName[selectedEntry], episode[selectedEntry], settingsForm
             );
             modify.ShowDialog();
             if (modify.DialogResult == DialogResult.OK)
             {
-                directoryContents[selectedEntry] = modify.returnValue1;
+                dirContents[selectedEntry] = modify.returnValue1;
                 titleName[selectedEntry] = modify.returnValue2;
                 releaseName[selectedEntry] = modify.returnValue3;
                 episode[selectedEntry] = modify.returnValue4;
@@ -256,7 +261,8 @@ namespace SubtitleDownloader
         /// </summary>
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
-            String pathToFolder = IOParsingHelper.checkFolderOrFile(directoryContents[selectedEntry]);
+            IOParsing ioParsing = new IOParsing();
+            String pathToFolder = ioParsing.getPath(dirContents[selectedEntry]);
             Process.Start(pathToFolder);
         }
     }

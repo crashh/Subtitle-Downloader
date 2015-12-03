@@ -84,7 +84,8 @@ namespace SubtitleDownloader
             {
                 try
                 {
-                    String pathToFolder = IOParsingHelper.checkFolderOrFile(path);
+                    IOParsing ioParser = new IOParsing();
+                    String pathToFolder = ioParser.getPath(path);
                     client.DownloadFile(url, pathToFolder + "/autosub-pull.rar");
                 } catch (System.Exception e)
                 {
@@ -113,14 +114,21 @@ namespace SubtitleDownloader
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
 
-            String pathToFolder = IOParsingHelper.checkFolderOrFile(location);
-            cmd.StandardInput.WriteLine("cd " + pathToFolder);
+            IOParsing ioParser = new IOParsing();
+            String pathToFolder = ioParser.getPath(location);
+
+            if (pathToFolder.Substring(0,1) != "C")
+            {
+                cmd.StandardInput.WriteLine(pathToFolder.Substring(0, 1) + ":");
+            }
+
+            cmd.StandardInput.WriteLine("cd \"" + pathToFolder + "\"");
             cmd.StandardInput.WriteLine("unzip \"autosub-pull.rar\"");
             cmd.StandardInput.WriteLine("rm \"autosub-pull.rar\"");
             cmd.StandardInput.Flush();
             cmd.StandardInput.Close();
             cmd.WaitForExit();
-            //Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+            Console.WriteLine(cmd.StandardOutput.ReadToEnd());
         }
     }
 }
