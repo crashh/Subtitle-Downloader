@@ -16,8 +16,8 @@ namespace SubtitleDownloader
     /// </summary>
     public partial class PickEntryForm : Form
     {
-        private String[] entries;
-        private int selectedEntry;
+        private readonly String[] _entries;
+        private int _selectedEntry;
         public String ReturnValue1 { get; set; }
 
         // Variables used to relocate window:
@@ -25,7 +25,7 @@ namespace SubtitleDownloader
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
         [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
 
@@ -35,7 +35,7 @@ namespace SubtitleDownloader
         public PickEntryForm(String[] entries)
         {
             InitializeComponent();
-            this.entries = entries;            
+            this._entries = entries;            
         }
 
         /// <summary>
@@ -58,10 +58,10 @@ namespace SubtitleDownloader
             // Retrieve and list all content in folder:
             listView1.Columns.Add("Possible picks");
 
-            for (int i = 0; i < entries.Length; i++)
+            foreach (string elem in _entries)
             {
                 ListViewItem row = new ListViewItem();
-                String entry = entries[i].Replace('-', ' ');
+                String entry = elem.Replace('-', ' ');
                 row.Text = entry.First().ToString().ToUpper() + entry.Substring(1);
                 listView1.Items.Add(row);
             }
@@ -74,7 +74,7 @@ namespace SubtitleDownloader
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            this.ReturnValue1 = entries[selectedEntry];
+            this.ReturnValue1 = _entries[_selectedEntry];
             this.DialogResult = DialogResult.OK;
         }
 
@@ -85,7 +85,7 @@ namespace SubtitleDownloader
         {
             if (listView1.SelectedItems.Count > 0)
             {
-                selectedEntry = listView1.SelectedItems[0].Index;
+                _selectedEntry = listView1.SelectedItems[0].Index;
                 btnOK.Enabled = true;
             }
             else

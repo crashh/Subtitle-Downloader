@@ -4,34 +4,43 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SubtitleDownloader
 {
-    class WebFetchHelper
+    class WebCrawler
     {
+        private String HTML { get; set; }
+
         /// <summary>
-        /// Access a webpage and returns all contents as a String.
+        /// Access given URL and retrieves the HTML source.
         /// </summary>
-        public static String accessWeb(String URL)
+        public void RetrieveHtmlAtUrl(String url)
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(URL);
-            myRequest.Method = "GET";
-            WebResponse myResponse = myRequest.GetResponse();
-            StreamReader sr = new StreamReader(myResponse.GetResponseStream(), System.Text.Encoding.UTF8);
-            string result = sr.ReadToEnd();
-            sr.Close();
-            myResponse.Close();
-            return result;
+            try
+            {
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+                myRequest.Method = "GET";
+                WebResponse myResponse = myRequest.GetResponse();
+                StreamReader streamReader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+                HTML = streamReader.ReadToEnd();
+                streamReader.Close();
+                myResponse.Close();
+            }
+            catch (Exception)
+            {
+                // Let it happen.
+            }
         }
 
         /// <summary>
-        /// Given an entire webpages HTML source as a string.
         /// Finds search results and returns them in an array.
+        /// Note: Retrieve correct HTML first.
         /// </summary>
-        public static String[] findCorrectEntry(String webContents)
+        public String[] PickCorrectSearchEntry()
         {
-            MatchCollection allMatches = Regex.Matches(webContents, @"/subtitles/(.+?)"">");
+            MatchCollection allMatches = Regex.Matches(HTML, @"/subtitles/(.+?)"">");
             HashSet<String> matchesWithoutDuplicates = new HashSet<string>();
             for (int i = 0; i < allMatches.Count; i++)
             {
@@ -45,13 +54,13 @@ namespace SubtitleDownloader
         }
 
         /// <summary>
-        /// Given an entire webpages HTML source as a string.
         /// Find the correct subtitle link, ie. english and correct release.
+        /// Note: Retrieve correct HTML first.
         /// TODO: Look for non-hearing impaired first.
         /// </summary>
-        internal static string findCorrectSub(String findCorrectSub, string releaseName, string episode)
+        public string PickCorrectSubtitle(string releaseName, string episode)
         {
-            MatchCollection allMatches = Regex.Matches(findCorrectSub, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
+            MatchCollection allMatches = Regex.Matches(HTML, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
             for (int i = 0; i < allMatches.Count; i++)
             {
                 String singleMatch = allMatches[i].ToString();
@@ -65,29 +74,30 @@ namespace SubtitleDownloader
         }
 
         /// <summary>
-        /// Given an entire webpages HTML source as a string.
         /// Find the download link on the page and returns it.
+        /// Note: Retrieve correct HTML first.
         /// </summary>
-        internal static string findDownloadLink(string downloadPage)
+        public string FindDownloadUrl()
         {
-            Match onlyMatch = Regex.Match(downloadPage, @"/subtitle/download(.+?)""", RegexOptions.Singleline);
+            Match onlyMatch = Regex.Match(HTML, @"/subtitle/download(.+?)""", RegexOptions.Singleline);
             return onlyMatch.ToString().Substring(0,onlyMatch.ToString().Length-1);
         }
 
         /// <summary>
-        /// Initiates download of the given URL and moves it to correct directory when done.
+        /// Initiates download of the given url and moves it to correct directory when done.
+        /// Note: Retrieve correct HTML first.
         /// </summary>
-        public static bool downloadFile(string url, string path, string name)
+        public bool InitiateDownload(string url, string path, string name)
         {
             // Create an instance of WebClient
-            using (var client = new WebClient())
+            using (WebClient client = new WebClient())
             {
                 try
                 {
                     IOParsing ioParser = new IOParsing();
-                    String pathToFolder = ioParser.getPath(path);
+                    String pathToFolder = ioParser.GetPath(path);
                     client.DownloadFile(url, pathToFolder + "/autosub-pull.rar");
-                } catch (System.Exception e)
+                } catch (Exception e)
                 {
                     //Write exception dump.
                     TextWriter settingsFile = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "SubDownloaderDUMP.txt", true);
@@ -104,7 +114,7 @@ namespace SubtitleDownloader
         /// Unrars the file at specified location.
         /// Note: this does not wait for download to complete, so might not always work.
         /// </summary>
-        public static void unrarFile(String location)
+        public void UnrarFile(String location)
         {
             Process cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
@@ -115,7 +125,7 @@ namespace SubtitleDownloader
             cmd.Start();
 
             IOParsing ioParser = new IOParsing();
-            String pathToFolder = ioParser.getPath(location);
+            String pathToFolder = ioParser.GetPath(location);
 
             if (pathToFolder.Substring(0,1) != "C")
             {

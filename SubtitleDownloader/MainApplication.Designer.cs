@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainApplication));
             this.currentPathLabel = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewDirContents = new System.Windows.Forms.ListView();
             this.btnDownload = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
             this.errorLabel = new System.Windows.Forms.Label();
@@ -58,21 +58,21 @@
             this.currentPathLabel.TabIndex = 1;
             this.currentPathLabel.Text = "Current path: ";
             // 
-            // listView1
+            // listViewDirContents
             // 
-            this.listView1.BackColor = System.Drawing.Color.White;
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listView1.Font = new System.Drawing.Font("Rockwell", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(252, 0);
-            this.listView1.Margin = new System.Windows.Forms.Padding(0);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 625);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged_1);
+            this.listViewDirContents.BackColor = System.Drawing.Color.White;
+            this.listViewDirContents.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listViewDirContents.Font = new System.Drawing.Font("Rockwell", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewDirContents.FullRowSelect = true;
+            this.listViewDirContents.Location = new System.Drawing.Point(252, 0);
+            this.listViewDirContents.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewDirContents.MultiSelect = false;
+            this.listViewDirContents.Name = "listViewDirContents";
+            this.listViewDirContents.Size = new System.Drawing.Size(800, 625);
+            this.listViewDirContents.TabIndex = 4;
+            this.listViewDirContents.UseCompatibleStateImageBehavior = false;
+            this.listViewDirContents.View = System.Windows.Forms.View.Details;
+            this.listViewDirContents.SelectedIndexChanged += new System.EventHandler(this.listViewDirContents_SelectedIndexChanged_1);
             // 
             // btnDownload
             // 
@@ -231,7 +231,7 @@
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.btnModify);
             this.Controls.Add(this.btnDownload);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listViewDirContents);
             this.Controls.Add(this.currentPathLabel);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
@@ -252,7 +252,7 @@
 
         #endregion
         private System.Windows.Forms.Label currentPathLabel;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewDirContents;
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Button btnModify;
         private System.Windows.Forms.Label errorLabel;

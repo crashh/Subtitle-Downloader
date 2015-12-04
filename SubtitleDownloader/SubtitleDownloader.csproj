@@ -97,7 +97,7 @@
     <Compile Include="PickEntryForm.Designer.cs">
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebFetchHelper.cs" />
+    <Compile Include="WebCrawler.cs" />
     <Compile Include="IOParsing.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>

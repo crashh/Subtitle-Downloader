@@ -14,7 +14,7 @@ namespace ParsingTests
             String pathToD = @"D:\folder\folder.name.with[special]-characters001\";
             String pathToFile = @"D:\folder\folder.name.with[special]-characters001\file_ending.mkv";
 
-            //IOParsingHelper.getPath(pathToC);
+            //IOParsingHelper.GetPath(pathToC);
         }
     }
 }

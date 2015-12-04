@@ -11,11 +11,11 @@ namespace SubtitleDownloader
         /// Returns the given directory listing, with excluded names and, if set, folders which contain subtitles, 
         /// removed from the list.
         /// </summary>
-        public String[] cleanDirectoryListing(String[] dirContents, bool ignoreFlag)
+        public String[] CleanDirectoryListing(String[] dirContents, bool ignoreFlag)
         {
             if (dirContents.Length < 1)
             {
-                throw new System.ArgumentException("No directory contents specified", "dirContents");
+                throw new ArgumentException("No directory contents specified", nameof(dirContents));
             }
 
             List<String> cleanedArray = new List<String>();
@@ -24,20 +24,21 @@ namespace SubtitleDownloader
             {
                 bool subtitleExist = false;
                 // Check if directory contains subtitles:
-                try
+                if (Directory.Exists(elem))
                 {
                     foreach (string dirEntry in Directory.GetFiles(elem))
                     {
+                        
                         if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src"))
                         {
-                            subtitleExist = true && ignoreFlag;
+                            subtitleExist = ignoreFlag;
                         }
                     }
                 }
-                catch (System.Exception) { /*ignore this entry*/ }
 
                 // Add to array if ignored or had subtitle:
-                if (!subtitleExist && !ignoredFiles.Contains(Path.GetFileName(elem)) && !Path.GetFileName(elem).Contains(".srt"))
+                string fileName = Path.GetFileName(elem);
+                if (fileName != null && (!subtitleExist && !ignoredFiles.Contains(fileName) && !fileName.Contains(".srt")))
                     cleanedArray.Add(elem);
             }
             return cleanedArray.ToArray();
@@ -46,16 +47,18 @@ namespace SubtitleDownloader
         /// <summary>
         /// Attempts to isolate the group who released the file, to know which versio best fits this file.
         /// </summary>
-        public String[] isolateReleaseName(String[] dirContents, List<String> expectedNames)
+        public String[] IsolateReleaseName(String[] dirContents, List<String> expectedNames)
         {
             List<String> expectedNamesSecondary = new List<String> { "TLA", "FoV", "720p", "1080p", "x264" };
             // List to story matches in, note that index maps directly to dir contents:
-            List<String> releaseNames = new List<String>(); ;
+            List<String> releaseNames = new List<String>();
 
             foreach (String elem in dirContents)
             {
                 bool nameFound = false;
-                String[] split = Path.GetFileName(elem).Split(new char[] { '.', '-', '_', '[', ']', ' ' });
+                string fileName = Path.GetFileName(elem);
+                if (fileName == null) continue;
+                String[] split = fileName.Split('.', '-', '_', '[', ']', ' ');
 
                 // Look at each split element and check if match pre-set names:
                 foreach (String del in split)
@@ -96,9 +99,9 @@ namespace SubtitleDownloader
         /// Attempts to isolate episode number, if one exists.
         /// </summary>
         /// <returns></returns>
-        public String[] isolateEpisodeNumber(String[] dirContents)
+        public String[] IsolateEpisodeNumber(String[] dirContents)
         {
-            List<String> episodeNumber = new List<String>(); ;
+            List<String> episodeNumber = new List<String>();
 
             foreach (String elem in dirContents)
             {
@@ -112,13 +115,15 @@ namespace SubtitleDownloader
         /// <summary>
         /// Attempts to isolate the actual name of the file entry.
         /// </summary>
-        public String[] isolateTitleName(String[] dirContents)
+        public String[] IsolateTitleName(String[] dirContents)
         {
-            List<String> titleNames = new List<String>(); ;
+            List<String> titleNames = new List<String>();
 
             foreach (String elem in dirContents)
             {
-                String[] split = Path.GetFileName(elem).Split(new char[] { '.', '-', '_', '[', ']', ' ' });
+                string fileName = Path.GetFileName(elem);
+                if (fileName == null) continue;
+                String[] split = fileName.Split('.', '-', '_', '[', ']', ' ');
                 String concatName = "";
 
                 // Assume name starts at beginning and ends when specific keywords show instead:
@@ -140,7 +145,7 @@ namespace SubtitleDownloader
         /// <summary>
         /// Checks wether a given path points to a file or a folder. Always returns path to the folder.
         /// </summary>
-        public String getPath(String path)
+        public String GetPath(String path)
         {
             if (path.Contains(".mkv") || path.Contains(".mp4") || path.Contains(".avi"))
             {
