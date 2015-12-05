@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PickEntryForm));
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewEntryListing = new System.Windows.Forms.ListView();
             this.btnOK = new System.Windows.Forms.Button();
             this.labelHelper = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // listView1
+            // listViewEntryListing
             // 
-            this.listView1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.listView1.Font = new System.Drawing.Font("Rockwell", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.Location = new System.Drawing.Point(12, 67);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(351, 263);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listViewEntryListing.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.listViewEntryListing.Font = new System.Drawing.Font("Rockwell", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewEntryListing.Location = new System.Drawing.Point(12, 67);
+            this.listViewEntryListing.Name = "listViewEntryListing";
+            this.listViewEntryListing.Size = new System.Drawing.Size(351, 263);
+            this.listViewEntryListing.TabIndex = 0;
+            this.listViewEntryListing.UseCompatibleStateImageBehavior = false;
+            this.listViewEntryListing.SelectedIndexChanged += new System.EventHandler(this.listViewEntryListing_SelectedIndexChanged);
             // 
             // btnOK
             // 
@@ -96,7 +96,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.labelHelper);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listViewEntryListing);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "PickEntryForm";
@@ -111,7 +111,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewEntryListing;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label labelHelper;
         private System.Windows.Forms.Label label5;

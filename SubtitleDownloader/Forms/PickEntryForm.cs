@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
@@ -43,30 +37,30 @@ namespace SubtitleDownloader
         /// </summary>
         private void PickEntry_Load(object sender, EventArgs e)
         {
-            updateListView();
+            UpdateListView();
         }
 
         /// <summary>
         /// Updates the content in listview, so user can select correct search result.
         /// </summary>
         /// <returns>Returns the correct entry picked by user as a String.</returns>
-        private void updateListView()
+        private void UpdateListView()
         {
-            listView1.Items.Clear();
-            listView1.View = View.Details;
+            listViewEntryListing.Items.Clear();
+            listViewEntryListing.View = View.Details;
 
             // Retrieve and list all content in folder:
-            listView1.Columns.Add("Possible picks");
+            listViewEntryListing.Columns.Add("Possible picks");
 
             foreach (string elem in _entries)
             {
                 ListViewItem row = new ListViewItem();
                 String entry = elem.Replace('-', ' ');
                 row.Text = entry.First().ToString().ToUpper() + entry.Substring(1);
-                listView1.Items.Add(row);
+                listViewEntryListing.Items.Add(row);
             }
 
-            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listViewEntryListing.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         /// <summary>
@@ -81,11 +75,11 @@ namespace SubtitleDownloader
         /// <summary>
         /// Listener that will be run when the user selects something in the window.
         /// </summary>
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listViewEntryListing_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
+            if (listViewEntryListing.SelectedItems.Count > 0)
             {
-                _selectedEntry = listView1.SelectedItems[0].Index;
+                _selectedEntry = listViewEntryListing.SelectedItems[0].Index;
                 btnOK.Enabled = true;
             }
             else

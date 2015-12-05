@@ -85,41 +85,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModifyForm.cs">
+    <Compile Include="Forms\ModifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModifyForm.Designer.cs">
+    <Compile Include="Forms\ModifyForm.Designer.cs">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PickEntryForm.cs">
+    <Compile Include="Forms\PickEntryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PickEntryForm.Designer.cs">
+    <Compile Include="Forms\PickEntryForm.Designer.cs">
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="WebCrawler.cs" />
-    <Compile Include="IOParsing.cs" />
-    <Compile Include="SettingsForm.cs">
+    <Compile Include="Services\UtilityService.cs" />
+    <Compile Include="Services\WebCrawlerService.cs" />
+    <Compile Include="Services\IOParsingService.cs" />
+    <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingsForm.Designer.cs">
+    <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainApplication.cs">
+    <Compile Include="Forms\MainApplication.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainApplication.Designer.cs">
+    <Compile Include="Forms\MainApplication.Designer.cs">
       <DependentUpon>MainApplication.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainApplication.resx">
+    <EmbeddedResource Include="Forms\MainApplication.resx">
       <DependentUpon>MainApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ModifyForm.resx">
+    <EmbeddedResource Include="Forms\ModifyForm.resx">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PickEntryForm.resx">
+    <EmbeddedResource Include="Forms\PickEntryForm.resx">
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -131,10 +132,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SettingsForm.en.resx">
+    <EmbeddedResource Include="Forms\SettingsForm.en.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -146,7 +147,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="SubtitleDownloader_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -166,6 +166,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

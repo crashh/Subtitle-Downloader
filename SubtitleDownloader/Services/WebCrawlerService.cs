@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using SubtitleDownloader.Services;
 
 namespace SubtitleDownloader
 {
-    class WebCrawler
+    class WebCrawlerService
     {
         private String HTML { get; set; }
 
@@ -20,9 +20,9 @@ namespace SubtitleDownloader
         {
             try
             {
-                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
-                myRequest.Method = "GET";
-                WebResponse myResponse = myRequest.GetResponse();
+                HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                httpRequest.Method = "GET";
+                WebResponse myResponse = httpRequest.GetResponse();
                 StreamReader streamReader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
                 HTML = streamReader.ReadToEnd();
                 streamReader.Close();
@@ -60,13 +60,15 @@ namespace SubtitleDownloader
         /// </summary>
         public string PickCorrectSubtitle(string releaseName, string episode)
         {
-            MatchCollection allMatches = Regex.Matches(HTML, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
+            MatchCollection allMatches = 
+                Regex.Matches(HTML, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
             for (int i = 0; i < allMatches.Count; i++)
             {
                 String singleMatch = allMatches[i].ToString();
-                if (singleMatch.Contains("English") && singleMatch.Contains(releaseName) && singleMatch.Contains(episode))
+                if (singleMatch.Contains("English") && singleMatch.Contains("positive-icon") &&
+                    singleMatch.Contains(releaseName) && singleMatch.Contains(episode))
                 {
-                    String correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString(); // TODO: Could be improved in runtime.
+                    String correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString(); 
                     return correct.Substring(0, correct.Length-2);
                 }
             }
@@ -89,13 +91,13 @@ namespace SubtitleDownloader
         /// </summary>
         public bool InitiateDownload(string url, string path, string name)
         {
-            // Create an instance of WebClient
             using (WebClient client = new WebClient())
             {
                 try
                 {
-                    IOParsing ioParser = new IOParsing();
-                    String pathToFolder = ioParser.GetPath(path);
+                    UtilityService utilSerivce = new UtilityService();
+                    String pathToFolder = utilSerivce.GetPath(path);
+                    if (!Directory.Exists(pathToFolder)) { return false; }
                     client.DownloadFile(url, pathToFolder + "/autosub-pull.rar");
                 } catch (Exception e)
                 {
@@ -108,37 +110,6 @@ namespace SubtitleDownloader
                 
                 return true;                
             }
-        }
-
-        /// <summary>
-        /// Unrars the file at specified location.
-        /// Note: this does not wait for download to complete, so might not always work.
-        /// </summary>
-        public void UnrarFile(String location)
-        {
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
-
-            IOParsing ioParser = new IOParsing();
-            String pathToFolder = ioParser.GetPath(location);
-
-            if (pathToFolder.Substring(0,1) != "C")
-            {
-                cmd.StandardInput.WriteLine(pathToFolder.Substring(0, 1) + ":");
-            }
-
-            cmd.StandardInput.WriteLine("cd \"" + pathToFolder + "\"");
-            cmd.StandardInput.WriteLine("unzip \"autosub-pull.rar\"");
-            cmd.StandardInput.WriteLine("rm \"autosub-pull.rar\"");
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            cmd.WaitForExit();
-            Console.WriteLine(cmd.StandardOutput.ReadToEnd());
         }
     }
 }

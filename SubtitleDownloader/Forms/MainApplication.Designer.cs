@@ -72,7 +72,7 @@
             this.listViewDirContents.TabIndex = 4;
             this.listViewDirContents.UseCompatibleStateImageBehavior = false;
             this.listViewDirContents.View = System.Windows.Forms.View.Details;
-            this.listViewDirContents.SelectedIndexChanged += new System.EventHandler(this.listViewDirContents_SelectedIndexChanged_1);
+            this.listViewDirContents.SelectedIndexChanged += new System.EventHandler(this.listViewDirContents_SelectedIndexChanged);
             // 
             // btnDownload
             // 

@@ -67,7 +67,7 @@
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(404, 20);
             this.textBox3.TabIndex = 2;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.textBox3.TextChanged += new System.EventHandler(this.textBoxReleaseName_TextChanged);
             // 
             // textBox4
             // 
@@ -136,7 +136,7 @@
             this.okBtn.TabIndex = 8;
             this.okBtn.Text = "OK";
             this.okBtn.UseVisualStyleBackColor = false;
-            this.okBtn.Click += new System.EventHandler(this.button1_Click);
+            this.okBtn.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // cancelBtn
             // 
@@ -149,7 +149,7 @@
             this.cancelBtn.TabIndex = 9;
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = false;
-            this.cancelBtn.Click += new System.EventHandler(this.button2_Click);
+            this.cancelBtn.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // addBtn
             // 

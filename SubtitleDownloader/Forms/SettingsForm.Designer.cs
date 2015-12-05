@@ -51,7 +51,6 @@
             this.locationLabel.Size = new System.Drawing.Size(81, 16);
             this.locationLabel.TabIndex = 0;
             this.locationLabel.Text = "Path to folder";
-            this.locationLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // locationBox
             // 
@@ -61,7 +60,6 @@
             this.locationBox.Name = "locationBox";
             this.locationBox.Size = new System.Drawing.Size(282, 20);
             this.locationBox.TabIndex = 1;
-            this.locationBox.TextChanged += new System.EventHandler(this.locationBox_TextChanged);
             // 
             // btnOK
             // 
