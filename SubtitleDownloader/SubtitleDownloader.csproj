@@ -85,42 +85,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\ModifyForm.cs">
+    <Compile Include="Source\Forms\ModifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ModifyForm.Designer.cs">
+    <Compile Include="Source\Forms\ModifyForm.Designer.cs">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PickEntryForm.cs">
+    <Compile Include="Source\Forms\PickEntryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PickEntryForm.Designer.cs">
+    <Compile Include="Source\Forms\PickEntryForm.Designer.cs">
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\UtilityService.cs" />
-    <Compile Include="Services\WebCrawlerService.cs" />
-    <Compile Include="Services\IOParsingService.cs" />
-    <Compile Include="Forms\SettingsForm.cs">
+    <Compile Include="Source\Services\WebAccess.cs" />
+    <Compile Include="Source\Services\IAccessService.cs" />
+    <Compile Include="Source\Services\UtilityService.cs" />
+    <Compile Include="Source\Services\AccessService.cs" />
+    <Compile Include="Source\Services\DiskAccess.cs" />
+    <Compile Include="Source\Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SettingsForm.Designer.cs">
+    <Compile Include="Source\Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainApplication.cs">
+    <Compile Include="Source\Forms\MainApplication.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainApplication.Designer.cs">
+    <Compile Include="Source\Forms\MainApplication.Designer.cs">
       <DependentUpon>MainApplication.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\MainApplication.resx">
+    <EmbeddedResource Include="Source\Forms\MainApplication.resx">
       <DependentUpon>MainApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ModifyForm.resx">
+    <EmbeddedResource Include="Source\Forms\ModifyForm.resx">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickEntryForm.resx">
+    <EmbeddedResource Include="Source\Forms\PickEntryForm.resx">
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -132,10 +134,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\SettingsForm.en.resx">
+    <EmbeddedResource Include="Source\Forms\SettingsForm.en.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsForm.resx">
+    <EmbeddedResource Include="Source\Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

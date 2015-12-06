@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace SubtitleDownloader
 {
-    public class IOParsingService
+    public class DiskAccess
     {
         public String[] DirContents { get; set; }
 
-        public IOParsingService(String[] directoryEntries)
+        public DiskAccess(String[] directoryEntries)
         {
             DirContents = directoryEntries;
         }
@@ -120,12 +120,10 @@ namespace SubtitleDownloader
                 String[] split = fileName.Split('.', '-', '_', '[', ']', ' ');
                 String concatName = "";
 
-                // Assume name starts at beginning and ends when specific keywords show instead:
+                // Assume name starts at beginning and ends when specific keywords show:
                 foreach (String del in split)
                 {
-                    // TODO: This is very fragile, find another way.
-                    if (del.Contains("S0") || del.Contains("S1") || del.Contains("201") || del.Contains("200") || del.Contains("199")
-                        || del.Contains("720") || del.Contains("1080") || del.Contains("HDTV"))
+                    if (del.Any(c => char.IsDigit(c)) || del.Contains("HDTV"))
                         break;
                     concatName += del + " ";
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using SubtitleDownloader.Services;
@@ -18,7 +19,7 @@ namespace SubtitleDownloader
         private String[] _entryReleaseGroup;
         private String[] _entryEpisode;
 
-        private int _selectedEntryInListView;
+        private int _activeEntry;
         private String _latestLookUpLink;
 
         public MainApplication()
@@ -30,7 +31,7 @@ namespace SubtitleDownloader
 
             listViewDirContents.View = View.Details;
             listViewDirContents.Columns.Add("Content missing subtitles:");
-            listViewDirContents.Columns.Add("Est. Title Name");
+            listViewDirContents.Columns.Add("Estimated Title Name");
             listViewDirContents.Columns.Add("Est. Release Name");
             listViewDirContents.Columns.Add("Episode");
         }
@@ -49,7 +50,8 @@ namespace SubtitleDownloader
             String directoryPath = settingsForm.WorkingFolderPath;
             if (Directory.Exists(directoryPath))
             {
-                if (updateFromDisk) {
+                if (updateFromDisk)
+                {
                     RetrieveDirectoryInformation();
                 }
                 AddRowsToListView();
@@ -63,7 +65,7 @@ namespace SubtitleDownloader
         private void RetrieveDirectoryInformation()
         {
             String[] allFilesAtPath = Directory.GetFileSystemEntries(settingsForm.WorkingFolderPath);
-            IOParsingService parsingService = new IOParsingService(allFilesAtPath);
+            DiskAccess parsingService = new DiskAccess(allFilesAtPath);
 
             bool ignoreFolderWithSubtitles = settingsForm.IgnoreAlreadySubbedFolders;
             parsingService.CleanDirectoryListing(ignoreFolderWithSubtitles);
@@ -76,7 +78,7 @@ namespace SubtitleDownloader
 
         private void AddRowsToListView()
         {
-            listViewDirContents.ForeColor = System.Drawing.Color.Black;
+            listViewDirContents.ForeColor = Color.Black;
             listViewDirContents.Items.Clear();
 
             for (int i = 0; i < _allDirectoryContents.Length; i++)
@@ -88,12 +90,13 @@ namespace SubtitleDownloader
                 row.SubItems.Add(_entryEpisode[i]);
                 listViewDirContents.Items.Add(row);
             }
+
             listViewDirContents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void AddRowError()
         {
-            listViewDirContents.ForeColor = System.Drawing.Color.Red;
+            listViewDirContents.ForeColor = Color.Red;
             ListViewItem row = new ListViewItem { Text = "Invalid directory, please set a directory in settings." };
             listViewDirContents.Items.Add(row);
             listViewDirContents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -122,7 +125,7 @@ namespace SubtitleDownloader
                 btnModify.Visible = true;
                 btnDownload.Enabled = true;
                 btnOpenFolder.Visible = true;
-                _selectedEntryInListView = listViewDirContents.SelectedItems[0].Index;
+                _activeEntry = listViewDirContents.SelectedItems[0].Index;
             }
             else
             {
@@ -142,20 +145,20 @@ namespace SubtitleDownloader
             if (_allDirectoryContents == null) return;
 
             ModifyForm modifyForm = new ModifyForm(
-                _allDirectoryContents[_selectedEntryInListView], 
-                _entryTitleName[_selectedEntryInListView], 
-                _entryReleaseGroup[_selectedEntryInListView], 
-                _entryEpisode[_selectedEntryInListView], 
+                _allDirectoryContents[_activeEntry],
+                _entryTitleName[_activeEntry],
+                _entryReleaseGroup[_activeEntry],
+                _entryEpisode[_activeEntry],
                 settingsForm
             );
             modifyForm.ShowDialog();
 
             if (modifyForm.DialogResult == DialogResult.OK)
             {
-                _allDirectoryContents[_selectedEntryInListView] = modifyForm.ReturnValue1;
-                _entryTitleName[_selectedEntryInListView] = modifyForm.ReturnValue2;
-                _entryReleaseGroup[_selectedEntryInListView] = modifyForm.ReturnValue3;
-                _entryEpisode[_selectedEntryInListView] = modifyForm.ReturnValue4;
+                _allDirectoryContents[_activeEntry] = modifyForm.ReturnValue1;
+                _entryTitleName[_activeEntry] = modifyForm.ReturnValue2;
+                _entryReleaseGroup[_activeEntry] = modifyForm.ReturnValue3;
+                _entryEpisode[_activeEntry] = modifyForm.ReturnValue4;
                 UpdateDirectoryListing(updateFromDisk: false);
             }
         }
@@ -172,14 +175,6 @@ namespace SubtitleDownloader
         }
 
         /// <summary>
-        /// Called when clicking exit on the menu-bar.
-        /// </summary>
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        /// <summary>
         /// Open default internet browser and last failed web lookup.
         /// </summary>
         private void btnOpenBrowser_Click(object sender, EventArgs e)
@@ -193,8 +188,17 @@ namespace SubtitleDownloader
         private void btnOpenFolder_Click(object sender, EventArgs e)
         {
             UtilityService utilService = new UtilityService();
-            String pathToFolder = utilService.GetPath(_allDirectoryContents[_selectedEntryInListView]);
+            String pathToFolder = utilService.GetPath(_allDirectoryContents[_activeEntry]);
             Process.Start(fileName: pathToFolder);
+        }
+
+
+        /// <summary>
+        /// Called when clicking exit on the menu-bar.
+        /// </summary>
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         /// <summary>
@@ -202,42 +206,46 @@ namespace SubtitleDownloader
         /// </summary>
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            textBoxProgress.ForeColor = System.Drawing.Color.ForestGreen;
+            textBoxProgress.ForeColor = Color.ForestGreen;
             textBoxProgress.Clear();
 
-            WebCrawlerService webCrawler = new WebCrawlerService();
+            IAccessService webCrawler = new AccessServiceSubscene();
 
             string[] searchResult;
-            if (!SearchForTitle(webCrawler, out searchResult)) { 
+            if (!SearchForTitle(webCrawler, out searchResult))
+            {
                 return;
             }
 
             string searchResultPicked = PickCorrectSearchResult(searchResult);
-            
+
             string correctSub;
-            if (FindMatchingSubtitle(searchResultPicked, webCrawler, out correctSub)) {
+            if (!FindMatchingSubtitle(searchResultPicked, webCrawler, out correctSub))
+            {
                 return;
             }
-            
-            if (DownloadSubtitle(webCrawler, correctSub)) {
+
+            if (DownloadSubtitle(webCrawler, correctSub))
+            {
                 return;
             }
 
             UnpackSubtitleFile();
         }
 
-        private bool SearchForTitle(WebCrawlerService webCrawler, out string[] searchResult)
+        private bool SearchForTitle(IAccessService webCrawler, out string[] searchResult)
         {
-            WriteToProgressWindow("Querying for " + _entryTitleName[_selectedEntryInListView] + "...", SUCCESS);
-            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + _entryTitleName[_selectedEntryInListView] + "&l=");
-            searchResult = webCrawler.PickCorrectSearchEntry();
+            WriteToProgressWindow("Querying for " + _entryTitleName[_activeEntry] + "...", SUCCESS);
 
-            // Check if search query was successfull:
+            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + _entryTitleName[_activeEntry] + "&l=");
+            searchResult = webCrawler.FindSearchResults();
+
             if (searchResult.Length < 1)
             {
                 WriteToProgressWindow("FAILURE! Search result gave no hits...", FAILURE);
                 return false;
             }
+
             WriteToProgressWindow("Found " + searchResult.Length + " possible results...", SUCCESS);
             return true;
         }
@@ -247,37 +255,40 @@ namespace SubtitleDownloader
             PickEntryForm pickEntryForm = new PickEntryForm(searchResult);
             pickEntryForm.ShowDialog();
             String searchResultPicked = pickEntryForm.ReturnValue1;
+
             WriteToProgressWindow("User picked " + searchResultPicked + "...", SUCCESS);
 
             _latestLookUpLink = "http://subscene.com/subtitles/" + searchResultPicked;
             return searchResultPicked;
         }
 
-        private bool FindMatchingSubtitle(string searchResultPicked, WebCrawlerService webCrawler, out string correctSub)
+        private bool FindMatchingSubtitle(string searchResultPicked, IAccessService webCrawler, out string correctSub)
         {
             WriteToProgressWindow("Querying for subtitles to " + searchResultPicked + "...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
-            correctSub = webCrawler.PickCorrectSubtitle(_entryReleaseGroup[_selectedEntryInListView], _entryEpisode[_selectedEntryInListView]);
-            if (correctSub == null)
+            correctSub = webCrawler.PickCorrectSubtitle(_entryReleaseGroup[_activeEntry], _entryEpisode[_activeEntry]);
+
+            if (correctSub.Length < 1)
             {
                 WriteToProgressWindow("FAILURE! Could not find any subtitles for this release...", FAILURE);
                 btnOpenBrowser.Visible = true;
-                return true;
+                return false;
             }
+
             WriteToProgressWindow("Found possible match...", SUCCESS);
-            return false;
+            return true;
         }
 
-        private bool DownloadSubtitle(WebCrawlerService webCrawler, string correctSub)
+        private bool DownloadSubtitle(IAccessService webCrawler, string correctSub)
         {
             WriteToProgressWindow("Querying download page...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);
             String downloadLink = webCrawler.FindDownloadUrl();
+
             bool result = webCrawler.InitiateDownload(
                 "http://subscene.com" + downloadLink,
-                _allDirectoryContents[_selectedEntryInListView],
-                _entryTitleName[_selectedEntryInListView]
-                );
+                _allDirectoryContents[_activeEntry]
+            );
 
             if (!result)
             {
@@ -285,6 +296,7 @@ namespace SubtitleDownloader
                 btnOpenBrowser.Visible = true;
                 return true;
             }
+
             WriteToProgressWindow("SUCCESS! Subtitle downloaded!", SUCCESS);
             return false;
         }
@@ -292,20 +304,28 @@ namespace SubtitleDownloader
         private void UnpackSubtitleFile()
         {
             WriteToProgressWindow("Unpacking rar file..", SUCCESS);
+
             UtilityService utilityService = new UtilityService();
-            utilityService.UnrarFile(_allDirectoryContents[_selectedEntryInListView]);
+            utilityService.UnrarFile(_allDirectoryContents[_activeEntry]);
         }
 
-        /// <summary>
-        /// Prints the given string to textbox, if parameter false is given color will turn red.
-        /// </summary>
         private void WriteToProgressWindow(String message, bool success)
         {
             if (!success)
             {
-                textBoxProgress.ForeColor = System.Drawing.Color.Red;
+                textBoxProgress.ForeColor = Color.Red;
             }
             textBoxProgress.Text += message + "\r\n\r\n";
+        }
+
+        private void subtitleSericeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            subtitleSericeToolStripMenuItem.ForeColor = Color.Black;
+        }
+
+        private void subtitleSericeToolStripMenuItem_DropDownClosed(object sender, EventArgs e)
+        {
+            subtitleSericeToolStripMenuItem.ForeColor = Color.White;
         }
     }
 }

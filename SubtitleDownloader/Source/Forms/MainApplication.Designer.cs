@@ -42,6 +42,8 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.subtitleSericeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.subsceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +70,7 @@
             this.listViewDirContents.Margin = new System.Windows.Forms.Padding(0);
             this.listViewDirContents.MultiSelect = false;
             this.listViewDirContents.Name = "listViewDirContents";
-            this.listViewDirContents.Size = new System.Drawing.Size(800, 625);
+            this.listViewDirContents.Size = new System.Drawing.Size(774, 625);
             this.listViewDirContents.TabIndex = 4;
             this.listViewDirContents.UseCompatibleStateImageBehavior = false;
             this.listViewDirContents.View = System.Windows.Forms.View.Details;
@@ -132,12 +134,12 @@
             this.textBoxProgress.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.textBoxProgress.Font = new System.Drawing.Font("Rockwell", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxProgress.ForeColor = System.Drawing.Color.ForestGreen;
-            this.textBoxProgress.Location = new System.Drawing.Point(1052, 0);
+            this.textBoxProgress.Location = new System.Drawing.Point(1026, 0);
             this.textBoxProgress.Margin = new System.Windows.Forms.Padding(0);
             this.textBoxProgress.Multiline = true;
             this.textBoxProgress.Name = "textBoxProgress";
             this.textBoxProgress.ReadOnly = true;
-            this.textBoxProgress.Size = new System.Drawing.Size(132, 625);
+            this.textBoxProgress.Size = new System.Drawing.Size(158, 625);
             this.textBoxProgress.TabIndex = 8;
             // 
             // btnOpenBrowser
@@ -178,28 +180,28 @@
             // 
             // settingsToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(69, 21);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // infoToolStripMenuItem
             // 
-            this.infoToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.infoToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.infoToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-            this.infoToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(42, 21);
             this.infoToolStripMenuItem.Text = "Info";
             this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exitToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(41, 21);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(40, 21);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -209,6 +211,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
+            this.subtitleSericeToolStripMenuItem,
             this.infoToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -217,6 +220,28 @@
             this.menuStrip1.Size = new System.Drawing.Size(1184, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // subtitleSericeToolStripMenuItem
+            // 
+            this.subtitleSericeToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
+            this.subtitleSericeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.subsceneToolStripMenuItem});
+            this.subtitleSericeToolStripMenuItem.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subtitleSericeToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.subtitleSericeToolStripMenuItem.Name = "subtitleSericeToolStripMenuItem";
+            this.subtitleSericeToolStripMenuItem.Size = new System.Drawing.Size(85, 21);
+            this.subtitleSericeToolStripMenuItem.Text = "SubsSerice";
+            this.subtitleSericeToolStripMenuItem.DropDownClosed += new System.EventHandler(this.subtitleSericeToolStripMenuItem_DropDownClosed);
+            this.subtitleSericeToolStripMenuItem.Click += new System.EventHandler(this.subtitleSericeToolStripMenuItem_Click);
+            // 
+            // subsceneToolStripMenuItem
+            // 
+            this.subsceneToolStripMenuItem.BackColor = System.Drawing.Color.Transparent;
+            this.subsceneToolStripMenuItem.Checked = true;
+            this.subsceneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.subsceneToolStripMenuItem.Name = "subsceneToolStripMenuItem";
+            this.subsceneToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.subsceneToolStripMenuItem.Text = "Subscene";
             // 
             // MainApplication
             // 
@@ -264,6 +289,8 @@
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem subtitleSericeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem subsceneToolStripMenuItem;
     }
 }
 
