@@ -98,10 +98,10 @@
       <DependentUpon>PickEntryForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Services\WebAccess.cs" />
-    <Compile Include="Source\Services\IAccessService.cs" />
+    <Compile Include="Source\Interfaces\IAccessService.cs" />
     <Compile Include="Source\Services\UtilityService.cs" />
-    <Compile Include="Source\Services\AccessService.cs" />
-    <Compile Include="Source\Services\DiskAccess.cs" />
+    <Compile Include="Source\Services\AccessServiceSubscene.cs" />
+    <Compile Include="Source\Services\ParseDirectoryContents.cs" />
     <Compile Include="Source\Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

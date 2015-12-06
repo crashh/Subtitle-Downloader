@@ -65,7 +65,7 @@ namespace SubtitleDownloader
         private void RetrieveDirectoryInformation()
         {
             String[] allFilesAtPath = Directory.GetFileSystemEntries(settingsForm.WorkingFolderPath);
-            DiskAccess parsingService = new DiskAccess(allFilesAtPath);
+            ParseDirectoryContents parsingService = new ParseDirectoryContents(allFilesAtPath);
 
             bool ignoreFolderWithSubtitles = settingsForm.IgnoreAlreadySubbedFolders;
             parsingService.CleanDirectoryListing(ignoreFolderWithSubtitles);
