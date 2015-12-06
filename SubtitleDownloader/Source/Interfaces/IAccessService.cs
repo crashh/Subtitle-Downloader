@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SubtitleDownloader.Services
+namespace SubtitleDownloader.Interfaces
 {
     internal interface IAccessService
     {
-
         /// <summary>
         /// Access given URL and retrieves the HTML source.
         /// </summary>

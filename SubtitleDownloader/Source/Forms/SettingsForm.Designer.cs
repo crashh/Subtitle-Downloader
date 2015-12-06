@@ -1,4 +1,4 @@
-﻿namespace SubtitleDownloader
+﻿namespace SubtitleDownloader.Services
 {
     partial class SettingsForm
     {

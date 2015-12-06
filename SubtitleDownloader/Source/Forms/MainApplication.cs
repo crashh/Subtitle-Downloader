@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using SubtitleDownloader.Services;
+using SubtitleDownloader.Interfaces;
 
-namespace SubtitleDownloader
+namespace SubtitleDownloader.Services
 {
     public partial class MainApplication : Form
     {

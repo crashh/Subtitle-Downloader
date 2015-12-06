@@ -4,7 +4,7 @@ using System.IO;
 
 namespace SubtitleDownloader.Services
 {
-    class UtilityService
+    public class UtilityService
     {
         /// <summary>
         /// Checks wether a given path points to a file or a folder. Always returns path to the folder.
@@ -14,7 +14,8 @@ namespace SubtitleDownloader.Services
             if (path.Contains(".mkv") || path.Contains(".mp4") || path.Contains(".avi"))
             {
                 // Path points directly to a file:
-                return path.Substring(0, (path.Length - Path.GetFileName(path).Length) - 1);
+                String newPath = path.Substring(0, (path.Length - Path.GetFileName(path).Length) - 1);
+                return newPath + @"\";
             }
             // Path already points to a folder:
             return path;

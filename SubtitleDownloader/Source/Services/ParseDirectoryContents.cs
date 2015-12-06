@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace SubtitleDownloader
+namespace SubtitleDownloader.Services
 {
     public class ParseDirectoryContents
     {
@@ -30,13 +30,14 @@ namespace SubtitleDownloader
             foreach (String elem in DirContents)
             {
                 bool subtitleExist = false;
-                if (Directory.Exists(elem))
+                if (ignoreFlag && Directory.Exists(elem))
                 {
                     foreach (string dirEntry in Directory.GetFiles(elem))
                     {
                         if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src"))
                         {
-                            subtitleExist = ignoreFlag;
+                            subtitleExist = true;
+                            break;
                         }
                     }
                 }

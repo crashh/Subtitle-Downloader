@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SubtitleDownloader.Properties
+namespace SubtitleDownloader.Services.Services.Properties
 {
 
 

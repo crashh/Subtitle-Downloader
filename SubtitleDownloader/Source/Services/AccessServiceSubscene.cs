@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SubtitleDownloader.Services;
+using SubtitleDownloader.Interfaces;
 
-namespace SubtitleDownloader
+namespace SubtitleDownloader.Services
 {
     class AccessServiceSubscene : WebAccess, IAccessService
     {
