@@ -5,11 +5,16 @@ using System.Text;
 
 namespace SubtitleDownloaderV2.Services
 {
-    internal class WebAccess
+    internal class WebAccessService
     {
-        // ReSharper disable once InconsistentNaming
         internal String HTML;
 
+        /// <summary>
+        /// Fetches HTML source code at given url
+        /// </summary>
+        /// <param name="url">
+        /// The target URL
+        /// </param>
         public void RetrieveHtmlAtUrl(String url)
         {
             try
@@ -30,6 +35,16 @@ namespace SubtitleDownloaderV2.Services
             }
         }
 
+        /// <summary>
+        /// Starts a download of the given file at target url.
+        /// </summary>
+        /// <param name="url">
+        /// Full url to target file.
+        /// </param>
+        /// <param name="path">
+        /// Full path to directory to store file at.
+        /// </param>
+        /// <returns></returns>
         public bool InitiateDownload(string url, string path)
         {
             using (WebClient client = new WebClient())

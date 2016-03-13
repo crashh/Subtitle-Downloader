@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -158,7 +159,7 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             Progress = String.Empty;
 
-            AccessServiceSubscene webCrawler = new AccessServiceSubscene();
+            SubsceneParsingService webCrawler = new SubsceneParsingService();
 
             string[] searchResult;
             if (!SearchForTitle(webCrawler, out searchResult))
@@ -186,7 +187,7 @@ namespace SubtitleDownloaderV2.ViewModel
             UnpackSubtitleFile();
         }
 
-        private bool SearchForTitle(AccessServiceSubscene webCrawler, out string[] searchResult)
+        private bool SearchForTitle(SubsceneParsingService webCrawler, out string[] searchResult)
         {
             WriteToProgressWindow("Querying for " + selectedEntry.title + "...", SUCCESS);
 
@@ -205,10 +206,19 @@ namespace SubtitleDownloaderV2.ViewModel
 
         private string PickCorrectSearchResult(string[] searchResult)
         {
+            if (searchResult.Length == 1)
+            {
+                return searchResult.First();
+            }
+
             ResultPickerView pickEntryForm = new ResultPickerView(searchResult);
             pickEntryForm.ShowDialog();
 
-            if (pickEntryForm.getReturnValue() == -1) return string.Empty;
+            if (pickEntryForm.getReturnValue() == -1)
+            {
+                pickEntryForm.Close();
+                return string.Empty;
+            }
 
             String searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
             pickEntryForm.Close();
@@ -219,7 +229,7 @@ namespace SubtitleDownloaderV2.ViewModel
             return searchResultPicked;
         }
 
-        private bool FindMatchingSubtitle(string searchResultPicked, AccessServiceSubscene webCrawler, out string correctSub)
+        private bool FindMatchingSubtitle(string searchResultPicked, SubsceneParsingService webCrawler, out string correctSub)
         {
             WriteToProgressWindow("Querying for subtitles to " + searchResultPicked + "...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
@@ -235,7 +245,7 @@ namespace SubtitleDownloaderV2.ViewModel
             return true;
         }
 
-        private bool DownloadSubtitle(AccessServiceSubscene webCrawler, string correctSub)
+        private bool DownloadSubtitle(SubsceneParsingService webCrawler, string correctSub)
         {
             WriteToProgressWindow("Querying download page...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);

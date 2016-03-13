@@ -81,9 +81,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\FileEntry.cs" />
-    <Compile Include="Services\AccessServiceSubscene.cs" />
+    <Compile Include="Services\SubsceneParsingService.cs" />
     <Compile Include="Services\UtilityService.cs" />
-    <Compile Include="Services\WebAccess.cs" />
+    <Compile Include="Services\WebAccessService.cs" />
     <Compile Include="Util\ExpectedNames.cs" />
     <Compile Include="Util\Settings.cs" />
     <Compile Include="ViewModel\Dialog\ResultPickerViewModel.cs" />

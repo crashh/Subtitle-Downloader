@@ -6,12 +6,27 @@ using SubtitleDownloaderV2.Services;
 
 namespace SubtitleDownloader.Services
 {
-    class AccessServiceSubscene : WebAccess
+    class SubsceneParsingService : WebAccessService
     {
         public String[] FindSearchResults()
         {
-            MatchCollection allMatches = Regex.Matches(HTML, @"/subtitles/(.+?)"">");
             HashSet<String> matchesWithoutDuplicates = new HashSet<string>();
+
+            // Look if we got exact match:
+            MatchCollection exactMatches = Regex.Matches(HTML, @"<h2 class=""exact"">(.+?)</ul>", RegexOptions.Singleline);
+            if (exactMatches.Count == 1)
+            {
+                exactMatches = Regex.Matches(exactMatches[0].ToString() , @"/subtitles/(.+?)"">");
+                if (exactMatches.Count == 1)
+                {
+                    string match = exactMatches[0].ToString();
+                    matchesWithoutDuplicates.Add(match.Substring(11, match.LastIndexOf('"') - 11));
+                    return matchesWithoutDuplicates.ToArray();
+                }
+            }
+
+            // No dice, pick them all:
+            MatchCollection allMatches = Regex.Matches(HTML, @"/subtitles/(.+?)"">");
             for (int i = 0; i < allMatches.Count; i++)
             {
                 String match = allMatches[i].ToString();
