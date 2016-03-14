@@ -8,6 +8,9 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:SearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -24,6 +27,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!-- Logo and title -->
             <Image Grid.Row="0" Source="../icon.ico" Height="120" Margin="0 15 0 0" >
@@ -33,23 +37,25 @@
             </Image>
             <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>
 
+            <Button Grid.Row="3" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Margin="0 0 0 7" Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
+
             <!-- DIY buttons -->
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Open Folder" Style="{DynamicResource LeftMenuButton}" Command="{Binding Open}" />
-                <Button Grid.Column="1" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}"/>
+                <Button Grid.Column="0" Content="Open Folder" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenFolderCommand}" />
+                <Button Grid.Column="1" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}" Command="{Binding ModifyEntryCommand}"/>
             </Grid>
 
             <!-- Search -->
-            <Button Grid.Row="4" Height="90" Content="Search" Command="{Binding SearchCommand}" Style="{DynamicResource LeftMenuButton}" Margin="0 40 0 0" />
-            <Label Grid.Row="5" Content="{Binding GetFullPath}" Foreground="White" FontSize="12" />
+            <Button Grid.Row="5" Height="90" Content="Search" Command="{Binding SearchCommand}" Style="{DynamicResource LeftMenuButton}" Margin="0 40 0 0" />
+            <Label Grid.Row="6" Content="{Binding GetFullPath}" Foreground="White" FontSize="12" />
         </Grid>
 
         <!-- Main window -->
-        <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}" 
+        <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}" RowHeaderWidth="0"
                       SelectedItem="{Binding SelectedEntry}"  AutoGenerateColumns="False"
                       GridLinesVisibility="None" HorizontalScrollBarVisibility="Hidden"
                       IsReadOnly="True">

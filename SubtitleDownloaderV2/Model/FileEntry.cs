@@ -18,9 +18,9 @@ namespace SubtitleDownloaderV2.Model
 
         public string episode { get; set; }
 
-        public bool subtitleExists;
+        public bool subtitleExists { get; set; }
 
-        public string url;
+        public string url { get; set; }
 
         public FileEntry(string path)
         {

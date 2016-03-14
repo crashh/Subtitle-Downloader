@@ -24,6 +24,8 @@ namespace SubtitleDownloaderV2.ViewModel
 
         public ICommand OpenFolderCommand { get; set; }
         public ICommand OpenBrowserCommand { get; set; }
+        public ICommand ModifyEntryCommand { get; set; }
+
         public ICommand SearchCommand { get; set; }
 
         #region Observables
@@ -55,7 +57,11 @@ namespace SubtitleDownloaderV2.ViewModel
         public FileEntry SelectedEntry
         {
             get { return selectedEntry; }
-            set { this.Set(() => this.SelectedEntry, ref this.selectedEntry, value); }
+            set
+            {
+                this.Set(() => this.SelectedEntry, ref this.selectedEntry, value);
+                IsURLset = !string.IsNullOrEmpty(this.SelectedEntry.url);
+            }
 
         }
 
@@ -67,6 +73,17 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             get { return allEntries; }
             set { this.Set(() => this.AllEntries, ref this.allEntries, value); }
+        }
+
+        private bool isURLset;
+
+        public bool IsURLset
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(this.SelectedEntry?.url);
+            }
+            set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
         }
 
         #endregion
@@ -83,6 +100,7 @@ namespace SubtitleDownloaderV2.ViewModel
             OpenFolderCommand = new RelayCommand(OpenFolder);
             OpenBrowserCommand = new RelayCommand(OpenBrowser);
             SearchCommand = new RelayCommand(DoSearch);
+            ModifyEntryCommand = new RelayCommand(DoModifyEntry);
 
             OnPresented();
         }
@@ -150,6 +168,14 @@ namespace SubtitleDownloaderV2.ViewModel
         private void OpenFolder()
         {
             Process.Start(selectedEntry.GetFullPath());
+        }
+
+        /// <summary>
+        /// Open view to modify an entry.
+        /// </summary>
+        private void DoModifyEntry()
+        {
+            //TODO: ugh
         }
 
         /// <summary>
