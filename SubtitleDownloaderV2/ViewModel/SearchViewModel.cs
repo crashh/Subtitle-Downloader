@@ -176,6 +176,7 @@ namespace SubtitleDownloaderV2.ViewModel
         private void DoModifyEntry()
         {
             //TODO: ugh
+            //Will need to redo how we reload information from the disk, so this will be persistent when we change views.
         }
 
         /// <summary>
