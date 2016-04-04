@@ -24,7 +24,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand SearchCommand { get; set; }
         public ICommand OpenBrowserCommand { get; set; }
 
-        private FileEntry customEntry;
+        private readonly ListSearchViewModel listSearchViewModel;
 
         #region Observables
 
@@ -49,32 +49,16 @@ namespace SubtitleDownloaderV2.ViewModel
             set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
         }
 
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { this.Set(() => this.Name, ref this.name, value); }
-        }
 
-        private string release;
-        public string Release
-        {
-            get { return release; }
-            set { this.Set(() => this.Release, ref this.release, value); }
-        }
+        private FileEntry customEntry;
 
-        private string episode;
-        public string Episode
+        public FileEntry CustomEntry
         {
-            get { return episode; }
-            set { this.Set(() => this.Episode, ref this.episode, value); }
-        }
-
-        private string location;
-        public string Location
-        {
-            get { return location; }
-            set { this.Set(() => this.Location, ref this.location, value); }
+            get
+            {
+                return customEntry;
+            }
+            set { this.Set(() => this.CustomEntry, ref this.customEntry, value); }
         }
 
         #endregion
@@ -84,9 +68,9 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Constructor
         /// </summary>
-        public InputSearchViewModel()
+        public InputSearchViewModel(ListSearchViewModel listSearchViewModel)
         {
-            this.Location = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            this.listSearchViewModel = listSearchViewModel;
 
             OpenBrowserCommand = new RelayCommand(OpenBrowser);
             SearchCommand = new RelayCommand(DoSearch);
@@ -99,7 +83,16 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void OnPresented()
         {
+            FileEntry selectedEntry = listSearchViewModel.SelectedEntry;
 
+            if (selectedEntry != null)
+            {
+                this.customEntry = new FileEntry(selectedEntry.GetFullPath(), selectedEntry.title, selectedEntry.release, selectedEntry.episode);
+            }
+            else
+            {
+                this.customEntry = new FileEntry(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "", "", "");
+            }
         }
 
         #endregion
@@ -116,8 +109,6 @@ namespace SubtitleDownloaderV2.ViewModel
         private void DoSearch()
         {
             Progress = String.Empty;
-            this.customEntry = new FileEntry(location, name, release, episode);
-
             SubsceneParsingService webCrawler = new SubsceneParsingService();
 
             string[] searchResult;

@@ -68,14 +68,14 @@
                 </Grid.RowDefinitions>
 
                 <!-- Path to folder -->
-                <Label Grid.Row="1" Content="Name" Foreground="White"/>
-                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Name}" Margin="5 0 0 0" FontSize="16"/>
+                <Label Grid.Row="1" Content="Title" Foreground="White"/>
+                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" FontSize="16"/>
 
                 <Label Grid.Row="3" Content="Release" Foreground="White"/>
-                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding Release}" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding CustomEntry.release}" Margin="5 0 0 0" FontSize="16"/>
 
                 <Label Grid.Row="5" Content="Episode" Foreground="White"/>
-                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding Episode}" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding CustomEntry.episode}" Margin="5 0 0 0" FontSize="16"/>
 
                 <Label Grid.Row="7" Content="Path to folder" Foreground="White"/>
                 <Grid Grid.Row="8">
@@ -84,8 +84,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding Location}" Margin="5 0 0 0" FontSize="16"/>
-                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}"/>
+                    <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" FontSize="16"/>
+                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}" IsEnabled="False"/>
                 </Grid>
             </Grid>
         </Border>

@@ -44,8 +44,11 @@ namespace SubtitleDownloaderV2.Services
         /// <param name="path">
         /// Full path to directory to store file at.
         /// </param>
+        /// <param name="name">
+        /// Name for save file as.
+        /// </param>
         /// <returns></returns>
-        public bool InitiateDownload(string url, string path)
+        public bool InitiateDownload(string url, string path, string name)
         {
             using (WebClient client = new WebClient())
             {
@@ -55,7 +58,7 @@ namespace SubtitleDownloaderV2.Services
 
                     if (!Directory.Exists(pathToFolder)) { return false; }
 
-                    client.DownloadFile(url, pathToFolder + "/autosub-pull.rar");
+                    client.DownloadFile(url, pathToFolder + "/" + name);
                 }
                 catch (Exception e)
                 {
@@ -68,6 +71,10 @@ namespace SubtitleDownloaderV2.Services
 
                 return true;
             }
+        }
+        public bool InitiateDownload(string url, string path)
+        {
+            return InitiateDownload(url, path, "autosub-pull.rar");
         }
     }
 }

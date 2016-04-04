@@ -8,7 +8,7 @@ namespace SubtitleDownloaderV2.Model
 {
     public class FileEntry
     {
-        private readonly string path;
+        public string path { get; set; } 
 
         public string filename { get; set; }
 

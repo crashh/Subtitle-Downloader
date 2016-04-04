@@ -25,7 +25,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand InputSearchCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
 
-        private readonly ListSearchViewModel _listSearchViewModel;
+        private readonly ListSearchViewModel ListSearchViewModel;
         private readonly InputSearchViewModel InputSearchViewModel;
         private readonly SettingsViewModel SettingsViewModel;
 
@@ -68,7 +68,7 @@ namespace SubtitleDownloaderV2.ViewModel
             InputSearchViewModel inputSearchViewModel,
             SettingsViewModel settingsViewModel)
         {
-            this._listSearchViewModel = listSearchViewModel;
+            this.ListSearchViewModel = listSearchViewModel;
             this.InputSearchViewModel = inputSearchViewModel;
             this.SettingsViewModel = settingsViewModel;
 
@@ -88,8 +88,8 @@ namespace SubtitleDownloaderV2.ViewModel
             IsListSearchNotSelected = false;
             IsInputSearchNotSelected = true;
             IsSettingsNotSelected = true;
-            SelectedViewModel = _listSearchViewModel;
-            _listSearchViewModel.OnPresented();
+            SelectedViewModel = ListSearchViewModel;
+            ListSearchViewModel.OnPresented();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace SubtitleDownloaderV2.ViewModel
             IsInputSearchNotSelected = false;
             IsSettingsNotSelected = true;
             SelectedViewModel = InputSearchViewModel;
-            _listSearchViewModel.OnPresented();
+            InputSearchViewModel.OnPresented();
         }
 
         /// <summary>
