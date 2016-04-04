@@ -32,11 +32,12 @@ namespace SubtitleDownloaderV2.Model
             this.filename = Path.GetFileName(path);
         }
 
-        public FileEntry(string path, string title, string release)
+        public FileEntry(string path, string title, string release, string episode)
         {
             this.path = path;
             this.title = title;
             this.release = release;
+            this.episode = episode;
             this.subtitleExists = false;
 
             this.filename = Path.GetFileName(path);

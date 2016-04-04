@@ -16,20 +16,17 @@ using SubtitleDownloaderV2.View.Dialog;
 
 namespace SubtitleDownloaderV2.ViewModel
 {
-    public class SearchViewModel : ViewModelBase
+    public class InputSearchViewModel : ViewModelBase
     {
-
         const bool SUCCESS = true;
         const bool FAILURE = false;
 
-        public ICommand OpenFolderCommand { get; set; }
-        public ICommand OpenBrowserCommand { get; set; }
-        public ICommand ModifyEntryCommand { get; set; }
-
         public ICommand SearchCommand { get; set; }
+        public ICommand OpenBrowserCommand { get; set; }
+
+        private FileEntry customEntry;
 
         #region Observables
-
 
         /// <summary>
         /// Displays how the search went.
@@ -39,51 +36,45 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             get { return progress; }
             set { this.Set(() => this.Progress, ref this.progress, value); }
-
-        }
-
-        /// <summary>
-        /// Returns the full path to the current directory.
-        /// </summary>
-        public string GetFullPath
-        {
-            get { return $"Current directory: {Settings.directoryPath}"; }
-        }
-
-        /// <summary>
-        /// The last selected item in the datagrid.
-        /// </summary>
-        private FileEntry selectedEntry;
-        public FileEntry SelectedEntry
-        {
-            get { return selectedEntry; }
-            set
-            {
-                this.Set(() => this.SelectedEntry, ref this.selectedEntry, value);
-                IsURLset = !string.IsNullOrEmpty(this.SelectedEntry.url);
-            }
-
-        }
-
-        /// <summary>
-        /// All entries to display in datagrid.
-        /// </summary>
-        private ObservableCollection<FileEntry> allEntries;
-        public ObservableCollection<FileEntry> AllEntries
-        {
-            get { return allEntries; }
-            set { this.Set(() => this.AllEntries, ref this.allEntries, value); }
+            
         }
 
         private bool isURLset;
-
         public bool IsURLset
         {
             get
             {
-                return !string.IsNullOrEmpty(this.SelectedEntry?.url);
+                return !string.IsNullOrEmpty(this.customEntry?.url);
             }
             set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
+        }
+
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set { this.Set(() => this.Name, ref this.name, value); }
+        }
+
+        private string release;
+        public string Release
+        {
+            get { return release; }
+            set { this.Set(() => this.Release, ref this.release, value); }
+        }
+
+        private string episode;
+        public string Episode
+        {
+            get { return episode; }
+            set { this.Set(() => this.Episode, ref this.episode, value); }
+        }
+
+        private string location;
+        public string Location
+        {
+            get { return location; }
+            set { this.Set(() => this.Location, ref this.location, value); }
         }
 
         #endregion
@@ -93,14 +84,12 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearchViewModel()
+        public InputSearchViewModel()
         {
-            this.AllEntries = new ObservableCollection<FileEntry>();
+            this.Location = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-            OpenFolderCommand = new RelayCommand(OpenFolder);
             OpenBrowserCommand = new RelayCommand(OpenBrowser);
             SearchCommand = new RelayCommand(DoSearch);
-            ModifyEntryCommand = new RelayCommand(DoModifyEntry);
 
             OnPresented();
         }
@@ -110,73 +99,15 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void OnPresented()
         {
-            AllEntries.Clear();
-            if (Directory.Exists(Settings.directoryPath))
-            {
-                List<String> ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
 
-                foreach (var entry in Directory.GetFileSystemEntries(Settings.directoryPath))
-                {
-                    bool subtitleExist = false;
-                    if (Settings.ignoreAlreadySubbedFolders && Directory.Exists(entry))
-                    {
-                        foreach (string dirEntry in Directory.GetFiles(entry))
-                        {
-                            if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src")) //todo
-                            {
-                                subtitleExist = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    String fileName = Path.GetFileName(entry);
-                    if (!subtitleExist && !ignoredFiles.Contains(fileName) && !fileName.EndsWith(".srt"))
-                    {
-                        FileEntry fileEntry = new FileEntry(entry);
-                        fileEntry.DefineEntriesFromPath();
-
-                        AllEntries.Add(fileEntry);
-                    }
-                }
-            }
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Opens window to modify selected entry.
-        /// </summary>
-        private void ModifySelectedEntry()
-        {
-
-        }
-        
-        /// <summary>
-        /// Open default internet browser and last failed web lookup.
-        /// </summary>
         private void OpenBrowser()
         {
-            Process.Start(selectedEntry.url);
-        }
-
-        /// <summary>
-        /// Open explorer window at selected entry path.
-        /// </summary>
-        private void OpenFolder()
-        {
-            Process.Start(selectedEntry.GetFullPath());
-        }
-
-        /// <summary>
-        /// Open view to modify an entry.
-        /// </summary>
-        private void DoModifyEntry()
-        {
-            //TODO: ugh
-            //Will need to redo how we reload information from the disk, so this will be persistent when we change views.
+            Process.Start(customEntry.url);
         }
 
         /// <summary>
@@ -185,6 +116,7 @@ namespace SubtitleDownloaderV2.ViewModel
         private void DoSearch()
         {
             Progress = String.Empty;
+            this.customEntry = new FileEntry(location, name, release, episode);
 
             SubsceneParsingService webCrawler = new SubsceneParsingService();
 
@@ -216,9 +148,9 @@ namespace SubtitleDownloaderV2.ViewModel
 
         private bool SearchForTitle(SubsceneParsingService webCrawler, out string[] searchResult)
         {
-            WriteToProgressWindow("Querying for " + selectedEntry.title + "...", SUCCESS);
+            WriteToProgressWindow("Querying for " + customEntry.title + "...", SUCCESS);
 
-            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selectedEntry.title + "&l=");
+            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + customEntry.title + "&l=");
             searchResult = webCrawler.FindSearchResults();
 
             if (searchResult.Length < 1)
@@ -252,7 +184,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
             WriteToProgressWindow("User picked " + searchResultPicked + "...", SUCCESS);
 
-            selectedEntry.url = "http://subscene.com/subtitles/" + searchResultPicked;
+            customEntry.url = "http://subscene.com/subtitles/" + searchResultPicked;
             return searchResultPicked;
         }
 
@@ -260,7 +192,7 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             WriteToProgressWindow("Querying for subtitles to " + searchResultPicked + "...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
-            correctSub = webCrawler.PickCorrectSubtitle(selectedEntry.release, selectedEntry.episode);
+            correctSub = webCrawler.PickCorrectSubtitle(customEntry.release, customEntry.episode);
 
             if (correctSub.Length < 1)
             {
@@ -278,7 +210,7 @@ namespace SubtitleDownloaderV2.ViewModel
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);
             String downloadLink = webCrawler.FindDownloadUrl();
 
-            bool result = webCrawler.InitiateDownload("http://subscene.com" + downloadLink, selectedEntry.GetFullPath()
+            bool result = webCrawler.InitiateDownload("http://subscene.com" + downloadLink, customEntry.GetFullPath()
             );
 
             if (!result)
@@ -294,9 +226,8 @@ namespace SubtitleDownloaderV2.ViewModel
         private void UnpackSubtitleFile()
         {
             WriteToProgressWindow("Unpacking rar file..", SUCCESS);
-
-            UtilityService utilityService = new UtilityService();
-            utilityService.UnrarFile(selectedEntry.GetFullPath());
+            
+            UtilityService.UnrarFile(customEntry.GetFullPath());
         }
 
         private void WriteToProgressWindow(String message, bool success)
@@ -307,6 +238,7 @@ namespace SubtitleDownloaderV2.ViewModel
             }
             Progress += message + "\r\n\r\n";
         }
+
         #endregion
     }
 }

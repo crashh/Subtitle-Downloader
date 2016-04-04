@@ -51,8 +51,7 @@ namespace SubtitleDownloaderV2.Services
             {
                 try
                 {
-                    UtilityService utilSerivce = new UtilityService();
-                    String pathToFolder = utilSerivce.GetPath(path);
+                    String pathToFolder = UtilityService.GetPath(path);
 
                     if (!Directory.Exists(pathToFolder)) { return false; }
 

@@ -1,16 +1,20 @@
-﻿<UserControl x:Class="SubtitleDownloaderV2.View.SettingsView"
+﻿<UserControl x:Class="SubtitleDownloaderV2.View.InputSearchView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:SubtitleDownloaderV2.ViewModel"
-             mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModel:InputSearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left menu -->
@@ -19,6 +23,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -31,19 +36,22 @@
             </Image>
             <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>
 
-            <!-- Save or reset -->
-            <Grid Grid.Row="4" Margin="0 0 0 40">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+            <Button Grid.Row="3" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Margin="0 0 0 7" Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
 
-                <Button Grid.Column="0" Content="Save" Command="{Binding SaveCommand}" Style="{DynamicResource LeftMenuButton}" />
-                <Button Grid.Column="1" Content="Reset" Command="{Binding ResetCommand}" Style="{DynamicResource LeftMenuButton}" />
+            <!-- DIY buttons -->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
             </Grid>
+
+            <!-- Search -->
+            <Button Grid.Row="5" Height="90" Content="Search" Command="{Binding SearchCommand}" Style="{DynamicResource LeftMenuButton}" Margin="0 40 0 0" />
+            <Label Grid.Row="6" Content="" />
         </Grid>
 
-
+        <!-- Main window -->
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
             <Grid Margin="100 0 100 0">
                 <Grid.RowDefinitions>
@@ -52,31 +60,36 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="27*"/>
-                    <RowDefinition Height="10*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="37*"/>
                 </Grid.RowDefinitions>
 
                 <!-- Path to folder -->
-                <Label Grid.Row="1" Content="Path to folder" Foreground="White"/>
-                
-                <Grid Grid.Row="2">
+                <Label Grid.Row="1" Content="Name" Foreground="White"/>
+                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding Name}" Margin="5 0 0 0" FontSize="16"/>
+
+                <Label Grid.Row="3" Content="Release" Foreground="White"/>
+                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding Release}" Margin="5 0 0 0" FontSize="16"/>
+
+                <Label Grid.Row="5" Content="Episode" Foreground="White"/>
+                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding Episode}" Margin="5 0 0 0" FontSize="16"/>
+
+                <Label Grid.Row="7" Content="Path to folder" Foreground="White"/>
+                <Grid Grid.Row="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" FontSize="16"/>
+                    <TextBox Grid.Column="0" Text="{Binding Location}" Margin="5 0 0 0" FontSize="16"/>
                     <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}"/>
                 </Grid>
-                
-                <CheckBox Grid.Row="3" Content="Ignore folders aldready containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
-                      Foreground="White" FontSize="12"/>
-                
-                <Label Grid.Row="6" Content="{Binding Result}" Foreground="White"/>
-
-
             </Grid>
         </Border>
+
+        <TextBox Grid.Column="2" Name="textBoxPrograss" Text="{Binding Progress}" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

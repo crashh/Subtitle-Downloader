@@ -11,8 +11,11 @@
         Title="SubtitleDownloader" Width="1200" Height="663" 
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="icon.ico">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
-            <view:SearchView/>
+        <DataTemplate DataType="{x:Type viewModel:ListSearchViewModel}">
+            <view:ListSearchView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:InputSearchViewModel}">
+            <view:InputSearchView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
             <view:SettingsView/>
@@ -29,9 +32,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Search" Style="{DynamicResource ButtonTabs}" Command="{Binding SearchCommand}" IsEnabled="{Binding IsSearchNotSelected}"/>
-            <Button Grid.Column="1" Content="Settings" Style="{DynamicResource ButtonTabs}" Command="{Binding SettingsCommand}" IsEnabled="{Binding IsSettingsNotSelected}"/>
+            <Button Grid.Column="0" Content="Listings" Style="{DynamicResource ButtonTabs}" Command="{Binding ListSearchCommand}" IsEnabled="{Binding IsListSearchNotSelected}"/>
+            <Button Grid.Column="1" Content="Manual Search" Style="{DynamicResource ButtonTabs}" Command="{Binding InputSearchCommand}" IsEnabled="{Binding IsInputSearchNotSelected}"/>
+            <Button Grid.Column="2" Content="Settings" Style="{DynamicResource ButtonTabs}" Command="{Binding SettingsCommand}" IsEnabled="{Binding IsSettingsNotSelected}"/>
         </Grid>
 
         <!-- Content -->

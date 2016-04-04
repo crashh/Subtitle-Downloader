@@ -4,12 +4,12 @@ using System.IO;
 
 namespace SubtitleDownloaderV2.Services
 {
-    public class UtilityService
+    public static class UtilityService
     {
         /// <summary>
         /// Checks wether a given path points to a file or a folder. Always returns path to the folder.
         /// </summary>
-        public String GetPath(String path)
+        public static String GetPath(String path)
         {
             if (path.Contains(".mkv") || path.Contains(".mp4") || path.Contains(".avi"))
             {
@@ -25,7 +25,7 @@ namespace SubtitleDownloaderV2.Services
         /// Unrars the file at specified location.
         /// Note: this does not wait for download to complete, so might not always work.
         /// </summary>
-        public void UnrarFile(String location)
+        public static void UnrarFile(String location)
         {
             Process cmd = new Process();
             cmd.StartInfo.FileName = "cmd.exe";
@@ -34,9 +34,8 @@ namespace SubtitleDownloaderV2.Services
             cmd.StartInfo.CreateNoWindow = true;
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
-
-            UtilityService utilSerivce = new UtilityService();
-            String pathToFolder = utilSerivce.GetPath(location);
+            
+            String pathToFolder = GetPath(location);
 
             // TODO: This assumes program (the unzip one) is located on C:
             if (pathToFolder.Substring(0, 1) != "C")

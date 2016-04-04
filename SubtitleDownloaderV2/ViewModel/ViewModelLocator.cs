@@ -42,7 +42,8 @@ namespace SubtitleDownloaderV2.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
-            SimpleIoc.Default.Register<SearchViewModel>();
+            SimpleIoc.Default.Register<ListSearchViewModel>();
+            SimpleIoc.Default.Register<InputSearchViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }

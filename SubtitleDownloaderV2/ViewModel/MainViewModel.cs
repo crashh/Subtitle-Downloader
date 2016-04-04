@@ -21,19 +21,28 @@ namespace SubtitleDownloaderV2.ViewModel
     public class MainViewModel : ViewModelBase
     {
 
-        public ICommand SearchCommand { get; set; }
+        public ICommand ListSearchCommand { get; set; }
+        public ICommand InputSearchCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
 
-        private readonly SearchViewModel searchViewModel;
-        private readonly SettingsViewModel settingsViewModel;
+        private readonly ListSearchViewModel _listSearchViewModel;
+        private readonly InputSearchViewModel InputSearchViewModel;
+        private readonly SettingsViewModel SettingsViewModel;
 
         #region Observables
 
-        private bool isSearchNotSelected;
-        public bool IsSearchNotSelected
+        private bool isListSearchNotSelected;
+        public bool IsListSearchNotSelected
         {
-            get { return isSearchNotSelected; }
-            set { this.Set(() => this.IsSearchNotSelected, ref this.isSearchNotSelected, value); }
+            get { return isListSearchNotSelected; }
+            set { this.Set(() => this.IsListSearchNotSelected, ref this.isListSearchNotSelected, value); }
+        }
+
+        private bool isInputSearchNotSelected;
+        public bool IsInputSearchNotSelected
+        {
+            get { return isInputSearchNotSelected; }
+            set { this.Set(() => this.IsInputSearchNotSelected, ref this.isInputSearchNotSelected, value); }
         }
 
         private bool isSettingsNotSelected;
@@ -54,17 +63,19 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(SearchViewModel searchViewModel, SettingsViewModel settingsViewModel)
+        public MainViewModel(
+            ListSearchViewModel listSearchViewModel, 
+            InputSearchViewModel inputSearchViewModel,
+            SettingsViewModel settingsViewModel)
         {
-            this.searchViewModel = searchViewModel;
-            this.settingsViewModel = settingsViewModel;
+            this._listSearchViewModel = listSearchViewModel;
+            this.InputSearchViewModel = inputSearchViewModel;
+            this.SettingsViewModel = settingsViewModel;
 
-            isSearchNotSelected = true;
-            isSettingsNotSelected = true;
-
-            SearchCommand = new RelayCommand(OpenSearch);
+            ListSearchCommand = new RelayCommand(OpenListSearch);
+            InputSearchCommand = new RelayCommand(OpenInputSearch);
             SettingsCommand = new RelayCommand(OpenSettings);
-            OpenSearch(); //Default open window
+            OpenListSearch(); //Default open window
         }
 
         #region Methods
@@ -72,12 +83,25 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Displays the Search View.
         /// </summary>
-        private void OpenSearch()
+        private void OpenListSearch()
         {
-            IsSearchNotSelected = false;
+            IsListSearchNotSelected = false;
+            IsInputSearchNotSelected = true;
             IsSettingsNotSelected = true;
-            SelectedViewModel = searchViewModel;
-            searchViewModel.OnPresented();
+            SelectedViewModel = _listSearchViewModel;
+            _listSearchViewModel.OnPresented();
+        }
+
+        /// <summary>
+        /// Displays the Search View.
+        /// </summary>
+        private void OpenInputSearch()
+        {
+            IsListSearchNotSelected = true;
+            IsInputSearchNotSelected = false;
+            IsSettingsNotSelected = true;
+            SelectedViewModel = InputSearchViewModel;
+            _listSearchViewModel.OnPresented();
         }
 
         /// <summary>
@@ -85,10 +109,11 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void OpenSettings()
         {
-            IsSearchNotSelected = true;
+            IsListSearchNotSelected = true;
+            IsInputSearchNotSelected = true;
             IsSettingsNotSelected = false;
-            SelectedViewModel = settingsViewModel;
-            settingsViewModel.OnPresented();
+            SelectedViewModel = SettingsViewModel;
+            SettingsViewModel.OnPresented();
         }
 
         #endregion
