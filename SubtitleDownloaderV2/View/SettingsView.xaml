@@ -77,7 +77,7 @@
 
                 <!-- Language box -->
                 <Label Grid.Row="4" Content="Subtitle language" Foreground="White"/>
-                <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" Foreground="Black" Background="White" FontSize="16" Margin="5 0 55 0"/>
+                <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" IsEditable="True" Foreground="Black" Background="White" FontSize="16" Margin="5 0 55 0"/>
 
                 <Label Grid.Row="7" Content="{Binding Result}" Foreground="White"/>
             </Grid>

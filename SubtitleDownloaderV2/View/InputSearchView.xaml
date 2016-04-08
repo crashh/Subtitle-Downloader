@@ -85,7 +85,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" FontSize="16"/>
-                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}" IsEnabled="False"/>
+                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}" />
                 </Grid>
             </Grid>
         </Border>

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -23,6 +24,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
         public ICommand SearchCommand { get; set; }
         public ICommand OpenBrowserCommand { get; set; }
+        public ICommand BrowseCommand { get; set; }
 
         private readonly ListSearchViewModel listSearchViewModel;
 
@@ -72,8 +74,9 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             this.listSearchViewModel = listSearchViewModel;
 
-            OpenBrowserCommand = new RelayCommand(OpenBrowser);
-            SearchCommand = new RelayCommand(DoSearch);
+            this.OpenBrowserCommand = new RelayCommand(OpenBrowser);
+            this.SearchCommand = new RelayCommand(DoSearch);
+            this.BrowseCommand = new RelayCommand(OpenFileDialogBrowser);
 
             OnPresented();
         }
@@ -228,6 +231,15 @@ namespace SubtitleDownloaderV2.ViewModel
                 //textBoxProgress.ForeColor = Color.Red;
             }
             Progress += message + "\r\n\r\n";
+        }
+
+        public void OpenFileDialogBrowser()
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                CustomEntry = new FileEntry(dialog.SelectedPath, customEntry.title, customEntry.release, customEntry.episode);
+            }
         }
 
         #endregion
