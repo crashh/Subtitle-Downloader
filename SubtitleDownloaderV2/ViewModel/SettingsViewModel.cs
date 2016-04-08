@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,14 @@ namespace SubtitleDownloaderV2.ViewModel
             set { this.Set(() => this.IgnoreAlreadySubbedFolders, ref this.ignoreAlreadySubbedFolders, value); }
         }
 
+        private string language;
+
+        public string Language
+        {
+            get { return language; }
+            set { this.Set(() => this.Language, ref this.language, value); }
+        }
+
         /// <summary>
         /// Result of the action to save or reset.
         /// </summary>
@@ -49,6 +58,8 @@ namespace SubtitleDownloaderV2.ViewModel
             get { return result; }
             set { this.Set(() => this.Result, ref this.result, value); }
         }
+
+        public List<string> Languages { get; set; } 
 
         #endregion
 
@@ -60,8 +71,14 @@ namespace SubtitleDownloaderV2.ViewModel
             this.SaveCommand = new RelayCommand(SaveCurrentSettings);
             this.ResetCommand = new RelayCommand(LoadSettingsFile);
             this.BrowseCommand = new RelayCommand(OpenFileDialogBrowser);
+            this.Languages = new List<string>
+            {
+                "Arabic", "Brazilian", "Croatian", "Dutch", "Danish", "English", "Farsi/Persian", "Finnish",
+                "French", "Greek", "Italian", "Norwegian", "Indonesian", "Japanese", "Romanian", "Russian",
+                "Spanish", "Turkish", "Vietnamese"
+            };
 
-            Settings.applicationPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\Settings";
+            Settings.ApplicationPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\Settings";
 
             OnPresented(); // Need this information immediately
         }
@@ -72,7 +89,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public void OnPresented()
         {
             // Get _settings file, or create new one:
-            if (File.Exists(Settings.applicationPath))
+            if (File.Exists(Settings.ApplicationPath))
             {
                 try
                 {
@@ -102,10 +119,11 @@ namespace SubtitleDownloaderV2.ViewModel
         private void GenerateSettingsFile()
         {
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\");
-            TextWriter settingsFile = new StreamWriter(Settings.applicationPath, false);
+            TextWriter settingsFile = new StreamWriter(Settings.ApplicationPath, false);
 
             settingsFile.WriteLine("No directory path set");
             settingsFile.WriteLine("true");
+            settingsFile.WriteLine("English");
             settingsFile.Close();
         }
 
@@ -115,9 +133,10 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void LoadSettingsFile()
         {
-            string[] settings = File.ReadAllLines(Settings.applicationPath);
-            WorkingFolderPath = Settings.directoryPath = settings[0];
-            IgnoreAlreadySubbedFolders = Settings.ignoreAlreadySubbedFolders = Boolean.Parse(settings[1]);
+            string[] settings = File.ReadAllLines(Settings.ApplicationPath);
+            WorkingFolderPath = Settings.DirectoryPath = settings[0];
+            IgnoreAlreadySubbedFolders = Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
+            Language = Settings.Language = settings[2];
             Result = "Settings restored!";
         }
 
@@ -126,11 +145,12 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void SaveCurrentSettings()
         {
-            string[] settings = new string[2];
-            settings[0] = Settings.directoryPath = WorkingFolderPath;
+            string[] settings = new string[3];
+            settings[0] = Settings.DirectoryPath = WorkingFolderPath;
             settings[1] = IgnoreAlreadySubbedFolders.ToString();
-            Settings.ignoreAlreadySubbedFolders = IgnoreAlreadySubbedFolders;
-            File.WriteAllLines(Settings.applicationPath, settings);
+            settings[2] = Settings.Language = Language;
+            Settings.IgnoreAlreadySubbedFolders = IgnoreAlreadySubbedFolders;
+            File.WriteAllLines(Settings.ApplicationPath, settings);
             Result = "Settings saved!";
         }
 

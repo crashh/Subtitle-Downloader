@@ -8,6 +8,8 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 using SubtitleDownloader.Services;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
@@ -46,7 +48,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public string GetFullPath
         {
-            get { return $"Current directory: {Settings.directoryPath}"; }
+            get { return $"Current directory: {Settings.DirectoryPath}"; }
         }
 
         /// <summary>
@@ -109,14 +111,14 @@ namespace SubtitleDownloaderV2.ViewModel
         public void OnPresented()
         {
             AllEntries.Clear();
-            if (Directory.Exists(Settings.directoryPath))
+            if (Directory.Exists(Settings.DirectoryPath))
             {
                 List<String> ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
 
-                foreach (var entry in Directory.GetFileSystemEntries(Settings.directoryPath))
+                foreach (var entry in Directory.GetFileSystemEntries(Settings.DirectoryPath))
                 {
                     bool subtitleExist = false;
-                    if (Settings.ignoreAlreadySubbedFolders && Directory.Exists(entry))
+                    if (Settings.IgnoreAlreadySubbedFolders && Directory.Exists(entry))
                     {
                         foreach (string dirEntry in Directory.GetFiles(entry))
                         {
@@ -143,14 +145,6 @@ namespace SubtitleDownloaderV2.ViewModel
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Opens window to modify selected entry.
-        /// </summary>
-        private void ModifySelectedEntry()
-        {
-
-        }
         
         /// <summary>
         /// Open default internet browser and last failed web lookup.
@@ -173,8 +167,8 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void DoModifyEntry()
         {
-            //TODO: ugh
-            //Will need to redo how we reload information from the disk, so this will be persistent when we change views.
+            var main = SimpleIoc.Default.GetInstance<MainViewModel>();
+            main.InputSearchCommand.Execute(null);
         }
 
         /// <summary>
@@ -182,9 +176,9 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void DoSearch()
         {
-            Progress = String.Empty;
+            Progress = string.Empty;
 
-            SubsceneParsingService webCrawler = new SubsceneParsingService();
+            var webCrawler = new SubsceneParsingService();
 
             string[] searchResult;
             if (!SearchForTitle(webCrawler, out searchResult))
@@ -214,7 +208,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
         private bool SearchForTitle(SubsceneParsingService webCrawler, out string[] searchResult)
         {
-            WriteToProgressWindow("Querying for " + selectedEntry.title + "...", SUCCESS);
+            WriteToProgressWindow($"Querying for {selectedEntry.title} in {Settings.Language} ...", SUCCESS);
 
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selectedEntry.title + "&l=");
             searchResult = webCrawler.FindSearchResults();
@@ -225,7 +219,7 @@ namespace SubtitleDownloaderV2.ViewModel
                 return false;
             }
 
-            WriteToProgressWindow("Found " + searchResult.Length + " possible results...", SUCCESS);
+            WriteToProgressWindow($"Found {searchResult.Length} possible results...", SUCCESS);
             return true;
         }
 
@@ -248,7 +242,7 @@ namespace SubtitleDownloaderV2.ViewModel
             String searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
             pickEntryForm.Close();
 
-            WriteToProgressWindow("User picked " + searchResultPicked + "...", SUCCESS);
+            WriteToProgressWindow($"User picked {searchResultPicked}...", SUCCESS);
 
             selectedEntry.url = "http://subscene.com/subtitles/" + searchResultPicked;
             return searchResultPicked;
@@ -256,7 +250,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
         private bool FindMatchingSubtitle(string searchResultPicked, SubsceneParsingService webCrawler, out string correctSub)
         {
-            WriteToProgressWindow("Querying for subtitles to " + searchResultPicked + "...", SUCCESS);
+            WriteToProgressWindow($"Querying for subtitles to {searchResultPicked}...", SUCCESS);
             webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
             correctSub = webCrawler.PickCorrectSubtitle(selectedEntry.release, selectedEntry.episode);
 
@@ -291,7 +285,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
         private void UnpackSubtitleFile()
         {
-            WriteToProgressWindow("Unpacking rar file..", SUCCESS);
+            WriteToProgressWindow($"Unpacking rar file at {selectedEntry.path}..", SUCCESS);
             
             UtilityService.UnrarFile(selectedEntry.GetFullPath());
         }

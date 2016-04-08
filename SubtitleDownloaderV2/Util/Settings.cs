@@ -5,8 +5,9 @@
     /// </summary>
     public static class Settings
     {
-        public static string applicationPath;
-        public static string directoryPath;
-        public static bool ignoreAlreadySubbedFolders;
+        public static string ApplicationPath;
+        public static string DirectoryPath;
+        public static bool IgnoreAlreadySubbedFolders;
+        public static string Language;
     }
 }

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SubtitleDownloaderV2.Properties;
 using SubtitleDownloaderV2.Services;
+using Settings = SubtitleDownloaderV2.Util.Settings;
 
 namespace SubtitleDownloader.Services
 {
     class SubsceneParsingService : WebAccessService
     {
-        public String[] FindSearchResults()
+        public string[] FindSearchResults()
         {
-            HashSet<String> matchesWithoutDuplicates = new HashSet<string>();
+            HashSet<string> matchesWithoutDuplicates = new HashSet<string>();
 
             // Look if we got exact match:
             MatchCollection exactMatches = Regex.Matches(HTML, @"<h2 class=""exact"">(.+?)</ul>", RegexOptions.Singleline);
@@ -27,9 +29,9 @@ namespace SubtitleDownloader.Services
 
             // No dice, pick them all:
             MatchCollection allMatches = Regex.Matches(HTML, @"/subtitles/(.+?)"">");
-            for (int i = 0; i < allMatches.Count; i++)
+            for (var i = 0; i < allMatches.Count; i++)
             {
-                String match = allMatches[i].ToString();
+                string match = allMatches[i].ToString();
                 if (!match.Contains("/subtitles/title") && !match.Contains("release?"))
                 {
                     matchesWithoutDuplicates.Add(match.Substring(11, match.LastIndexOf('"') - 11));
@@ -44,15 +46,15 @@ namespace SubtitleDownloader.Services
                 Regex.Matches(HTML, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
             for (int i = 0; i < allMatches.Count; i++)
             {
-                String singleMatch = allMatches[i].ToString();
-                if (singleMatch.Contains("English") && singleMatch.Contains("positive-icon") &&
+                string singleMatch = allMatches[i].ToString();
+                if (singleMatch.Contains(Settings.Language) && singleMatch.Contains("positive-icon") &&
                     singleMatch.Contains(releaseName) && singleMatch.Contains(episode))
                 {
-                    String correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString();
+                    string correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString();
                     return correct.Substring(0, correct.Length - 2);
                 }
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         public string FindDownloadUrl()

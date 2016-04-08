@@ -52,6 +52,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="27*"/>
                     <RowDefinition Height="10*"/>
                     <RowDefinition Height="Auto"/>
@@ -70,12 +71,15 @@
                     <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}"/>
                 </Grid>
                 
-                <CheckBox Grid.Row="3" Content="Ignore folders aldready containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
+                <CheckBox Grid.Row="3" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
                       Foreground="White" FontSize="12"/>
-                
-                <Label Grid.Row="6" Content="{Binding Result}" Foreground="White"/>
 
 
+                <!-- Language box -->
+                <Label Grid.Row="4" Content="Subtitle language" Foreground="White"/>
+                <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" Foreground="Black" Background="White" FontSize="16" Margin="5 0 55 0"/>
+
+                <Label Grid.Row="7" Content="{Binding Result}" Foreground="White"/>
             </Grid>
         </Border>
     </Grid>
