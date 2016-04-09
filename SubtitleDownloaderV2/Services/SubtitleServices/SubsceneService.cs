@@ -103,7 +103,7 @@ namespace SubtitleDownloaderV2.Services
             var searchResultPicked = PickCorrectSearchResult(searchResult);
             if (string.IsNullOrEmpty(searchResultPicked))
             {
-                WriteProgress("User cancelled..", FAILURE);
+                WriteProgress("User cancelled the search..", FAILURE);
                 return;
             }
 
