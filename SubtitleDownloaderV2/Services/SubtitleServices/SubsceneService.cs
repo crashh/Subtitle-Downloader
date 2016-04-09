@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Util;
 using SubtitleDownloaderV2.View.Dialog;
@@ -102,6 +103,7 @@ namespace SubtitleDownloaderV2.Services
             var searchResultPicked = PickCorrectSearchResult(searchResult);
             if (string.IsNullOrEmpty(searchResultPicked))
             {
+                WriteProgress("User cancelled..", FAILURE);
                 return;
             }
 
@@ -140,17 +142,21 @@ namespace SubtitleDownloaderV2.Services
                 return searchResult.First();
             }
 
-            var pickEntryForm = new ResultPickerView(searchResult);
-            pickEntryForm.ShowDialog();
+            var searchResultPicked = "";
 
-            if (pickEntryForm.getReturnValue() == -1)
-            {
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                var pickEntryForm = new ResultPickerView(searchResult);
+                pickEntryForm.ShowDialog();
+
+                if (pickEntryForm.getReturnValue() != -1)
+                {
+                    searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
+                } 
+
                 pickEntryForm.Close();
-                return string.Empty;
-            }
+            });
 
-            var searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
-            pickEntryForm.Close();
+            if (string.IsNullOrEmpty(searchResultPicked)) return string.Empty;
 
             WriteProgress($"User picked {searchResultPicked}...", SUCCESS);
 
