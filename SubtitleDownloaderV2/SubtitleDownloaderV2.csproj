@@ -82,7 +82,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Model\FileEntry.cs" />
-    <Compile Include="Services\SubsceneParsingService.cs" />
+    <Compile Include="Services\SubtitleServices\SubsceneService.cs" />
     <Compile Include="Services\UtilityService.cs" />
     <Compile Include="Services\WebAccessService.cs" />
     <Compile Include="Util\ExpectedNames.cs" />

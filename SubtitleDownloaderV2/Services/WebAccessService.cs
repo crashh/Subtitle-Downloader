@@ -7,10 +7,10 @@ namespace SubtitleDownloaderV2.Services
 {
     internal class WebAccessService
     {
-        internal String HTML;
+        internal string html;
 
         /// <summary>
-        /// Fetches HTML source code at given url
+        /// Fetches html source code at given url
         /// </summary>
         /// <param name="url">
         /// The target URL
@@ -24,14 +24,14 @@ namespace SubtitleDownloaderV2.Services
                 WebResponse myResponse = httpRequest.GetResponse();
                 StreamReader streamReader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
 
-                HTML = streamReader.ReadToEnd();
+                html = streamReader.ReadToEnd();
 
                 streamReader.Close();
                 myResponse.Close();
             }
             catch (Exception)
             {
-                HTML = null;
+                html = null;
             }
         }
 

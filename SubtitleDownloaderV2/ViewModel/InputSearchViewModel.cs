@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using SubtitleDownloader.Services;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
-using SubtitleDownloaderV2.Util;
-using SubtitleDownloaderV2.View.Dialog;
 
 namespace SubtitleDownloaderV2.ViewModel
 {
@@ -111,126 +103,11 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void DoSearch()
         {
-            Progress = String.Empty;
-            SubsceneParsingService webCrawler = new SubsceneParsingService();
+            Progress = string.Empty;
 
-            string[] searchResult;
-            if (!SearchForTitle(webCrawler, out searchResult))
-            {
-                return;
-            }
-
-            string searchResultPicked = PickCorrectSearchResult(searchResult);
-            if (string.IsNullOrEmpty(searchResultPicked))
-            {
-                return;
-            }
-
-            string correctSub;
-            if (!FindMatchingSubtitle(searchResultPicked, webCrawler, out correctSub))
-            {
-                return;
-            }
-
-            if (DownloadSubtitle(webCrawler, correctSub))
-            {
-                return;
-            }
-
-            UnpackSubtitleFile();
-        }
-
-        private bool SearchForTitle(SubsceneParsingService webCrawler, out string[] searchResult)
-        {
-            WriteToProgressWindow("Querying for " + customEntry.title + "...", SUCCESS);
-
-            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + customEntry.title + "&l=");
-            searchResult = webCrawler.FindSearchResults();
-
-            if (searchResult.Length < 1)
-            {
-                WriteToProgressWindow("FAILURE! Search result gave no hits...", FAILURE);
-                return false;
-            }
-
-            WriteToProgressWindow("Found " + searchResult.Length + " possible results...", SUCCESS);
-            return true;
-        }
-
-        private string PickCorrectSearchResult(string[] searchResult)
-        {
-            if (searchResult.Length == 1)
-            {
-                return searchResult.First();
-            }
-
-            ResultPickerView pickEntryForm = new ResultPickerView(searchResult);
-            pickEntryForm.ShowDialog();
-
-            if (pickEntryForm.getReturnValue() == -1)
-            {
-                pickEntryForm.Close();
-                return string.Empty;
-            }
-
-            String searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
-            pickEntryForm.Close();
-
-            WriteToProgressWindow("User picked " + searchResultPicked + "...", SUCCESS);
-
-            customEntry.url = "http://subscene.com/subtitles/" + searchResultPicked;
-            return searchResultPicked;
-        }
-
-        private bool FindMatchingSubtitle(string searchResultPicked, SubsceneParsingService webCrawler, out string correctSub)
-        {
-            WriteToProgressWindow("Querying for subtitles to " + searchResultPicked + "...", SUCCESS);
-            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
-            correctSub = webCrawler.PickCorrectSubtitle(customEntry.release, customEntry.episode);
-
-            if (correctSub.Length < 1)
-            {
-                WriteToProgressWindow("FAILURE! Could not find any subtitles for this release...", FAILURE);
-                return false;
-            }
-
-            WriteToProgressWindow("Found possible match...", SUCCESS);
-            return true;
-        }
-
-        private bool DownloadSubtitle(SubsceneParsingService webCrawler, string correctSub)
-        {
-            WriteToProgressWindow("Querying download page...", SUCCESS);
-            webCrawler.RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);
-            String downloadLink = webCrawler.FindDownloadUrl();
-
-            bool result = webCrawler.InitiateDownload("http://subscene.com" + downloadLink, customEntry.GetFullPath()
-            );
-
-            if (!result)
-            {
-                WriteToProgressWindow("FAILURE! Error downloading subtitle!", FAILURE);
-                return true;
-            }
-
-            WriteToProgressWindow("SUCCESS! Subtitle downloaded!", SUCCESS);
-            return false;
-        }
-
-        private void UnpackSubtitleFile()
-        {
-            WriteToProgressWindow("Unpacking rar file..", SUCCESS);
-            
-            UtilityService.UnrarFile(customEntry.GetFullPath());
-        }
-
-        private void WriteToProgressWindow(String message, bool success)
-        {
-            if (!success)
-            {
-                //textBoxProgress.ForeColor = Color.Red;
-            }
-            Progress += message + "\r\n\r\n";
+            var subscene = new SubsceneService(customEntry);
+            subscene.WriteProgress = WriteToProgressWindow;
+            subscene.Search();
         }
 
         public void OpenFileDialogBrowser()
@@ -240,6 +117,15 @@ namespace SubtitleDownloaderV2.ViewModel
             {
                 CustomEntry = new FileEntry(dialog.SelectedPath, customEntry.title, customEntry.release, customEntry.episode);
             }
+        }
+   
+        private void WriteToProgressWindow(string message, bool success)
+        {
+            if (!success)
+            {
+                //textBoxProgress.ForeColor = Color.Red;
+            }
+            Progress += message + "\r\n\r\n";
         }
 
         #endregion
