@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -105,9 +106,9 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             Progress = string.Empty;
 
-            var subscene = new SubsceneService(customEntry);
-            subscene.WriteProgress = WriteToProgressWindow;
-            subscene.Search();
+            var subscene = new SubsceneService(customEntry) {WriteProgress = WriteToProgressWindow};
+            Thread thread = new Thread(subscene.Search);
+            thread.Start();
         }
 
         public void OpenFileDialogBrowser()

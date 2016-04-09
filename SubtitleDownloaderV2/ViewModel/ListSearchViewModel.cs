@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -171,9 +172,9 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             Progress = string.Empty;
 
-            var subscene = new SubsceneService(selectedEntry);
-            subscene.WriteProgress = WriteToProgressWindow;
-            subscene.Search();
+            var subscene = new SubsceneService(selectedEntry) {WriteProgress = WriteToProgressWindow};
+            Thread thread = new Thread(subscene.Search);
+            thread.Start();
         }
 
         private void WriteToProgressWindow(string message, bool success)
