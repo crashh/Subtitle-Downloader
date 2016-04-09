@@ -67,7 +67,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" FontSize="16"/>
+                    <TextBox Grid.Column="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
                     <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}"/>
                 </Grid>
                 

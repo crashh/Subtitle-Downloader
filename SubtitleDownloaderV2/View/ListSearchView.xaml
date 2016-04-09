@@ -5,17 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SubtitleDownloaderV2.View"
              xmlns:viewModel="clr-namespace:SubtitleDownloaderV2.ViewModel"
+             xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:ListSearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <converters:StringToBoolConverter x:Key="StringToBool" />
     </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left menu -->
@@ -55,10 +70,10 @@
         </Grid>
 
         <!-- Main window -->
-        <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}" RowHeaderWidth="0"
-                      SelectedItem="{Binding SelectedEntry}"  AutoGenerateColumns="False"
-                      GridLinesVisibility="None" HorizontalScrollBarVisibility="Hidden"
-                      IsReadOnly="True">
+        <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}"
+                      SelectedItem="{Binding SelectedEntry}"
+                      Style="{StaticResource DataGridStyle}"
+                      IsReadOnly="True" ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="310" />
                 <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="250"/>
@@ -67,7 +82,20 @@
             </DataGrid.Columns>
 
         </DataGrid>
-        
-        <TextBox Grid.Column="2" Name="textBoxPrograss" Text="{Binding Progress}" TextWrapping="Wrap"/>
+
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <ToggleButton  Grid.Column="0" Content="&lt;&lt;" x:Name="toggleVis" Style="{StaticResource ToggleButtonStyle}"
+                           IsChecked="{Binding Progress, Converter={StaticResource StringToBool}, Mode=OneWay}" 
+                           Click="ButtonExpandProgress_OnClick"/>
+            <TextBox Grid.Column="1" x:Name="textBoxProgress" Text="{Binding Progress}" 
+                 Style="{StaticResource TextProgressBoxStyle}"
+                 Visibility="{Binding ElementName=toggleVis, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
+
+        </Grid>
     </Grid>
 </UserControl>

@@ -80,6 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Model\FileEntry.cs" />
     <Compile Include="Services\SubsceneParsingService.cs" />
     <Compile Include="Services\UtilityService.cs" />

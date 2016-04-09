@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:SubtitleDownloaderV2.ViewModel"
+             xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:InputSearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+        <converters:StringToBoolConverter x:Key="StringToBool" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left menu -->
@@ -69,13 +71,13 @@
 
                 <!-- Path to folder -->
                 <Label Grid.Row="1" Content="Title" Foreground="White"/>
-                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
                 <Label Grid.Row="3" Content="Release" Foreground="White"/>
-                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding CustomEntry.release}" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding CustomEntry.release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
                 <Label Grid.Row="5" Content="Episode" Foreground="White"/>
-                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding CustomEntry.episode}" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding CustomEntry.episode}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
                 <Label Grid.Row="7" Content="Path to folder" Foreground="White"/>
                 <Grid Grid.Row="8">
@@ -84,12 +86,24 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" FontSize="16"/>
+                    <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" />
                     <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}" />
                 </Grid>
             </Grid>
         </Border>
 
-        <TextBox Grid.Column="2" Name="textBoxPrograss" Text="{Binding Progress}" TextWrapping="Wrap"/>
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ToggleButton  Grid.Column="0" Content="&lt;&lt;" x:Name="toggleVis" Style="{StaticResource ToggleButtonStyle}"
+                           IsChecked="{Binding Progress, Converter={StaticResource StringToBool}, Mode=OneWay}"/>
+            <TextBox Grid.Column="1" x:Name="textBoxProgress" Text="{Binding Progress}" 
+                 Style="{StaticResource TextProgressBoxStyle}"
+                 Visibility="{Binding ElementName=toggleVis, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
+
+        </Grid>
     </Grid>
 </UserControl>

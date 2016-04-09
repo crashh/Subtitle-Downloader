@@ -147,9 +147,20 @@
       </Setter>
     </Style>
       
-    <ResourceDictionary x:Key="Locator">
-        <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:SubtitleDownloaderV2.ViewModel" />
-    </ResourceDictionary>
-      
-  </Application.Resources>
+    <Style x:Key="TextProgressBoxStyle" TargetType="TextBox">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Background" Value="#272424" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+    <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Background" Value="BurlyWood" />
+    </Style>
+
+    </Application.Resources>
 </Application>
