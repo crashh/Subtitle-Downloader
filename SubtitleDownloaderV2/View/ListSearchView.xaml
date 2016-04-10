@@ -78,14 +78,14 @@
 
         <!-- Main window -->
         <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}"
-                      SelectedItem="{Binding SelectedEntry}"
+                      SelectedItem="{Binding SelectedEntry}" 
                       Style="{StaticResource DataGridStyle}"
                       IsReadOnly="True" ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="310" />
-                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="250"/>
-                <DataGridTextColumn Header="Release" Binding="{Binding release}" Width="100"/>
-                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" Width="100"/>
+                <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="*" />
+                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="*"/>
+                <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="110" Width="*"/>
+                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="80" Width="*"/>
             </DataGrid.Columns>
 
             <DataGrid.Resources>
