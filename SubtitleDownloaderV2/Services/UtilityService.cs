@@ -25,31 +25,12 @@ namespace SubtitleDownloaderV2.Services
         /// Unrars the file at specified location.
         /// Note: this does not wait for download to complete, so might not always work.
         /// </summary>
-        public static void UnrarFile(String location)
+        public static void UnrarFile(string location)
         {
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
+            var pathToFolder = GetPath(location);
             
-            String pathToFolder = GetPath(location);
-
-            // TODO: This assumes program (the unzip one) is located on C:
-            if (pathToFolder.Substring(0, 1) != "C")
-            {
-                cmd.StandardInput.WriteLine(pathToFolder.Substring(0, 1) + ":");
-            }
-
-            cmd.StandardInput.WriteLine("cd \"" + pathToFolder + "\"");
-            cmd.StandardInput.WriteLine("unzip \"autosub-pull.rar\"");
-            cmd.StandardInput.WriteLine("rm \"autosub-pull.rar\"");
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            cmd.WaitForExit();
-            Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+            System.IO.Compression.ZipFile.ExtractToDirectory(pathToFolder+ "\\autosub-pull.rar", pathToFolder);
+            System.IO.File.Delete(pathToFolder + "\\autosub-pull.rar");
         }
     }
 }
