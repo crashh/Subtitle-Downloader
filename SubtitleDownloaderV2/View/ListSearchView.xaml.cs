@@ -33,7 +33,7 @@ namespace SubtitleDownloaderV2.View
             var button = sender as ToggleButton;
             if (button == null) return;
             
-            button.Content = (string) button.Content == ">>" ? ">>" : ">>";
+            button.Content = (bool) button.IsChecked ? ">>" : "<<";
         }
     }
 }

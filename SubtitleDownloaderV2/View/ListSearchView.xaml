@@ -14,14 +14,21 @@
         <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style x:Key="DataGridStyle" TargetType="DataGrid">
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="GridLinesVisibility" Value="None"/>
             <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
             <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderThickness" Value="1 1 0 1" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="SelectionMode" Value="Single" />
             <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="5 2 5 2"/>
+            <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <converters:StringToBoolConverter x:Key="StringToBool" />
     </UserControl.Resources>
@@ -80,6 +87,22 @@
                 <DataGridTextColumn Header="Release" Binding="{Binding release}" Width="100"/>
                 <DataGridTextColumn Header="Episode" Binding="{Binding episode}" Width="100"/>
             </DataGrid.Columns>
+
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF272424"/>
+            </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="BorderThickness" Value="1" />
+                </Style>
+            </DataGrid.RowStyle>
 
         </DataGrid>
 

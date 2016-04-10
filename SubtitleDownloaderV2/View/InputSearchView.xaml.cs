@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -25,6 +26,14 @@ namespace SubtitleDownloaderV2.View
         public InputSearchView()
         {
             InitializeComponent();
+        }
+
+        private void ButtonExpandProgress_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            if (button == null) return;
+
+            button.Content = (bool)button.IsChecked ? ">>" : "<<";
         }
     }
 }

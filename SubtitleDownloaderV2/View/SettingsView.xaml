@@ -68,7 +68,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
-                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}"/>
+                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
                 </Grid>
                 
                 <CheckBox Grid.Row="3" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
@@ -76,7 +76,7 @@
 
 
                 <!-- Language box -->
-                <Label Grid.Row="4" Content="Subtitle language" Foreground="White"/>
+                <Label Grid.Row="4" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
                 <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" IsEditable="True" Foreground="Black" Background="White" FontSize="16" Margin="5 0 55 0"/>
 
                 <Label Grid.Row="7" Content="{Binding Result}" Foreground="White"/>

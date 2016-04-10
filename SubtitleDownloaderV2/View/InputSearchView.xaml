@@ -87,7 +87,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" />
-                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource MenuButton}" />
+                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}" />
                 </Grid>
             </Grid>
         </Border>
@@ -99,7 +99,8 @@
             </Grid.ColumnDefinitions>
 
             <ToggleButton  Grid.Column="0" Content="&lt;&lt;" x:Name="toggleVis" Style="{StaticResource ToggleButtonStyle}"
-                           IsChecked="{Binding Progress, Converter={StaticResource StringToBool}, Mode=OneWay}"/>
+                           IsChecked="{Binding Progress, Converter={StaticResource StringToBool}, Mode=OneWay}"
+                           Click="ButtonExpandProgress_OnClick"/>
             <TextBox Grid.Column="1" x:Name="textBoxProgress" Text="{Binding Progress}" 
                  Style="{StaticResource TextProgressBoxStyle}"
                  Visibility="{Binding ElementName=toggleVis, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>

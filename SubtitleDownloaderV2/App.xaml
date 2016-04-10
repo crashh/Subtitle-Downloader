@@ -185,6 +185,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+      <Style x:Key="TextBoxButton" TargetType="Button" BasedOn="{StaticResource MenuButton}">
+          <Setter Property="BorderThickness" Value="1 0 1 0" />
+          <Setter Property="Margin" Value="0" />
+      </Style>
 
-    </Application.Resources>
+  </Application.Resources>
 </Application>
