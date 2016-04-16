@@ -12,8 +12,10 @@ It will attempt to find the correct subtitles based on the filename. It is possi
 ###Install latest build
 In the folder 'Latest Build', run the file 'SubtitleDownloader.application'. This will install the program as a desktop app, which can then be run by hitting the windows key and typing 'SubtitleDownloader'.
 
+Windows will complain about the unknown certificate, thus you will have to hit advanced and "install anyway" during the installation.
+
 ###Compile
-Clone the repository and compile the source-code, preferrably using visual studio.
+Clone the repository and compile the source-code, preferrably using visual studio. In case i forgot, it is nessecary to remove/add a new test-certificate for the signing of the files, this can be done by going to Project->Properties->Signing. 
 
 ##Uninstall
 Remove the application using windows 'add or remove program' like you would any other installation.
