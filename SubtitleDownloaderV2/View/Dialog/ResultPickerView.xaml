@@ -6,7 +6,7 @@
         xmlns:dialog="clr-namespace:SubtitleDownloaderV2.ViewModel.Dialog"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance dialog:ResultPickerViewModel}"
-        Title="ResultPickerView" Height="300" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/SubtitleDownloaderV2;component/icon.ico" BorderThickness="1" WindowStyle="None" Background="#FF382A18">
+        Title="ResultPickerView" Height="300" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/SubtitleDownloader;component/icon.ico" BorderThickness="1" WindowStyle="None" Background="#FF382A18">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
