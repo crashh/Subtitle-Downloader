@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -30,6 +31,14 @@ namespace SubtitleDownloaderV2.ViewModel
         private readonly SettingsViewModel SettingsViewModel;
 
         #region Observables
+
+        private string version;
+
+        public string Version
+        {
+            get { return this.version; }
+            set { this.Set(() => this.Version, ref this.version, value); }
+        }
 
         private bool isListSearchNotSelected;
         public bool IsListSearchNotSelected
@@ -68,6 +77,8 @@ namespace SubtitleDownloaderV2.ViewModel
             InputSearchViewModel inputSearchViewModel,
             SettingsViewModel settingsViewModel)
         {
+            this.version = "ver. " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             this.ListSearchViewModel = listSearchViewModel;
             this.InputSearchViewModel = inputSearchViewModel;
             this.SettingsViewModel = settingsViewModel;

@@ -34,10 +34,12 @@
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Content="Listings" Style="{DynamicResource ButtonTabs}" Command="{Binding ListSearchCommand}" IsEnabled="{Binding IsListSearchNotSelected}"/>
             <Button Grid.Column="1" Content="Manual Search" Style="{DynamicResource ButtonTabs}" Command="{Binding InputSearchCommand}" IsEnabled="{Binding IsInputSearchNotSelected}"/>
             <Button Grid.Column="2" Content="Settings" Style="{DynamicResource ButtonTabs}" Command="{Binding SettingsCommand}" IsEnabled="{Binding IsSettingsNotSelected}"/>
+            <Label Grid.Column="3" Content="{Binding Version }" Foreground="LightGray" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- Content -->
