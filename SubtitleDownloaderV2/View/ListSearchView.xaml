@@ -73,7 +73,7 @@
 
             <!-- Search -->
             <Button Grid.Row="5" Height="90" Content="Search" Command="{Binding SearchCommand}" Style="{DynamicResource LeftMenuButton}" Margin="0 40 0 0" />
-            <Label Grid.Row="6" Content="{Binding GetFullPath}" Foreground="White" FontSize="12" />
+            <Label Grid.Row="6" Content="{Binding GetFullPath}" Foreground="White" FontSize="10" />
         </Grid>
 
         <!-- Main window -->

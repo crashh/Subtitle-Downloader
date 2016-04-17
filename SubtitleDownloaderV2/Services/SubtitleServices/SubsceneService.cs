@@ -64,8 +64,10 @@ namespace SubtitleDownloaderV2.Services
 
         public string PickCorrectSubtitle()
         {
+            chosenResult = string.Empty;
             var allMatches =
                 Regex.Matches(html, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
+
             for (var i = 0; i < allMatches.Count; i++)
             {
                 var singleMatch = allMatches[i].ToString();
@@ -74,10 +76,14 @@ namespace SubtitleDownloaderV2.Services
                 {
                     var correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString();
                     chosenResult = correct.Substring(0, correct.Length - 2);
-                    return chosenResult;
+
+                    if (!singleMatch.Contains("class=\"a41\""))
+                    {
+                        // This is not hearing compared, so we are satisfied.
+                        return chosenResult;
+                    }
                 }
             }
-            chosenResult = string.Empty;
             return chosenResult;
         }
 
@@ -115,7 +121,7 @@ namespace SubtitleDownloaderV2.Services
                 WriteProgress("FAILURE! Could not find any subtitles for this release...", FAILURE);
                 return;
             }
-            WriteProgress("Found possible match...", SUCCESS);
+            WriteProgress($"Found possible match: \"{correctSub}\"...", SUCCESS);
 
             WriteProgress("Querying download page...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using SubtitleDownloaderV2.Util;
@@ -60,6 +61,8 @@ namespace SubtitleDownloaderV2.ViewModel
         }
 
         public List<string> Languages { get; set; } 
+
+        public Rectangle Dimensions { get; set; }
 
         #endregion
 
@@ -124,6 +127,8 @@ namespace SubtitleDownloaderV2.ViewModel
             settingsFile.WriteLine("No directory path set");
             settingsFile.WriteLine("true");
             settingsFile.WriteLine("English");
+            settingsFile.WriteLine(System.Windows.SystemParameters.PrimaryScreenHeight);
+            settingsFile.WriteLine(System.Windows.SystemParameters.PrimaryScreenWidth);
             settingsFile.Close();
         }
 
@@ -138,6 +143,7 @@ namespace SubtitleDownloaderV2.ViewModel
             IgnoreAlreadySubbedFolders = Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
             Language = Settings.Language = settings[2];
             Result = "Settings restored!";
+            Dimensions = new Rectangle() {Height = double.Parse(settings[3]), Width = double.Parse(settings[4])};
         }
 
         /// <summary>
