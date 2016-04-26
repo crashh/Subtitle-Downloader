@@ -5,10 +5,11 @@ namespace SubtitleDownloaderV2.Util
 {
     /// <summary>
     /// Holds static content.
+    /// Contents here are default values, they may be overriden by the settings model.
     /// </summary>
     public static class ExpectedNames
     {
-        public static readonly List<String> ReleaseNames = new List<String> {
+        public static List<String> ReleaseNames = new List<String> {
             "KILLERS",
             "DIMENSION",
             "SPARKS",
@@ -27,7 +28,7 @@ namespace SubtitleDownloaderV2.Util
         };
 
 
-        public static readonly List<String> ReleaseNamesSecondary = new List<String>
+        public static List<String> ReleaseNamesSecondary = new List<String>
         {
             "TLA",
             "FoV",
@@ -36,7 +37,7 @@ namespace SubtitleDownloaderV2.Util
             "x264"
         };
 
-        public static readonly List<String> FileTypeNames = new List<String>
+        public static List<String> FileTypeNames = new List<String>
         {
             ".mkv",
             ".mp4",

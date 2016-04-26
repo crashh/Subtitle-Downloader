@@ -22,7 +22,6 @@
         <Style x:Key="LeftMenuButton" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
             <Setter Property="Background" Value="BurlyWood" />
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}" />
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -305,7 +304,7 @@
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
             <Setter Property="MinWidth" Value="120"/>
             <Setter Property="MinHeight" Value="20"/>
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="16" />
             <Setter Property="Height" Value="26" />
             <Setter Property="Background" Value="#FF463219"/>
             <Setter Property="Foreground" Value="White" />
@@ -385,7 +384,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        
+        <Style x:Key="ListBoxStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="#FF463219"/>
+            <Setter Property="Foreground" Value="White" />
+        </Style>
 
 
     </Application.Resources>

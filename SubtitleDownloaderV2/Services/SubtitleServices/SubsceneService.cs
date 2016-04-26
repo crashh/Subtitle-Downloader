@@ -115,6 +115,7 @@ namespace SubtitleDownloaderV2.Services
 
             WriteProgress($"Querying for subtitles to {searchResultPicked}...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
+            selected.url = "http://subscene.com/subtitles/" + searchResultPicked;
             var correctSub = PickCorrectSubtitle();
             if (correctSub.Length < 1)
             {

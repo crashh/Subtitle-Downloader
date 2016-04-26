@@ -14,7 +14,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
@@ -86,7 +86,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" />
+                    <TextBox Grid.Column="0" Text="{Binding CustomEntry.path}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
                     <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}" />
                 </Grid>
             </Grid>

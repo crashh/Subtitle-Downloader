@@ -8,8 +8,8 @@
         xmlns:view="clr-namespace:SubtitleDownloaderV2.View"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainViewModel}"
-        Title="SubtitleDownloader" Width="850" Height="500" 
-        MinWidth="600" MinHeight="450"
+        Title="SubtitleDownloader" Width="1000" Height="650" 
+        MinWidth="850" MinHeight="500"
         ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Icon="icon.ico">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:ListSearchViewModel}">

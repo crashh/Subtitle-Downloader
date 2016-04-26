@@ -114,18 +114,19 @@ namespace SubtitleDownloaderV2.ViewModel
                     bool subtitleExist = false;
                     if (Settings.IgnoreAlreadySubbedFolders && Directory.Exists(entry))
                     {
-                        foreach (string dirEntry in Directory.GetFiles(entry))
-                        {
-                            if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src")) //todo
-                            {
-                                subtitleExist = true;
-                                break;
-                            }
-                        }
+                        subtitleExist = LookForSubtitle(entry);
                     }
 
+
                     String fileName = Path.GetFileName(entry);
-                    if (!subtitleExist && !ignoredFiles.Contains(fileName) && !fileName.EndsWith(".srt"))
+
+                    if (fileName == null) continue;
+
+                    bool isDirectory = fileName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase) != fileName.Length - 4;
+                    bool isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 3));
+
+                    if ((!Settings.IgnoreAlreadySubbedFolders || !subtitleExist)
+                        && !ignoredFiles.Contains(fileName) && (isDirectory || isCorrectFileType))
                     {
                         FileEntry fileEntry = new FileEntry(entry);
                         fileEntry.DefineEntriesFromPath();
@@ -134,6 +135,18 @@ namespace SubtitleDownloaderV2.ViewModel
                     }
                 }
             }
+        }
+
+        private bool LookForSubtitle(string entry)
+        {
+            foreach (string dirEntry in Directory.GetFiles(entry))
+            {
+                if (dirEntry.EndsWith(".srt") || dirEntry.EndsWith(".sub") || dirEntry.EndsWith(".src"))
+                {
+                    return true;
+                }
+            }
+            return Directory.GetDirectories(entry).Any(LookForSubtitle);
         }
 
         #endregion

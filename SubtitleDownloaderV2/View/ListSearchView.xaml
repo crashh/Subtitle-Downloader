@@ -35,7 +35,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
@@ -67,8 +67,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Open Folder" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenFolderCommand}" />
-                <Button Grid.Column="1" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}" Command="{Binding ModifyEntryCommand}"/>
+                <Button Grid.Column="0" Content="Open Folder" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenFolderCommand}" Margin="0 1 1 1"/>
+                <Button Grid.Column="1" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}" Command="{Binding ModifyEntryCommand}" Margin="1 1 0 1"/>
             </Grid>
 
             <!-- Search -->
@@ -82,8 +82,8 @@
                       Style="{StaticResource DataGridStyle}"
                       IsReadOnly="True" ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="*" />
-                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="*"/>
+                <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="1.5*" />
+                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
                 <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="110" Width="*"/>
                 <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="80" Width="*"/>
             </DataGrid.Columns>
