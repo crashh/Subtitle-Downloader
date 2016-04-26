@@ -8,6 +8,7 @@
         public static string ApplicationPath;
         public static string DirectoryPath;
         public static bool IgnoreAlreadySubbedFolders;
+        public static bool ShowFirstColumn;
         public static string Language;
     }
 }

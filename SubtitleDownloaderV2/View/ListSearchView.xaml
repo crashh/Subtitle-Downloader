@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:ListSearchViewModel}"
-             d:DesignHeight="653" d:DesignWidth="1200">
+             d:DesignHeight="653" d:DesignWidth="1200" Name="_userControl">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
         <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
@@ -31,9 +31,11 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <converters:StringToBoolConverter x:Key="StringToBool" />
+        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*" 
+                                    Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
@@ -80,9 +82,10 @@
         <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}"
                       SelectedItem="{Binding SelectedEntry}" 
                       Style="{StaticResource DataGridStyle}"
-                      IsReadOnly="True" ColumnHeaderStyle="{StaticResource GridHeaderStyle}">
+                      ColumnHeaderStyle="{StaticResource GridHeaderStyle}"
+                      IsReadOnly="True" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Filename" Binding="{Binding filename}" Width="1.5*" />
+                <StaticResource ResourceKey="DataGridFilenameColumn" />
                 <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
                 <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="110" Width="*"/>
                 <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="80" Width="*"/>

@@ -70,12 +70,19 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                     
-                    <TextBox Grid.Column="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
-                    <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
-                </Grid>
-                <CheckBox Grid.Row="3" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
+                    <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
+                    <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
+                    <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
                       Foreground="White" FontSize="12"/>
+                </Grid>
+                <CheckBox Grid.Row="3" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0"
+                      Foreground="White" FontSize="12"/>
+
 
                 <!-- Language box -->
                 <Label Grid.Row="4" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
@@ -95,7 +102,7 @@
                     <StackPanel Grid.Column="0">
                         <Label Content="Expected release names" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
                         <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
-                                 SelectionMode="Single"/>
+                                 SelectionMode="Single" Margin="5 0 0 0 "/>
                     </StackPanel>
                     
                     <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
@@ -107,7 +114,7 @@
                     <StackPanel Grid.Column="2">
                         <Label Content="File types" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
                         <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
-                                 SelectionMode="Single"/>
+                                 SelectionMode="Single" Margin="5 0 0 0 "/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="3" Margin="20 0" VerticalAlignment="Center">

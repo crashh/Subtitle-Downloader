@@ -63,6 +63,13 @@ namespace SubtitleDownloaderV2.ViewModel
             set { this.Set(() => this.IgnoreAlreadySubbedFolders, ref this.ignoreAlreadySubbedFolders, value); }
         }
 
+        private bool showFirstColumn;
+        public bool ShowFirstColumn
+        {
+            get { return showFirstColumn; }
+            set { this.Set(() => this.ShowFirstColumn, ref this.showFirstColumn, value); }
+        }
+
         /// <summary>
         /// Result of the action to save or reset.
         /// </summary>
@@ -177,6 +184,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
             settingsFile.WriteLine("No directory path set");
             settingsFile.WriteLine("true");
+            settingsFile.WriteLine("true");
             settingsFile.WriteLine("English");
             settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNames));
             settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNamesSecondary));
@@ -194,10 +202,11 @@ namespace SubtitleDownloaderV2.ViewModel
 
             this.WorkingFolderPath          = Settings.DirectoryPath              = settings[0];
             this.IgnoreAlreadySubbedFolders = Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            this.Language                   = Settings.Language                   = settings[2];
-            ExpectedNames.ReleaseNames          = settings[3].Split(',').ToList();
-            ExpectedNames.ReleaseNamesSecondary = settings[4].Split(',').ToList();
-            ExpectedNames.FileTypeNames         = settings[5].Split(',').ToList();
+            this.ShowFirstColumn            = Settings.ShowFirstColumn            = bool.Parse(settings[2]);
+            this.Language                   = Settings.Language                   = settings[3];
+            ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
+            ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
+            ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
 
             this.ReleaseNames = new ObservableCollection<string>(ExpectedNames.ReleaseNames);
             this.ReleaseNamesSecondary = new ObservableCollection<string>(ExpectedNames.ReleaseNamesSecondary);
@@ -211,14 +220,15 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void SaveCurrentSettings()
         {
-            string[] settings = new string[6];
+            string[] settings = new string[7];
 
             settings[0] = this.WorkingFolderPath;
-            settings[1] = IgnoreAlreadySubbedFolders.ToString();
-            settings[2] = this.Language;
-            settings[3] = string.Join(",", this.ReleaseNames);
-            settings[4] = string.Join(",", this.ReleaseNamesSecondary);
-            settings[5] = string.Join(",", this.FileTypes);
+            settings[1] = this.IgnoreAlreadySubbedFolders.ToString();
+            settings[2] = this.ShowFirstColumn.ToString();
+            settings[3] = this.Language;
+            settings[4] = string.Join(",", this.ReleaseNames);
+            settings[5] = string.Join(",", this.ReleaseNamesSecondary);
+            settings[6] = string.Join(",", this.FileTypes);
 
             File.WriteAllLines(Settings.ApplicationPath, settings);
             Result = "Settings saved!";
@@ -227,10 +237,11 @@ namespace SubtitleDownloaderV2.ViewModel
             settings = File.ReadAllLines(Settings.ApplicationPath);
             Settings.DirectoryPath              = settings[0];
             Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            Settings.Language                   = settings[2];
-            ExpectedNames.ReleaseNames          = settings[3].Split(',').ToList();
-            ExpectedNames.ReleaseNamesSecondary = settings[4].Split(',').ToList();
-            ExpectedNames.FileTypeNames         = settings[5].Split(',').ToList();
+            Settings.ShowFirstColumn            = bool.Parse(settings[2]);
+            Settings.Language                   = settings[3];
+            ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
+            ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
+            ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
         }
 
         #endregion

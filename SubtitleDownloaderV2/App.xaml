@@ -335,7 +335,7 @@
                                 Template="{StaticResource ComboBoxTextBox}" 
                                 HorizontalAlignment="Left" 
                                 VerticalAlignment="Center" 
-                                Margin="3,3,23,3"
+                                Margin="0,3,23,3"
                                 Focusable="True" 
                                 Background="Transparent"
                                 Visibility="Hidden"

@@ -80,6 +80,13 @@ namespace SubtitleDownloaderV2.ViewModel
             set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
         }
 
+        private bool showFirstColumn;
+        public bool ShowFirstColumn
+        {
+            get { return showFirstColumn; }
+            set { this.Set(() => this.ShowFirstColumn, ref this.showFirstColumn, value); }
+        }
+
         #endregion
 
         #region Initialize
@@ -104,7 +111,9 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void OnPresented()
         {
+            this.ShowFirstColumn = Settings.ShowFirstColumn;
             AllEntries.Clear();
+
             if (Directory.Exists(Settings.DirectoryPath))
             {
                 List<String> ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
@@ -119,7 +128,6 @@ namespace SubtitleDownloaderV2.ViewModel
 
 
                     String fileName = Path.GetFileName(entry);
-
                     if (fileName == null) continue;
 
                     bool isDirectory = fileName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase) != fileName.Length - 4;
