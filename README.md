@@ -14,6 +14,8 @@ In the folder 'Latest Build', run the file 'SubtitleDownloader.application'. Thi
 
 Windows will complain about the unknown certificate, thus you will have to hit advanced and "install anyway" during the installation.
 
+Alternatively, the program can be downloaded from [here](http://crashh.me:8082/clickonce/subtitledownloader/publish.htm).
+
 ###Compile
 Clone the repository and compile the source-code, preferrably using visual studio. In case i forgot, it is nessecary to remove/add a new test-certificate for the signing of the files, this can be done by going to Project->Properties->Signing. 
 
