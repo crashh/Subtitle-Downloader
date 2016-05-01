@@ -4,6 +4,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
+using System.Deployment.Application;
 
 namespace SubtitleDownloaderV2.ViewModel
 {
@@ -77,7 +78,14 @@ namespace SubtitleDownloaderV2.ViewModel
             InputSearchViewModel inputSearchViewModel,
             SettingsViewModel settingsViewModel)
         {
-            this.version = "ver. " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                this.Version = $"ver. {ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(4)}";
+            }
+            else
+            {
+                this.Version = "ver. DEBUG";
+            }
 
             this.ListSearchViewModel = listSearchViewModel;
             this.InputSearchViewModel = inputSearchViewModel;

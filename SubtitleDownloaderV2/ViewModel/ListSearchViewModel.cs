@@ -116,31 +116,43 @@ namespace SubtitleDownloaderV2.ViewModel
 
             if (Directory.Exists(Settings.DirectoryPath))
             {
-                List<String> ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
+                var ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
 
                 foreach (var entry in Directory.GetFileSystemEntries(Settings.DirectoryPath))
                 {
-                    bool subtitleExist = false;
-                    if (Settings.IgnoreAlreadySubbedFolders && Directory.Exists(entry))
-                    {
-                        subtitleExist = LookForSubtitle(entry);
-                    }
-
-
-                    String fileName = Path.GetFileName(entry);
+                    var fileName = Path.GetFileName(entry);
                     if (fileName == null) continue;
 
-                    bool isDirectory = fileName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase) != fileName.Length - 4;
-                    bool isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 4));
+                    var isDirectory = Directory.Exists(entry);
+                    var isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 4));
 
-                    if ((!Settings.IgnoreAlreadySubbedFolders || !subtitleExist)
-                        && !ignoredFiles.Contains(fileName) && (isDirectory || isCorrectFileType))
+                    var subtitleExist = false;
+                    if (isDirectory)
                     {
-                        FileEntry fileEntry = new FileEntry(entry);
-                        fileEntry.DefineEntriesFromPath();
+                        if (Settings.IgnoreAlreadySubbedFolders)
+                        {
+                            subtitleExist = LookForSubtitle(entry);
+                        }
 
-                        AllEntries.Add(fileEntry);
+                        //Check if correct file type is present in first level of dir:
+                        var dirEntries = Directory.GetFiles(entry);
+                        foreach (var dirEntry in dirEntries)
+                        {
+                            isCorrectFileType = ExpectedNames.FileTypeNames.Contains(Path.GetExtension(dirEntry));
+                            if (isCorrectFileType) break;
+                        }
                     }
+
+
+                    if ((Settings.IgnoreAlreadySubbedFolders && subtitleExist) || ignoredFiles.Contains(fileName) || !isCorrectFileType)
+                    {
+                        continue;
+                    }
+
+                    FileEntry fileEntry = new FileEntry(entry);
+                    fileEntry.DefineEntriesFromPath();
+
+                    AllEntries.Add(fileEntry);
                 }
             }
         }
@@ -173,7 +185,15 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void OpenBrowser()
         {
-            Process.Start(selectedEntry.url);
+            try
+            {
+                Process.Start(selectedEntry.url);
+            }
+            catch (Exception)
+            {
+                // ignored
+                // todo:  this is sometimes triggered in release versions.
+            }
         }
 
         /// <summary>
@@ -209,7 +229,8 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             if (!success)
             {
-                //textBoxProgress.ForeColor = Color.Red;
+                // textBoxProgress.ForeColor = Color.Red;
+                // todo: convert to proper mvvm design. (using an observable flag to see from view.)
             }
             Progress += message + "\r\n\r\n";
         }
