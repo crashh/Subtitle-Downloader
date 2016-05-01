@@ -131,7 +131,7 @@ namespace SubtitleDownloaderV2.ViewModel
                     if (fileName == null) continue;
 
                     bool isDirectory = fileName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase) != fileName.Length - 4;
-                    bool isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 3));
+                    bool isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 4));
 
                     if ((!Settings.IgnoreAlreadySubbedFolders || !subtitleExist)
                         && !ignoredFiles.Contains(fileName) && (isDirectory || isCorrectFileType))
@@ -154,7 +154,14 @@ namespace SubtitleDownloaderV2.ViewModel
                     return true;
                 }
             }
-            return Directory.GetDirectories(entry).Any(LookForSubtitle);
+            if (entry != Settings.DirectoryPath)
+            {
+                return Directory.GetDirectories(entry).Any(LookForSubtitle);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion
