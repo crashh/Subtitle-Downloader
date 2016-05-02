@@ -33,8 +33,29 @@ namespace SubtitleDownloaderV2.ViewModel
 
         #region Observables
 
-        private string version;
+        private int width;
+        public int Width
+        {
+            get { return width; }
+            set
+            {
+                this.Set(() => this.Width, ref this.width, value);
+                SettingsViewModel.Width = this.width;
+            }
+        }
 
+        private int height;
+        public int Height
+        {
+            get { return height; }
+            set
+            {
+                this.Set(() => this.Height, ref this.height, value);
+                SettingsViewModel.Height = this.height;
+            }
+        }
+
+        private string version;
         public string Version
         {
             get { return this.version; }
@@ -78,18 +99,16 @@ namespace SubtitleDownloaderV2.ViewModel
             InputSearchViewModel inputSearchViewModel,
             SettingsViewModel settingsViewModel)
         {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                this.Version = $"ver. {ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(4)}";
-            }
-            else
-            {
-                this.Version = "ver. DEBUG";
-            }
+            this.Version = ApplicationDeployment.IsNetworkDeployed 
+                ? $"ver. {ApplicationDeployment.CurrentDeployment.CurrentVersion}" 
+                : "ver. DEBUG";
 
             this.ListSearchViewModel = listSearchViewModel;
             this.InputSearchViewModel = inputSearchViewModel;
             this.SettingsViewModel = settingsViewModel;
+
+            this.Width = settingsViewModel.Width;
+            this.Height = settingsViewModel.Height;
 
             ListSearchCommand = new RelayCommand(OpenListSearch);
             InputSearchCommand = new RelayCommand(OpenInputSearch);

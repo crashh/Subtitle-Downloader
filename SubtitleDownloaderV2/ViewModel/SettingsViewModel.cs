@@ -28,10 +28,14 @@ namespace SubtitleDownloaderV2.ViewModel
 
 
         #region Observables
-
-        public Rectangle Dimensions { get; set; }
-
         public List<string> Languages { get; set; }
+
+        public int Width
+        {
+            get;
+            set;
+        }
+        public int Height { get; set; }
 
         /// <summary>
         /// Selected language to look for subtitles in.
@@ -179,6 +183,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void GenerateSettingsFile()
         {
+            //TODO: Find out how not to clear previous settings.
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\");
             TextWriter settingsFile = new StreamWriter(Settings.ApplicationPath, false);
 
@@ -188,6 +193,9 @@ namespace SubtitleDownloaderV2.ViewModel
             settingsFile.WriteLine("English");
             settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNames));
             settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNamesSecondary));
+            settingsFile.WriteLine(string.Join(",", ExpectedNames.FileTypeNames));
+            settingsFile.WriteLine("1000");
+            settingsFile.WriteLine("700");
             settingsFile.WriteLine(string.Join(",", ExpectedNames.FileTypeNames));
             settingsFile.Close();
         }
@@ -207,6 +215,8 @@ namespace SubtitleDownloaderV2.ViewModel
             ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
             ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
             ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
+            this.Width = int.Parse(settings[7]);
+            this.Height = int.Parse(settings[8]);
 
             this.ReleaseNames = new ObservableCollection<string>(ExpectedNames.ReleaseNames);
             this.ReleaseNamesSecondary = new ObservableCollection<string>(ExpectedNames.ReleaseNamesSecondary);
@@ -220,7 +230,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void SaveCurrentSettings()
         {
-            string[] settings = new string[7];
+            string[] settings = new string[9];
 
             settings[0] = this.WorkingFolderPath;
             settings[1] = this.IgnoreAlreadySubbedFolders.ToString();
@@ -229,6 +239,8 @@ namespace SubtitleDownloaderV2.ViewModel
             settings[4] = string.Join(",", this.ReleaseNames);
             settings[5] = string.Join(",", this.ReleaseNamesSecondary);
             settings[6] = string.Join(",", this.FileTypes);
+            settings[7] = this.Width.ToString();
+            settings[8] = this.Height.ToString();
 
             File.WriteAllLines(Settings.ApplicationPath, settings);
             Result = "Settings saved!";
