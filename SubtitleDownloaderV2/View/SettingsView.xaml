@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModel:SettingsViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVisConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
@@ -20,6 +23,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -31,8 +35,17 @@
             </Image>
             <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>
 
+            <StackPanel Orientation="Horizontal" Grid.Row="3">
+                <Button Content="Open settings file" 
+                        Style="{DynamicResource LeftMenuButton}" 
+                        Margin="0 0 0 0" Width="220"
+                        ToolTip="Manually manipulate settings. Restart requried." 
+                        Command="{Binding OpenFileCommand}"/>
+
+            </StackPanel>
+
             <!-- Save or reset -->
-            <Grid Grid.Row="4" Margin="0 0 0 40">
+            <Grid Grid.Row="5" Margin="0 0 0 40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -45,95 +58,98 @@
 
 
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
-            <Grid Margin="100 0 100 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="47*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="27*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-
-                <!-- Path to folder -->
-                <Label Grid.Row="1" Content="Path to folder" Foreground="White"/>
-                
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                <Grid Margin="100 0 100 0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="47*"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="27*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    
-                    <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
-                    <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
-                    <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
+
+                    <!-- Path to folder -->
+                    <Label Grid.Row="1" Content="Path to folder" Foreground="White"/>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
+                        <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
+                        <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"
                       Foreground="White" FontSize="12"/>
-                </Grid>
-                <CheckBox Grid.Row="3" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0"
+                    </Grid>
+                    <CheckBox Grid.Row="3" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0"
                       Foreground="White" FontSize="12"/>
 
 
-                <!-- Language box -->
-                <Label Grid.Row="4" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
-                <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
+                    <!-- Language box -->
+                    <Label Grid.Row="4" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
+                    <ComboBox Grid.Row="5 " ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
                           Style="{StaticResource ComboBoxStyle}"
                           IsEditable="False" Margin="5 0 0 0" VerticalAlignment="Top">
-                </ComboBox>
+                    </ComboBox>
 
-                <!-- Release names -->
-                <Grid Grid.Row="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <Label Content="Expected release names" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
-                        <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
+                    <!-- Release names -->
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Content="Expected release names" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
+                            <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
                                  SelectionMode="Single" Margin="5 0 0 0 "/>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
-                        <TextBox Text="{Binding SelectedReleaseName}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
-                        <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameCommand}" Margin="0 0 0 10"/>
-                        <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseNameCommand}" Margin="0 10 0 0"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Column="2">
-                        <Label Content="File types" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
-                        <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
+                        <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
+                            <TextBox Text="{Binding SelectedReleaseName}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
+                            <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameCommand}" Margin="0 0 0 10"/>
+                            <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseNameCommand}" Margin="0 10 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <Label Content="File types" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
+                            <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
                                  SelectionMode="Single" Margin="5 0 0 0 "/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Grid.Column="3" Margin="20 0" VerticalAlignment="Center">
-                        <TextBox Text="{Binding SelectedFileType}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
-                        <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddFileTypeCommand}" Margin="0 0 0 10"/>
-                        <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveFileTypeCommand}" Margin="0 10 0 0"/>
-                    </StackPanel>
+                        <StackPanel Grid.Column="3" Margin="20 0" VerticalAlignment="Center">
+                            <TextBox Text="{Binding SelectedFileType}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
+                            <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddFileTypeCommand}" Margin="0 0 0 10"/>
+                            <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveFileTypeCommand}" Margin="0 10 0 0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="11">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.8*"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Content="(Click 'Save' in order for changes to take effect!)" Visibility="{Binding ChangePerformed, Converter={StaticResource boolToVisConverter}, FallbackValue=Hidden}" Foreground="White"/>
+                        <Label Grid.Column="1" Content="{Binding Result}" Foreground="White" HorizontalAlignment="Right"/>
+
+                    </Grid>
                 </Grid>
-
-
-                <StackPanel Orientation="Horizontal" Grid.Row="11" HorizontalAlignment="Right">
-                    <Label Content="{Binding Result}" Foreground="White"/>
-                    <Button Content="Open settings file" Style="{DynamicResource TextBoxButton}" 
-                        Width="150" HorizontalAlignment="Right" Margin="0 0 0 0"
-                        ToolTip="Manually manipulate settings. Restart requried." Command="{Binding OpenFileCommand}"/>
-
-                </StackPanel>
-
-            </Grid>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>

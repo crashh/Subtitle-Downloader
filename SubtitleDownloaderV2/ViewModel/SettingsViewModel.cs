@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -118,7 +119,14 @@ namespace SubtitleDownloaderV2.ViewModel
             get { return fileTypes; }
             set { this.Set(() => this.FileTypes, ref this.fileTypes, value); }
         }
-
+        
+        public bool ChangePerformed => 
+            Settings.IgnoreAlreadySubbedFolders != this.IgnoreAlreadySubbedFolders ||
+            Settings.ShowFirstColumn != this.ShowFirstColumn ||
+            string.CompareOrdinal(Settings.DirectoryPath, this.WorkingFolderPath) != 0 ||
+            string.CompareOrdinal(Settings.Language, this.Language) != 0 ||
+            ExpectedNames.ReleaseNames.Except(this.ReleaseNames).Any() ||
+            this.ReleaseNames.Except(ExpectedNames.ReleaseNames).Any();
         #endregion
 
         /// <summary>
@@ -159,20 +167,21 @@ namespace SubtitleDownloaderV2.ViewModel
                 try
                 {
                     LoadSettingsFile();
+                    this.Result = "Settings loaded from file.";
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     GenerateSettingsFile();
                     LoadSettingsFile();
+                    this.Result = "Failed to retrieve settings, all settings reset to default.";
                 }
             }
             else
             {
                 GenerateSettingsFile();
                 LoadSettingsFile();
+                this.Result = "No settings file found, all settings reset to default.";
             }
-
-            this.Result = string.Empty;
         }
 
         #region Methods

@@ -9,7 +9,7 @@ namespace SubtitleDownloaderV2.Util
     /// </summary>
     public static class ExpectedNames
     {
-        public static List<String> ReleaseNames = new List<String> {
+        public static List<string> ReleaseNames = new List<string> {
             "KILLERS",
             "DIMENSION",
             "SPARKS",
@@ -28,7 +28,7 @@ namespace SubtitleDownloaderV2.Util
         };
 
 
-        public static List<String> ReleaseNamesSecondary = new List<String>
+        public static List<string> ReleaseNamesSecondary = new List<string>
         {
             "TLA",
             "FoV",
@@ -37,7 +37,7 @@ namespace SubtitleDownloaderV2.Util
             "x264"
         };
 
-        public static List<String> FileTypeNames = new List<String>
+        public static List<string> FileTypeNames = new List<string>
         {
             ".mkv",
             ".mp4",
