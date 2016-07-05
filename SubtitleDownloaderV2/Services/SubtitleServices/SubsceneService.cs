@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using SubtitleDownloaderV2.Dialogs;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Util;
 using SubtitleDownloaderV2.View.Dialog;
@@ -152,17 +153,13 @@ namespace SubtitleDownloaderV2.Services
             var searchResultPicked = "";
 
             Application.Current.Dispatcher.Invoke((Action)delegate {
-                var pickEntryForm = new ResultPickerView(searchResult);
-                pickEntryForm.ShowDialog();
-
-                if (pickEntryForm.getReturnValue() != -1)
+                var dialog = new SearchPickerDialogHandler(searchResult);
+                dialog.StartDialog((int result) =>
                 {
-                    searchResultPicked = searchResult[pickEntryForm.getReturnValue()];
-                } 
-
-                pickEntryForm.Close();
+                    searchResultPicked = result != -1 ? searchResult[result] : "";
+                });
             });
-
+            
             if (string.IsNullOrEmpty(searchResultPicked)) return string.Empty;
 
             WriteProgress($"User picked {searchResultPicked}...", SUCCESS);

@@ -20,24 +20,23 @@ namespace SubtitleDownloaderV2.View.Dialog
     /// </summary>
     public partial class ResultPickerView : Window
     {
-        private readonly ResultPickerViewModel vm;
 
-        public ResultPickerView(string[] results)
+        public ResultPickerView()
         {
             InitializeComponent();
-            vm = new ResultPickerViewModel(results);
-            this.DataContext = vm;
-        }
-
-        public int getReturnValue()
-        {
-            return vm.returnValue;
         }
 
         private void HideWindow(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            // Will close it later, need the return value.
+            this.Close();
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            // Begin dragging the window
+            this.DragMove();
         }
     }
 }

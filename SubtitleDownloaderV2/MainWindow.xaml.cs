@@ -14,6 +14,7 @@ namespace SubtitleDownloaderV2
             InitializeComponent();
             ViewModelLocator vml = new ViewModelLocator();
             this.DataContext = ServiceLocator.Current.GetInstance<MainViewModel>();
+            AppContext.MainWindow = this;
         }
     }
 }

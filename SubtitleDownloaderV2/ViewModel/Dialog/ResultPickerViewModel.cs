@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -11,8 +12,6 @@ namespace SubtitleDownloaderV2.ViewModel.Dialog
 {
     class ResultPickerViewModel : ViewModelBase
     {
-        public int returnValue;
-
         public ICommand OkCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
@@ -20,11 +19,14 @@ namespace SubtitleDownloaderV2.ViewModel.Dialog
 
         public int SelectedEntry { get; set; }
 
-        public ResultPickerViewModel(string[] results)
+        private readonly Action<int> onSavedAction;
+
+        public ResultPickerViewModel(string[] results, Action<int> onSavedAction)
         {
             this.AllResults = results;
             this.SelectedEntry = 0;
-            this.returnValue = -1;
+
+            this.onSavedAction = onSavedAction;
 
             this.OkCommand = new RelayCommand(DoOkCommand);
             this.CancelCommand = new RelayCommand(DoCancelCommand);
@@ -32,12 +34,17 @@ namespace SubtitleDownloaderV2.ViewModel.Dialog
 
         private void DoOkCommand()
         {
-            returnValue = SelectedEntry;
+            this.onSavedAction.Invoke(SelectedEntry);
         }
 
         private void DoCancelCommand()
         {
-            returnValue = -1;
+            this.onSavedAction.Invoke(-1);
+        }
+
+        public void OnPresented()
+        {
+            
         }
     }
 }
