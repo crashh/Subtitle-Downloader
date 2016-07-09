@@ -55,7 +55,7 @@
 
         <!-- Main window -->
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
-            <Grid Margin="100 0 100 0">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="37*"/>
                     <RowDefinition Height="Auto"/>
@@ -66,21 +66,28 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="37*"/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition MaxWidth="900"/>
+                    <ColumnDefinition Width="0.1*"/>
+                </Grid.ColumnDefinitions>
 
+                <Label Grid.Row="1" Grid.Column="1" Content="Manual Search" Foreground="White" FontSize="30"/>
                 <!-- Path to folder -->
-                <Label Grid.Row="1" Content="Title" Foreground="White"/>
-                <TextBox Grid.Row="2" Grid.Column="0" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="2" Grid.Column="1" Content="Title" Foreground="White"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="3" Content="Release" Foreground="White"/>
-                <TextBox Grid.Row="4" Grid.Column="0" Text="{Binding CustomEntry.release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="4" Grid.Column="1" Content="Release" Foreground="White"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CustomEntry.release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="5" Content="Episode" Foreground="White"/>
-                <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding CustomEntry.episode}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="6" Grid.Column="1" Content="Episode" Foreground="White"/>
+                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CustomEntry.episode}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="7" Content="Path to folder" Foreground="White"/>
-                <Grid Grid.Row="8">
+                <Label Grid.Row="8" Grid.Column="1" Content="Path to folder" Foreground="White"/>
+                <Grid Grid.Row="9" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
