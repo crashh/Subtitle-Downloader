@@ -99,6 +99,13 @@ namespace SubtitleDownloaderV2.ViewModel
             set { this.Set(() => this.ReleaseNames, ref this.releaseNames, value); }
         }
 
+        private string selectedReleaseNameSecondary;
+        public string SelectedReleaseNameSecondary
+        {
+            get { return selectedReleaseNameSecondary; }
+            set { this.Set(() => this.SelectedReleaseNameSecondary, ref this.selectedReleaseNameSecondary, value); }
+        }
+
         private ObservableCollection<string> releaseNamesSecondary;
         public ObservableCollection<string> ReleaseNamesSecondary
         {

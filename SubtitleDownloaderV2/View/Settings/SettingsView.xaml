@@ -56,18 +56,13 @@
             </Grid>
         </Grid>
 
-
-        <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+        <!-- Main window -->
+        <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" HorizontalAlignment="Stretch">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" >
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -77,73 +72,121 @@
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.1*"/>
-                        <ColumnDefinition MaxWidth="900"/>
-                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="1" Grid.Column="1" Content="Settings" Foreground="White" FontSize="30"/>
-                    <!-- Path to folder -->
-                    <Label Grid.Row="2" Grid.Column="1" Content="Path to folder" Foreground="White"/>
+                    <Expander Grid.Row="2" Grid.Column="1" Header="General" IsExpanded="True" Foreground="White" FontSize="16" Margin="0 30 0 0" HorizontalAlignment="Stretch">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MaxWidth="700"/>
+                                <ColumnDefinition Width="0.1*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Path to folder -->
+                            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Path to folder" Foreground="White"/>
+                            <Grid Grid.Row="1" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="0.2*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="3" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
-                        <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
-                        <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
-                    </Grid>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
+                                <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
+                                <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
+                                <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
+                            </Grid>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
 
 
-                    <!-- Language box -->
-                    <Label Grid.Row="5" Grid.Column="1" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
-                    <ComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
+                            <!-- Language box -->
+                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
+                            <ComboBox Grid.Row="4" Grid.Column="0" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
                           Style="{StaticResource ComboBoxStyle}"
                           IsEditable="False" Margin="5 0 0 0" VerticalAlignment="Top">
-                    </ComboBox>
+                            </ComboBox>
+                        </Grid>
+                    </Expander>
+                    
 
                     <!-- Release names -->
+                    <Expander Grid.Row="3" Grid.Column="1" Header="File estimation lists" IsExpanded="False" Foreground="White" FontSize="16" Margin="0 30 0 0">
+                        <WrapPanel  Orientation="Horizontal" FlowDirection="LeftToRight">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="200"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
+                                        Expected release names
+                                    </TextBlock>
+                                    <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
+                                 SelectionMode="Single" Margin="5 0 0 0 "/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
+                                    <TextBox Text="{Binding SelectedReleaseName}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
+                                    <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameCommand}" Margin="0 0 0 10"/>
+                                    <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseNameCommand}" Margin="0 10 0 0"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="200"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
+                                        Secondary release names
+                                    </TextBlock>
+                                    <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNamesSecondary}" SelectedItem="{Binding SelectedReleaseNameSecondary}"
+                                 SelectionMode="Single" Margin="5 0 0 0 "/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
+                                    <TextBox Text="{Binding SelectedReleaseNameSecondary}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
+                                    <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameSecondaryCommand}" Margin="0 0 0 10"/>
+                                    <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseSecondaryNameCommand}" Margin="0 10 0 0"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="200"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
+                                        File types
+                                    </TextBlock>
+                                    <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
+                                 SelectionMode="Single" Margin="5 0 0 0 "/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center" >
+                                    <TextBox Text="{Binding SelectedFileType}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
+                                    <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddFileTypeCommand}" Margin="0 0 0 10"/>
+                                    <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveFileTypeCommand}" Margin="0 10 0 0"/>
+                                </StackPanel>
+                            </Grid>
+                        </WrapPanel>
+                    </Expander>
+                    
                     <Grid Grid.Row="7" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <Label Content="Expected release names" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
-                            <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
-                                 SelectionMode="Single" Margin="5 0 0 0 "/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
-                            <TextBox Text="{Binding SelectedReleaseName}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
-                            <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameCommand}" Margin="0 0 0 10"/>
-                            <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseNameCommand}" Margin="0 10 0 0"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2">
-                            <Label Content="File types" Foreground="White" Margin="0 10 0 0" ToolTip="If present in filename, it will be used to find correct subtitle."/>
-                            <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
-                                 SelectionMode="Single" Margin="5 0 0 0 "/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="3" Margin="20 0" VerticalAlignment="Center">
-                            <TextBox Text="{Binding SelectedFileType}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
-                            <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddFileTypeCommand}" Margin="0 0 0 10"/>
-                            <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveFileTypeCommand}" Margin="0 10 0 0"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Grid.Row="12" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1.8*"/>
                             <ColumnDefinition Width="200"/>

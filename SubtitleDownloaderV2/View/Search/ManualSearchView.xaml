@@ -57,7 +57,7 @@
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="37*"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -70,12 +70,12 @@
                     <RowDefinition Height="37*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="20"/>
                     <ColumnDefinition MaxWidth="900"/>
-                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="1" Grid.Column="1" Content="Manual Search" Foreground="White" FontSize="30"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="Manual Search" Foreground="White" FontSize="30" Margin="0 3 0 30"/>
                 <!-- Path to folder -->
                 <Label Grid.Row="2" Grid.Column="1" Content="Title" Foreground="White"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CustomEntry.title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
