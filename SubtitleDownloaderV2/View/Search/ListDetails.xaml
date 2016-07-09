@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="SubtitleDownloader.View.Search.ListDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SubtitleDownloader.View.Search"
+             xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="640" d:DesignWidth="1000" Name="_userControl">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="BorderThickness" Value="1 1 0 1" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="0 0 0 0"/>
+            <Setter Property="SelectionUnit" Value="FullRow" />
+        </Style>
+        <converters:VisibilityToBooleanConverter x:Key="VisibilityToBool"/>
+        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*" 
+                            Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <DataGrid ItemsSource="{Binding AllEntries}"
+                  SelectedItem="{Binding SelectedEntry}" 
+                  Style="{StaticResource DataGridStyle}"
+                  ColumnHeaderStyle="{StaticResource GridHeaderStyle}"
+                  IsReadOnly="True" 
+                  RowDetailsVisibilityMode="Collapsed">
+            <DataGrid.Columns>
+                <StaticResource ResourceKey="DataGridFilenameColumn" />
+                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
+                <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="100" Width="*"/>
+                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="90" Width="*"/>
+                <DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- Tie button to row details visibility, and hide button if not relevant. -->
+                            <ToggleButton Name="ShowDetails" Content="+"
+                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
+                                                      Path=DetailsVisibility, 
+                                                      Converter={StaticResource VisibilityToBool}, 
+                                                      Mode=TwoWay}"
+                                          Visibility="{Binding IsDirectory, Converter={StaticResource BoolToVis}}"
+                                          FontSize="8"
+                                          Width="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid MaxHeight="175">
+                        <ScrollViewer>
+                            <local:ListRowDetails DataContext="{Binding}"/>
+                        </ScrollViewer>
+                    </Grid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF272424"/>
+            </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="BorderThickness" Value="1" />
+                </Style>
+            </DataGrid.RowStyle>
+
+        </DataGrid>
+    </Grid>
+</UserControl>

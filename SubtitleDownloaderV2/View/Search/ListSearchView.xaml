@@ -6,33 +6,13 @@
              xmlns:local="clr-namespace:SubtitleDownloaderV2.View"
              xmlns:viewModel="clr-namespace:SubtitleDownloaderV2.ViewModel"
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
+             xmlns:search="clr-namespace:SubtitleDownloader.View.Search"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModel:ListSearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200" Name="_userControl">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
-        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="BorderThickness" Value="0 0 0 1"/>
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
-        <Style x:Key="DataGridStyle" TargetType="DataGrid">
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="GridLinesVisibility" Value="None"/>
-            <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
-            <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderThickness" Value="1 1 0 1" />
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="SelectionMode" Value="Single" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Padding" Value="5 2 5 2"/>
-            <Setter Property="SelectionUnit" Value="FullRow" />
-        </Style>
         <converters:StringToBoolConverter x:Key="StringToBool" />
-        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*" 
-                                    Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
     </UserControl.Resources>
 
     <Grid x:Name="grid">
@@ -79,36 +59,9 @@
         </Grid>
 
         <!-- Main window -->
-        <DataGrid Grid.Column="1" ItemsSource="{Binding AllEntries}"
-                      SelectedItem="{Binding SelectedEntry}" 
-                      Style="{StaticResource DataGridStyle}"
-                      ColumnHeaderStyle="{StaticResource GridHeaderStyle}"
-                      IsReadOnly="True" >
-            <DataGrid.Columns>
-                <StaticResource ResourceKey="DataGridFilenameColumn" />
-                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
-                <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="110" Width="*"/>
-                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="80" Width="*"/>
-            </DataGrid.Columns>
+        <search:ListDetails Grid.Column="1"/>
 
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                   Color="#FF272424"/>
-            </DataGrid.Resources>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="BorderThickness" Value="1" />
-                </Style>
-            </DataGrid.RowStyle>
-
-        </DataGrid>
-
+        <!-- Popup window -->
         <Grid Grid.Column="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />

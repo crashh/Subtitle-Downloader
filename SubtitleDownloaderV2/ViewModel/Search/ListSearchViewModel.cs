@@ -115,44 +115,71 @@ namespace SubtitleDownloaderV2.ViewModel
 
             if (Directory.Exists(Settings.DirectoryPath))
             {
-                var ignoredFiles = new List<String> { "desktop.ini", "Thumbs.db", "Movies", "Series" };
+                AddDirectoryContent(AllEntries, Settings.DirectoryPath);
+            }
+        }
 
-                foreach (var entry in Directory.GetFileSystemEntries(Settings.DirectoryPath))
+        private void AddDirectoryContent(ObservableCollection<FileEntry> parent, string directory)
+        {
+            var ignoredFiles = new List<String> { "desktop", "thumbs", "movies", "series", "sample" };
+
+            foreach (var entry in Directory.GetFileSystemEntries(directory))
+            {
+                var fileName = Path.GetFileName(entry);
+                if (fileName == null) continue;
+
+                var isDirectory = Directory.Exists(entry);
+                var isDirectoryAndContainsSeveralCorrectFileTypes = false;
+                var isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 4));
+
+                var subtitleExist = false;
+                if (isDirectory)
                 {
-                    var fileName = Path.GetFileName(entry);
-                    if (fileName == null) continue;
-
-                    var isDirectory = Directory.Exists(entry);
-                    var isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - 4));
-
-                    var subtitleExist = false;
-                    if (isDirectory)
+                    if (Settings.IgnoreAlreadySubbedFolders)
                     {
-                        if (Settings.IgnoreAlreadySubbedFolders)
-                        {
-                            subtitleExist = LookForSubtitle(entry);
-                        }
-
-                        //Check if correct file type is present in first level of dir:
-                        var dirEntries = Directory.GetFiles(entry);
-                        foreach (var dirEntry in dirEntries)
-                        {
-                            isCorrectFileType = ExpectedNames.FileTypeNames.Contains(Path.GetExtension(dirEntry));
-                            if (isCorrectFileType) break;
-                        }
+                        subtitleExist = LookForSubtitle(entry);
                     }
 
-
-                    if ((Settings.IgnoreAlreadySubbedFolders && subtitleExist) || ignoredFiles.Contains(fileName) || !isCorrectFileType)
+                    //Check if correct file type is present in first level of dir:
+                    var dirEntries = Directory.GetFiles(entry);
+                    foreach (var dirEntry in dirEntries)
                     {
-                        continue;
+                        if (ExpectedNames.FileTypeNames.Contains(Path.GetExtension(dirEntry)) == false)
+                        {
+                            continue;
+                        }
+                        if (isCorrectFileType)
+                        {
+                            isDirectoryAndContainsSeveralCorrectFileTypes = true;
+                        }
+                        isCorrectFileType = true;
                     }
-
-                    FileEntry fileEntry = new FileEntry(entry);
-                    fileEntry.DefineEntriesFromPath();
-
-                    AllEntries.Add(fileEntry);
                 }
+
+
+                if ((Settings.IgnoreAlreadySubbedFolders && subtitleExist) || ignoredFiles.Contains(fileName.ToLower().Split('.')[0]) || !isCorrectFileType)
+                {
+                    continue;
+                }
+
+                FileEntry fileEntry = new FileEntry(entry);
+                fileEntry.DefineEntriesFromPath();
+
+                parent.Add(fileEntry);
+
+                if (isDirectoryAndContainsSeveralCorrectFileTypes)
+                {
+                    this.AddDirectoryContent(fileEntry.AllEntries, fileEntry.path);
+                }
+                else
+                {
+                    if (AllEntries != parent)
+                    {
+                        var parentEntry = AllEntries.Count > 0 ? AllEntries.Last() : fileEntry;
+                        fileEntry.DefineEntriesWithDefault("", parentEntry.release ?? "", "");
+                    }
+                }
+
             }
         }
 

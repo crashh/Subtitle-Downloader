@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,12 +24,22 @@ namespace SubtitleDownloaderV2.Model
 
         public string url { get; set; }
 
+        private bool isDirectory;
+        public bool IsDirectory {
+            get { return (AllEntries?.Count ?? 0) > 1; }
+            private set { this.isDirectory = value; }
+        }
+
+        public ObservableCollection<FileEntry> AllEntries { get; set; }
+
         public FileEntry(string path)
         {
             this.path = path;
             this.subtitleExists = false;
+            this.AllEntries = new ObservableCollection<FileEntry>();
+            this.IsDirectory = isDirectory;
 
-            if (String.IsNullOrEmpty(path)) throw new NullReferenceException("domain");
+            if (string.IsNullOrEmpty(path)) throw new NullReferenceException("domain");
 
             this.filename = Path.GetFileName(path);
         }
@@ -39,23 +51,48 @@ namespace SubtitleDownloaderV2.Model
             this.release = release;
             this.episode = episode;
             this.subtitleExists = false;
+            this.IsDirectory = isDirectory;
+
+            this.AllEntries = new ObservableCollection<FileEntry>();
 
             this.filename = Path.GetFileName(path);
         }
 
         public void DefineEntriesFromPath()
         {
-            if (String.IsNullOrEmpty(filename)) return;
+            if (string.IsNullOrEmpty(filename)) return;
 
-            String[] split = filename.Split('.', '-', '_', '[', ']', ' ');
+            var split = filename.Split('.', '-', '_', '[', ']', ' ', '(', ')');
             ExtractName(split);
             ExtractRelease(split);
             ExtractEpisode();
         }
 
+        public void DefineEntriesWithDefault(string name, string release, string episode)
+        {
+            if (string.IsNullOrEmpty(name) == false)
+            {
+                this.title = name;
+            }
+            if (string.IsNullOrEmpty(release) == false)
+            {
+                var primaryFound = ExpectedNames.ReleaseNames.Contains(this.release);
+                var secondaryFound = ExpectedNames.ReleaseNamesSecondary.Contains(this.release);
+
+                if (primaryFound == false && secondaryFound == false)
+                {
+                    this.release = release;
+                }
+            }
+            if (string.IsNullOrEmpty(episode) == false)
+            {
+                this.title = episode;
+            }
+        }
+
         private void ExtractName(string[] split)
         {
-            String concatName = split[0];
+            string concatName = split[0];
             for (int index = 1; index < split.Length; index++)
             {
                 string del = split[index];
@@ -63,7 +100,7 @@ namespace SubtitleDownloaderV2.Model
                     break;
                 concatName += " " + del;
             }
-            title = concatName;
+            title = concatName.TrimStart();
         }
 
         private void ExtractRelease(string[] split)
@@ -71,12 +108,12 @@ namespace SubtitleDownloaderV2.Model
             release = "";
             release = split.FirstOrDefault(x => ExpectedNames.ReleaseNames.Contains(x));
 
-            if (String.IsNullOrEmpty(release))
+            if (string.IsNullOrEmpty(release))
             {
                 release = split.FirstOrDefault(x => ExpectedNames.ReleaseNamesSecondary.Contains(x));
             }
 
-            if (String.IsNullOrEmpty(release))
+            if (string.IsNullOrEmpty(release))
             {
                 release = ExpectedNames.FileTypeNames.Contains(split[split.Length - 1]) 
                     ? split[split.Length - 2] 
