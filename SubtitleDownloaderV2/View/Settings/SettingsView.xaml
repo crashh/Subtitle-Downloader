@@ -28,9 +28,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!-- Logo and title -->
-            <Image Grid.Row="0" Source="../icon.ico" Height="120" Margin="0 15 0 0" >
+            <Image Grid.Row="0" Source="../../icon.ico" Height="120" Margin="0 15 0 0" >
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="../icon.ico"/>
+                    <ImageBrush ImageSource="../../icon.ico"/>
                 </Image.OpacityMask>
             </Image>
             <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>

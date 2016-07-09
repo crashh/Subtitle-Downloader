@@ -28,7 +28,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand SettingsCommand { get; set; }
 
         private readonly ListSearchViewModel ListSearchViewModel;
-        private readonly InputSearchViewModel InputSearchViewModel;
+        private readonly ManualSearchViewModel _manualSearchViewModel;
         private readonly SettingsViewModel SettingsViewModel;
 
         #region Observables
@@ -96,7 +96,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public MainViewModel(
             ListSearchViewModel listSearchViewModel, 
-            InputSearchViewModel inputSearchViewModel,
+            ManualSearchViewModel manualSearchViewModel,
             SettingsViewModel settingsViewModel)
         {
             this.Version = ApplicationDeployment.IsNetworkDeployed 
@@ -104,7 +104,7 @@ namespace SubtitleDownloaderV2.ViewModel
                 : "ver. DEBUG";
 
             this.ListSearchViewModel = listSearchViewModel;
-            this.InputSearchViewModel = inputSearchViewModel;
+            this._manualSearchViewModel = manualSearchViewModel;
             this.SettingsViewModel = settingsViewModel;
 
             this.Width = settingsViewModel.Width;
@@ -138,8 +138,8 @@ namespace SubtitleDownloaderV2.ViewModel
             IsListSearchNotSelected = true;
             IsInputSearchNotSelected = false;
             IsSettingsNotSelected = true;
-            SelectedViewModel = InputSearchViewModel;
-            InputSearchViewModel.OnPresented();
+            SelectedViewModel = _manualSearchViewModel;
+            _manualSearchViewModel.OnPresented();
         }
 
         /// <summary>

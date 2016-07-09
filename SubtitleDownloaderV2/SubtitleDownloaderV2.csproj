@@ -144,21 +144,21 @@
     <Compile Include="Util\ExpectedNames.cs" />
     <Compile Include="Util\Settings.cs" />
     <Compile Include="ViewModel\Dialog\ResultPickerViewModel.cs" />
-    <Compile Include="ViewModel\InputSearchViewModel.cs" />
+    <Compile Include="ViewModel\Search\ManualSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ListSearchViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Search\ListSearchViewModel.cs" />
+    <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Dialog\ResultPickerView.xaml.cs">
       <DependentUpon>ResultPickerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\InputSearchView.xaml.cs">
-      <DependentUpon>InputSearchView.xaml</DependentUpon>
+    <Compile Include="View\Search\ManualSearchView.xaml.cs">
+      <DependentUpon>ManualSearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ListSearchView.xaml.cs">
+    <Compile Include="View\Search\ListSearchView.xaml.cs">
       <DependentUpon>ListSearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingsView.xaml.cs">
+    <Compile Include="View\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -177,15 +177,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\InputSearchView.xaml">
+    <Page Include="View\Search\ManualSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ListSearchView.xaml">
+    <Page Include="View\Search\ListSearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingsView.xaml">
+    <Page Include="View\Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

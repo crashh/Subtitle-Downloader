@@ -10,7 +10,7 @@ using SubtitleDownloaderV2.Services;
 
 namespace SubtitleDownloaderV2.ViewModel
 {
-    public class InputSearchViewModel : ViewModelBase
+    public class ManualSearchViewModel : ViewModelBase
     {
         const bool SUCCESS = true;
         const bool FAILURE = false;
@@ -63,7 +63,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Constructor
         /// </summary>
-        public InputSearchViewModel(ListSearchViewModel listSearchViewModel)
+        public ManualSearchViewModel(ListSearchViewModel listSearchViewModel)
         {
             this.listSearchViewModel = listSearchViewModel;
 
@@ -96,7 +96,14 @@ namespace SubtitleDownloaderV2.ViewModel
         #region Methods
         private void OpenBrowser()
         {
-            Process.Start(customEntry.url);
+            try
+            {
+                Process.Start(customEntry.url);
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
         }
 
         /// <summary>

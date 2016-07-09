@@ -21,9 +21,9 @@ namespace SubtitleDownloaderV2.View
     /// <summary>
     /// Interaction logic for SearchView.xaml
     /// </summary>
-    public partial class InputSearchView : UserControl
+    public partial class ManualSearchView : UserControl
     {
-        public InputSearchView()
+        public ManualSearchView()
         {
             InitializeComponent();
         }

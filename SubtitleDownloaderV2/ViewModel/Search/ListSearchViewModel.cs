@@ -12,7 +12,6 @@ using GalaSoft.MvvmLight.Ioc;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
 using SubtitleDownloaderV2.Util;
-using SubtitleDownloaderV2.View.Dialog;
 
 namespace SubtitleDownloaderV2.ViewModel
 {
@@ -201,7 +200,14 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void OpenFolder()
         {
-            Process.Start(selectedEntry.GetFullPath());
+            try
+            {
+                Process.Start(selectedEntry.GetFullPath());
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
         }
 
         /// <summary>

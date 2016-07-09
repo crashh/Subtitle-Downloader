@@ -43,7 +43,7 @@ namespace SubtitleDownloaderV2.ViewModel
             ////}
 
             SimpleIoc.Default.Register<ListSearchViewModel>();
-            SimpleIoc.Default.Register<InputSearchViewModel>();
+            SimpleIoc.Default.Register<ManualSearchViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }

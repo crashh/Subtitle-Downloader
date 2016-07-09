@@ -15,8 +15,8 @@
         <DataTemplate DataType="{x:Type viewModel:ListSearchViewModel}">
             <view:ListSearchView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:InputSearchViewModel}">
-            <view:InputSearchView/>
+        <DataTemplate DataType="{x:Type viewModel:ManualSearchViewModel}">
+            <view:ManualSearchView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
             <view:SettingsView/>
