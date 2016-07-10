@@ -34,9 +34,11 @@ namespace SubtitleDownloaderV2.Services
                 System.IO.Compression.ZipFile.ExtractToDirectory(pathToFolder + "\\autosub-pull.rar", pathToFolder);
                 System.IO.File.Delete(pathToFolder + "\\autosub-pull.rar");
             }
-            catch (IOException e)
+            catch (IOException)
             {
-                // File exists, we do nothing then.
+                // ignored
+                // 1: Subtitle file already exists.
+                // 2: Zip file may be in incorrect format, leave the user to unpack it.
             }
 
         }

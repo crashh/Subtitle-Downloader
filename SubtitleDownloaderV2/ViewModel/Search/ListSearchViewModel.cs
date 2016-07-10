@@ -184,7 +184,7 @@ namespace SubtitleDownloaderV2.ViewModel
                     }
                 } catch(Exception)
                 {
-                    //ignored (meaning that this entry will be ignored.)
+                    //ignored and continue with next (meaning that this entry will not be shown.)
                 }
 
             }

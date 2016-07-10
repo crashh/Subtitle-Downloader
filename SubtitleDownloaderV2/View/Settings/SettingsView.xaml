@@ -93,7 +93,16 @@
                                 <ColumnDefinition Width="0.1*"/>
                             </Grid.ColumnDefinitions>
                             <!-- Path to folder -->
-                            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Path to folder" Foreground="White"/>
+                            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The directory to scan when using list search." Margin="0" Padding="5 0 0 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Path to folder</TextBlock>
+                                    <Image Source="../../information.ico" Margin="5 0 0 0" >
+                                        <Image.OpacityMask>
+                                            <ImageBrush ImageSource="../../information.ico"/>
+                                        </Image.OpacityMask>
+                                    </Image>
+                                </StackPanel>
+                             </Label>
                             <Grid Grid.Row="1" Grid.Column="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -112,7 +121,16 @@
 
 
                             <!-- Language box -->
-                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Subtitle language" Foreground="White" Margin="0 10 0 0"/>
+                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The language of subtitles it should be looking for." Margin="5 10 0 0" Padding="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock>Subtitle language</TextBlock>
+                                    <Image Source="../../information.ico" Margin="5 0 0 0" >
+                                        <Image.OpacityMask>
+                                            <ImageBrush ImageSource="../../information.ico"/>
+                                        </Image.OpacityMask>
+                                    </Image>
+                                </StackPanel>
+                            </Label>
                             <ComboBox Grid.Row="4" Grid.Column="0" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
                           Style="{StaticResource ComboBoxStyle}"
                           IsEditable="False" Margin="5 0 0 0" VerticalAlignment="Top">
@@ -130,9 +148,19 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
-                                        Expected release names
-                                    </TextBlock>
+                                    <Label Foreground="White" ToolTip="Will pick the first match from this list, as release name." Margin="0" Padding="4 10 0 0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12" >
+                                                Expected release names
+                                            </TextBlock>
+                                            <Image Source="../../information.ico" Margin="10 3 0 0" Width="10">
+                                                <Image.OpacityMask>
+                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                </Image.OpacityMask>
+                                            </Image>
+                                        </StackPanel>
+                                    </Label>
+
                                     <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
                                  SelectionMode="Single" Margin="5 0 0 0 "/>
                                 </StackPanel>
@@ -150,9 +178,18 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
-                                        Secondary release names
-                                    </TextBlock>
+                                    <Label Foreground="White" ToolTip="If non from 'expected release names' match, this list will be scanned." Margin="0" Padding="4 10 0 0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
+                                                Secondary release names
+                                            </TextBlock>
+                                            <Image Source="../../information.ico" Margin="3 3 0 0" Width="10">
+                                                <Image.OpacityMask>
+                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                </Image.OpacityMask>
+                                            </Image>
+                                        </StackPanel>
+                                    </Label>
                                     <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNamesSecondary}" SelectedItem="{Binding SelectedReleaseNameSecondary}"
                                  SelectionMode="Single" Margin="5 0 0 0 "/>
                                 </StackPanel>
@@ -160,7 +197,7 @@
                                 <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
                                     <TextBox Text="{Binding SelectedReleaseNameSecondary}" Style="{DynamicResource TextBoxStyle}" Margin="0 10 0 5"/>
                                     <Button Content="Add" Style="{DynamicResource TextBoxButton}" Command="{Binding AddReleaseNameSecondaryCommand}" Margin="0 0 0 10"/>
-                                    <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseSecondaryNameCommand}" Margin="0 10 0 0"/>
+                                    <Button Content="Remove" Style="{DynamicResource TextBoxButton}" Command="{Binding RemoveReleaseNameSecondaryCommand}" Margin="0 10 0 0"/>
                                 </StackPanel>
                             </Grid>
 
@@ -170,9 +207,18 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock TextWrapping="WrapWithOverflow" Margin="5 10 0 0" FontSize="12" ToolTip="If present in filename, it will be used to find correct subtitle.">
-                                        File types
-                                    </TextBlock>
+                                    <Label Foreground="White" ToolTip="Only show files which contain these file types." Margin="0" Padding="4 10 0 0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
+                                                File types
+                                            </TextBlock>
+                                            <Image Source="../../information.ico" Margin="87 3 0 0" Width="10">
+                                                <Image.OpacityMask>
+                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                </Image.OpacityMask>
+                                            </Image>
+                                        </StackPanel>
+                                    </Label>
                                     <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding FileTypes}" SelectedItem="{Binding SelectedFileType}"
                                  SelectionMode="Single" Margin="5 0 0 0 "/>
                                 </StackPanel>

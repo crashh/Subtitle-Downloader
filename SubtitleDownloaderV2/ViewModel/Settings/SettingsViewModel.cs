@@ -23,6 +23,8 @@ namespace SubtitleDownloaderV2.ViewModel
 
         public ICommand AddReleaseNameCommand { get; set; }
         public ICommand RemoveReleaseNameCommand { get; set; }
+        public ICommand AddReleaseNameSecondaryCommand { get; set; }
+        public ICommand RemoveReleaseNameSecondaryCommand { get; set; }
         public ICommand AddFileTypeCommand { get; set; }
         public ICommand RemoveFileTypeCommand { get; set; }
 
@@ -148,6 +150,8 @@ namespace SubtitleDownloaderV2.ViewModel
 
             this.AddReleaseNameCommand = new RelayCommand(DoAddReleaseName);
             this.RemoveReleaseNameCommand = new RelayCommand(DoRemoveReleaseName);
+            this.AddReleaseNameSecondaryCommand = new RelayCommand(DoAddReleaseNameSecondary);
+            this.RemoveReleaseNameSecondaryCommand = new RelayCommand(DoRemoveReleaseNameSecondary);
             this.AddFileTypeCommand = new RelayCommand(DoAddFileType);
             this.RemoveFileTypeCommand = new RelayCommand(DoRemoveFileType);
 
@@ -299,6 +303,18 @@ namespace SubtitleDownloaderV2.ViewModel
         public void DoRemoveReleaseName()
         {
             this.ReleaseNames.Remove(this.SelectedReleaseName);
+        }
+
+
+        public void DoAddReleaseNameSecondary()
+        {
+            this.ReleaseNamesSecondary.Add(this.SelectedReleaseName);
+            this.SelectedReleaseNameSecondary = null;
+        }
+
+        public void DoRemoveReleaseNameSecondary()
+        {
+            this.ReleaseNamesSecondary.Remove(this.SelectedReleaseName);
         }
 
         public void DoAddFileType()
