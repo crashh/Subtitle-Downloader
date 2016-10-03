@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using SubtitleDownloader.ViewModel.Dialog;
 using SubtitleDownloaderV2.Dialogs;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Util;
@@ -19,9 +20,6 @@ namespace SubtitleDownloaderV2.Services
         private const bool FAILURE = false;
 
         private readonly FileEntry selected;
-    
-        private string[] allResults;
-        private string chosenResult;
 
         internal delegate void WriteToProgressWindow(string message, bool success);
         public WriteToProgressWindow WriteProgress;
@@ -31,43 +29,45 @@ namespace SubtitleDownloaderV2.Services
             this.selected = selected;
         }
 
-        public string[] FindSearchResults()
+        public ResultPickerItemViewModel[] FindSearchResults()
         {
-            var matchesWithoutDuplicates = new HashSet<string>();
+            //var matchesWithoutDuplicates = new HashSet<string>();
+            var result = new List<ResultPickerItemViewModel>();
 
-            // Look if we got exact match:
+            // Look if we got an exact match:
             var exactMatches = Regex.Matches(html, @"<h2 class=""exact"">(.+?)</ul>", RegexOptions.Singleline);
             if (exactMatches.Count == 1)
             {
-                exactMatches = Regex.Matches(exactMatches[0].ToString(), @"/subtitles/(.+?)"">");
-                if (exactMatches.Count == 1)
+                var exactMatch = Regex.Matches(exactMatches[0].ToString(), @"/subtitles/(.+?)"">(.+?)</a>");
+                if (exactMatch.Count == 1)
                 {
-                    var match = exactMatches[0].ToString();
-                    matchesWithoutDuplicates.Add(match.Substring(11, match.LastIndexOf('"') - 11));
-                    allResults = matchesWithoutDuplicates.ToArray();
-                    return allResults;
+                    var matchLink = exactMatch[1].ToString();
+                    var matchName = exactMatch[2].ToString();
+                    result.Add(new ResultPickerItemViewModel(matchName, matchLink));
+                    return result.ToArray();
                 }
             }
 
             // No dice, pick them all:
-            var allMatches = Regex.Matches(html, @"/subtitles/(.+?)"">");
+            var allMatches = Regex.Matches(html, @"/subtitles/(.+?)"">(.+?)</a>");
             for (var i = 0; i < allMatches.Count; i++)
             {
-                var match = allMatches[i].ToString();
-                if (!match.Contains("/subtitles/title") && !match.Contains("release?"))
+                var match = allMatches[i];
+                var matchLink = match.Groups[1].ToString();
+                var matchName = match.Groups[2].ToString();
+                if (!matchLink.Contains("/subtitles/title") && !matchLink.Contains("release?"))
                 {
-                    matchesWithoutDuplicates.Add(match.Substring(11, match.LastIndexOf('"') - 11));
+                    result.Add(new ResultPickerItemViewModel(matchName, matchLink));
                 }
+
             }
-            allResults = matchesWithoutDuplicates.ToArray();
-            return allResults;
+            return result.ToArray();
         }
 
         public string PickCorrectSubtitle()
         {
-            chosenResult = string.Empty;
-            var allMatches =
-                Regex.Matches(html, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
+            var chosenResult = string.Empty;
+            var allMatches = Regex.Matches(html, @"<td class=""a1"">(.+?)<td class=""a3"">", RegexOptions.Singleline);
 
             for (var i = 0; i < allMatches.Count; i++)
             {
@@ -75,12 +75,11 @@ namespace SubtitleDownloaderV2.Services
                 if (singleMatch.Contains(Settings.Language) && singleMatch.Contains("positive-icon") &&
                     singleMatch.Contains(selected.release) && singleMatch.Contains(selected.episode))
                 {
-                    var correct = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").ToString();
-                    chosenResult = correct.Substring(0, correct.Length - 2);
+                    chosenResult = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").Groups[1].ToString();
 
                     if (!singleMatch.Contains("class=\"a41\""))
                     {
-                        // This is not hearing compared, so we are satisfied.
+                        // This is not hearing impaired, so we are satisfied.
                         return chosenResult;
                     }
                 }
@@ -91,7 +90,7 @@ namespace SubtitleDownloaderV2.Services
         public string FindDownloadUrl()
         {
             var onlyMatch = Regex.Match(html, @"/subtitle/download(.+?)""");
-            return onlyMatch.ToString().Substring(0, onlyMatch.ToString().Length - 1);
+            return onlyMatch.Groups[1].ToString();
         }
 
         public void Search()
@@ -126,10 +125,10 @@ namespace SubtitleDownloaderV2.Services
             WriteProgress($"Found possible match: \"{correctSub}\"...", SUCCESS);
 
             WriteProgress("Querying download page...", SUCCESS);
-            RetrieveHtmlAtUrl("http://subscene.com/" + correctSub);
+            RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + correctSub);
             var downloadLink = FindDownloadUrl();
 
-            var result = InitiateDownload("http://subscene.com" + downloadLink, selected.GetFullPath()
+            var result = InitiateDownload("http://subscene.com/subtitle/download" + downloadLink, selected.GetFullPath()
             );
             if (!result)
             {
@@ -143,11 +142,11 @@ namespace SubtitleDownloaderV2.Services
         }
 
 
-        private string PickCorrectSearchResult(string[] searchResult)
+        private string PickCorrectSearchResult(ResultPickerItemViewModel[] searchResult)
         {
             if (searchResult.Length == 1)
             {
-                return searchResult.First();
+                return searchResult.First().Address;
             }
 
             var searchResultPicked = "";
@@ -156,7 +155,7 @@ namespace SubtitleDownloaderV2.Services
                 var dialog = new SearchPickerDialogHandler(searchResult);
                 dialog.StartDialog((int result) =>
                 {
-                    searchResultPicked = result != -1 ? searchResult[result] : "";
+                    searchResultPicked = result != -1 ? searchResult[result].Address : "";
                 });
             });
             

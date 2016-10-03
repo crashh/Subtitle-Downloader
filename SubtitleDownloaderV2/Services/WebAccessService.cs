@@ -5,6 +5,10 @@ using System.Text;
 
 namespace SubtitleDownloaderV2.Services
 {
+    /// <summary>
+    /// NOTE:
+    /// Should never be called directly, simply serves as a base for any of the different SubtitleService's.
+    /// </summary>
     internal class WebAccessService
     {
         internal string html;
@@ -29,7 +33,7 @@ namespace SubtitleDownloaderV2.Services
                 streamReader.Close();
                 myResponse.Close();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 html = null;
             }

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using SubtitleDownloader.ViewModel.Dialog;
 
 namespace SubtitleDownloaderV2.ViewModel.Dialog
 {
@@ -15,13 +16,13 @@ namespace SubtitleDownloaderV2.ViewModel.Dialog
         public ICommand OkCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public string[] AllResults { get; set; }
+        public ResultPickerItemViewModel[] AllResults { get; set; }
 
         public int SelectedEntry { get; set; }
 
         private readonly Action<int> onSavedAction;
 
-        public ResultPickerViewModel(string[] results, Action<int> onSavedAction)
+        public ResultPickerViewModel(ResultPickerItemViewModel[] results, Action<int> onSavedAction)
         {
             this.AllResults = results;
             this.SelectedEntry = 0;

@@ -29,7 +29,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2.2.0.%2a</ApplicationVersion>
+    <ApplicationVersion>2.3.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -144,12 +144,16 @@
     <Compile Include="Services\WebAccessService.cs" />
     <Compile Include="Util\ExpectedNames.cs" />
     <Compile Include="Util\Settings.cs" />
+    <Compile Include="ViewModel\Dialog\ResultPickerItemViewModel.cs" />
     <Compile Include="ViewModel\Dialog\ResultPickerViewModel.cs" />
     <Compile Include="ViewModel\Search\ManualSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Search\ListSearchViewModel.cs" />
     <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Dialog\ResultPickerItem.xaml.cs">
+      <DependentUpon>ResultPickerItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Dialog\ResultPickerView.xaml.cs">
       <DependentUpon>ResultPickerView.xaml</DependentUpon>
     </Compile>
@@ -180,6 +184,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Dialog\ResultPickerItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Dialog\ResultPickerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
