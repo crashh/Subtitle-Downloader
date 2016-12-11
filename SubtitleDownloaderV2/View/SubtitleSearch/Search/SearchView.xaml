@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SubtitleDownloader.View.SubtitleSearch.Search.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
+             xmlns:search="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
+             xmlns:search1="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Search"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance search1:SearchViewModel}"
+             d:DesignHeight="653" d:DesignWidth="1200" Name="_userControl">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter  x:Key="BoolToVis" />
+        <converters:StringToBoolConverter x:Key="StringToBool" />
+    </UserControl.Resources>
+
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left menu -->
+        <Grid Margin="-210 0 0 25" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <Button Grid.Row="0" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
+
+            <Button Grid.Row="1" Content="Open Folder"  Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenFolderCommand}"/>
+            <Button Grid.Row="2" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}" Command="{Binding ModifyEntryCommand}"/>
+
+            <Button Grid.Row="3" Height="90" Content="Search" Style="{DynamicResource LeftMenuButton}" Command="{Binding SearchCommand}"/>
+            <Label  Grid.Row="4" Content="{Binding GetFullPath}" Foreground="White" FontSize="10" />
+        </Grid>
+
+        <!-- Main window -->
+        <!--<search:ListGridDetails Grid.Column="0"/>-->
+        <search:ListViewDetails Grid.Column="0"/>
+
+        <!-- Popup window -->
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <ToggleButton  Grid.Column="0" Content="&lt;&lt;" x:Name="toggleVis" Style="{StaticResource ToggleButtonStyle}"
+                           IsChecked="{Binding Progress, Converter={StaticResource StringToBool}, Mode=OneWay}" 
+                           Click="ButtonExpandProgress_OnClick"/>
+            <TextBox Grid.Column="1" x:Name="textBoxProgress" Text="{Binding Progress}" 
+                 Style="{StaticResource TextProgressBoxStyle}"
+                 Visibility="{Binding ElementName=toggleVis, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
+
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using SubtitleDownloader.ViewModel.Dialog;
 
-namespace SubtitleDownloaderV2.ViewModel.Dialog
+namespace SubtitleDownloader.ViewModel.SubtitleSearch.Dialog
 {
     class ResultPickerViewModel : ViewModelBase
     {

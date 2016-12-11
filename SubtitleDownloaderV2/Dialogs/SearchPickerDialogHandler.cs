@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using SubtitleDownloader.ViewModel.Dialog;
+using SubtitleDownloader.View.SubtitleSearch.Dialog;
+using SubtitleDownloader.ViewModel.SubtitleSearch.Dialog;
 using SubtitleDownloaderV2.Services;
-using SubtitleDownloaderV2.View.Dialog;
-using SubtitleDownloaderV2.ViewModel.Dialog;
 
 namespace SubtitleDownloaderV2.Dialogs
 {

@@ -28,7 +28,7 @@
     <InstallUrl>http://crashh.me:8082/clickonce/subtitledownloader/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>2.3.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -144,30 +144,30 @@
     <Compile Include="Services\WebAccessService.cs" />
     <Compile Include="Util\ExpectedNames.cs" />
     <Compile Include="Util\Settings.cs" />
-    <Compile Include="ViewModel\Dialog\ResultPickerItemViewModel.cs" />
-    <Compile Include="ViewModel\Dialog\ResultPickerViewModel.cs" />
-    <Compile Include="ViewModel\Search\ManualSearchViewModel.cs" />
+    <Compile Include="ViewModel\SubtitleSearch\Dialog\ResultPickerItemViewModel.cs" />
+    <Compile Include="ViewModel\SubtitleSearch\Dialog\ResultPickerViewModel.cs" />
+    <Compile Include="ViewModel\SubtitleSearch\Search\ManualViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\Search\ListSearchViewModel.cs" />
+    <Compile Include="ViewModel\SubtitleSearch\Search\SearchViewModel.cs" />
     <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\Dialog\ResultPickerItem.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml.cs">
       <DependentUpon>ResultPickerItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\ResultPickerView.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Dialog\ResultPickerView.xaml.cs">
       <DependentUpon>ResultPickerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Search\ListRowDetails.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Search\ListRowDetails.xaml.cs">
       <DependentUpon>ListRowDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Search\ListDetails.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Search\ListDetails.xaml.cs">
       <DependentUpon>ListDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Search\ManualSearchView.xaml.cs">
-      <DependentUpon>ManualSearchView.xaml</DependentUpon>
+    <Compile Include="View\SubtitleSearch\Search\ManualView.xaml.cs">
+      <DependentUpon>ManualView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Search\ListSearchView.xaml.cs">
-      <DependentUpon>ListSearchView.xaml</DependentUpon>
+    <Compile Include="View\SubtitleSearch\Search\SearchView.xaml.cs">
+      <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -184,27 +184,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\Dialog\ResultPickerItem.xaml">
+    <Page Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Dialog\ResultPickerView.xaml">
+    <Page Include="View\SubtitleSearch\Dialog\ResultPickerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Search\ListRowDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\ListRowDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Search\ListDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\ListDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Search\ManualSearchView.xaml">
+    <Page Include="View\SubtitleSearch\Search\ManualView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Search\ListSearchView.xaml">
+    <Page Include="View\SubtitleSearch\Search\SearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -261,6 +261,7 @@
   <ItemGroup>
     <Resource Include="information.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

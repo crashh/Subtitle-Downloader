@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Practices.ServiceLocation;
-using SubtitleDownloaderV2.ViewModel;
+using SubtitleDownloader.ViewModel;
 
 namespace SubtitleDownloaderV2
 {

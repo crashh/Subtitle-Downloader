@@ -13,9 +13,9 @@ using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
 using SubtitleDownloaderV2.Util;
 
-namespace SubtitleDownloaderV2.ViewModel
+namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 {
-    public class ListSearchViewModel : ViewModelBase
+    public class SearchViewModel : ViewModelBase
     {
         public ICommand OpenFolderCommand { get; set; }
         public ICommand OpenBrowserCommand { get; set; }
@@ -23,8 +23,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand SearchCommand { get; set; }
 
         #region Observables
-
-
+        
         /// <summary>
         /// Displays how the search went.
         /// </summary>
@@ -39,10 +38,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Returns the full path to the current directory.
         /// </summary>
-        public string GetFullPath
-        {
-            get { return $"Current directory: {Settings.DirectoryPath}"; }
-        }
+        public string GetFullPath => $"Current directory: {SubtitleDownloaderV2.Util.Settings.DirectoryPath}";
 
         /// <summary>
         /// The last selected item in the datagrid.
@@ -93,7 +89,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Constructor
         /// </summary>
-        public ListSearchViewModel()
+        public SearchViewModel()
         {
             this.AllEntries = new ObservableCollection<FileEntry>();
 
@@ -110,12 +106,12 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void OnPresented()
         {
-            this.ShowFirstColumn = Settings.ShowFirstColumn;
+            this.ShowFirstColumn = SubtitleDownloaderV2.Util.Settings.ShowFirstColumn;
             AllEntries.Clear();
 
-            if (Directory.Exists(Settings.DirectoryPath))
+            if (Directory.Exists(SubtitleDownloaderV2.Util.Settings.DirectoryPath))
             {
-                AddDirectoryContent(AllEntries, Settings.DirectoryPath);
+                AddDirectoryContent(AllEntries, SubtitleDownloaderV2.Util.Settings.DirectoryPath);
             }
         }
 
@@ -137,7 +133,7 @@ namespace SubtitleDownloaderV2.ViewModel
                     var subtitleExist = false;
                     if (isDirectory)
                     {
-                        if (Settings.IgnoreAlreadySubbedFolders)
+                        if (SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders)
                         {
                             subtitleExist = LookForSubtitle(entry);
                         }
@@ -159,7 +155,7 @@ namespace SubtitleDownloaderV2.ViewModel
                     }
 
 
-                    if ((Settings.IgnoreAlreadySubbedFolders && subtitleExist) ||
+                    if ((SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders && subtitleExist) ||
                         ignoredFiles.Contains(fileName.ToLower().Split('.')[0]) || !isCorrectFileType)
                     {
                         continue;
@@ -199,7 +195,7 @@ namespace SubtitleDownloaderV2.ViewModel
                     return true;
                 }
             }
-            if (entry != Settings.DirectoryPath)
+            if (entry != SubtitleDownloaderV2.Util.Settings.DirectoryPath)
             {
                 return Directory.GetDirectories(entry).Any(LookForSubtitle);
             }

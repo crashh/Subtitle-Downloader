@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="SubtitleDownloader.View.Search.ListRowDetails"
+﻿<UserControl x:Class="SubtitleDownloader.View.SubtitleSearch.Search.ListGridRowDetails"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SubtitleDownloader.View.Search"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
              mc:Ignorable="d" 
              d:DesignHeight="640" d:DesignWidth="1000" Name="_userControl">
     <UserControl.Resources>
@@ -19,11 +19,11 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*"
-                            Visibility="{Binding Path=DataContext.ShowFirstColumn, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ListDetails}}, Mode=TwoWay}" />
+                            Visibility="{Binding Path=DataContext.ShowFirstColumn, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ListViewDetails}}, Mode=TwoWay}" />
     </UserControl.Resources>
 
     <DataGrid ItemsSource="{Binding AllEntries}"
-              SelectedItem="{Binding Path=DataContext.SelectedEntry, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ListDetails}}, Mode=TwoWay}"
+              SelectedItem="{Binding Path=DataContext.SelectedEntry, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ListViewDetails}}, Mode=TwoWay}"
               Style="{StaticResource DataGridStyle}"
               HeadersVisibility="None"
               IsReadOnly="True">

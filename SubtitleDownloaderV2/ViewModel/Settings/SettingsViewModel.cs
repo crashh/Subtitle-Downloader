@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,12 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Shapes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using SubtitleDownloaderV2.Util;
 
-namespace SubtitleDownloaderV2.ViewModel
+namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
 {
     public class SettingsViewModel : ViewModelBase
     {
@@ -130,10 +128,10 @@ namespace SubtitleDownloaderV2.ViewModel
         }
         
         public bool ChangePerformed => 
-            Settings.IgnoreAlreadySubbedFolders != this.IgnoreAlreadySubbedFolders ||
-            Settings.ShowFirstColumn != this.ShowFirstColumn ||
-            string.CompareOrdinal(Settings.DirectoryPath, this.WorkingFolderPath) != 0 ||
-            string.CompareOrdinal(Settings.Language, this.Language) != 0 ||
+            SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders != this.IgnoreAlreadySubbedFolders ||
+            SubtitleDownloaderV2.Util.Settings.ShowFirstColumn != this.ShowFirstColumn ||
+            string.CompareOrdinal(SubtitleDownloaderV2.Util.Settings.DirectoryPath, this.WorkingFolderPath) != 0 ||
+            string.CompareOrdinal(SubtitleDownloaderV2.Util.Settings.Language, this.Language) != 0 ||
             ExpectedNames.ReleaseNames.Except(this.ReleaseNames).Any() ||
             this.ReleaseNames.Except(ExpectedNames.ReleaseNames).Any();
         #endregion
@@ -162,7 +160,7 @@ namespace SubtitleDownloaderV2.ViewModel
                 "Spanish", "Swedish", "Turkish", "Vietnamese"
             };
 
-            Settings.ApplicationPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\Settings";
+            SubtitleDownloaderV2.Util.Settings.ApplicationPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\Settings";
 
             OnPresented(); // Need this information immediately
         }
@@ -173,7 +171,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public void OnPresented()
         {
             // Get _settings file, or create new one:
-            if (File.Exists(Settings.ApplicationPath))
+            if (File.Exists(SubtitleDownloaderV2.Util.Settings.ApplicationPath))
             {
                 try
                 {
@@ -205,7 +203,7 @@ namespace SubtitleDownloaderV2.ViewModel
         {
             //TODO: Find out how not to clear previous settings.
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\");
-            TextWriter settingsFile = new StreamWriter(Settings.ApplicationPath, false);
+            TextWriter settingsFile = new StreamWriter(SubtitleDownloaderV2.Util.Settings.ApplicationPath, false);
 
             settingsFile.WriteLine("No directory path set");
             settingsFile.WriteLine("true");
@@ -226,12 +224,12 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         private void LoadSettingsFile()
         {
-            string[] settings = File.ReadAllLines(Settings.ApplicationPath);
+            string[] settings = File.ReadAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
 
-            this.WorkingFolderPath          = Settings.DirectoryPath              = settings[0];
-            this.IgnoreAlreadySubbedFolders = Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            this.ShowFirstColumn            = Settings.ShowFirstColumn            = bool.Parse(settings[2]);
-            this.Language                   = Settings.Language                   = settings[3];
+            this.WorkingFolderPath          = SubtitleDownloaderV2.Util.Settings.DirectoryPath              = settings[0];
+            this.IgnoreAlreadySubbedFolders = SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
+            this.ShowFirstColumn            = SubtitleDownloaderV2.Util.Settings.ShowFirstColumn            = bool.Parse(settings[2]);
+            this.Language                   = SubtitleDownloaderV2.Util.Settings.Language                   = settings[3];
             ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
             ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
             ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
@@ -262,15 +260,15 @@ namespace SubtitleDownloaderV2.ViewModel
             settings[7] = this.Width.ToString();
             settings[8] = this.Height.ToString();
 
-            File.WriteAllLines(Settings.ApplicationPath, settings);
+            File.WriteAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath, settings);
             Result = "Settings saved!";
 
             // Load back in settings, in case user manually edited file too.
-            settings = File.ReadAllLines(Settings.ApplicationPath);
-            Settings.DirectoryPath              = settings[0];
-            Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            Settings.ShowFirstColumn            = bool.Parse(settings[2]);
-            Settings.Language                   = settings[3];
+            settings = File.ReadAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
+            SubtitleDownloaderV2.Util.Settings.DirectoryPath              = settings[0];
+            SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
+            SubtitleDownloaderV2.Util.Settings.ShowFirstColumn            = bool.Parse(settings[2]);
+            SubtitleDownloaderV2.Util.Settings.Language                   = settings[3];
             ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
             ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
             ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
@@ -291,7 +289,7 @@ namespace SubtitleDownloaderV2.ViewModel
 
         public void OpenSettingsFile()
         {
-            Process.Start(Settings.ApplicationPath);
+            Process.Start(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
         }
 
         public void DoAddReleaseName()

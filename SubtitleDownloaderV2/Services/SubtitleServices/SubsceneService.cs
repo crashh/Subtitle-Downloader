@@ -6,11 +6,10 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using SubtitleDownloader.ViewModel.Dialog;
+using SubtitleDownloader.ViewModel.SubtitleSearch.Dialog;
 using SubtitleDownloaderV2.Dialogs;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Util;
-using SubtitleDownloaderV2.View.Dialog;
 
 namespace SubtitleDownloaderV2.Services
 {
@@ -39,7 +38,7 @@ namespace SubtitleDownloaderV2.Services
             if (exactMatches.Count == 1)
             {
                 var exactMatch = Regex.Matches(exactMatches[0].ToString(), @"/subtitles/(.+?)"">(.+?)</a>");
-                if (exactMatch.Count == 1)
+                if (exactMatch.Count > 2)
                 {
                     var matchLink = exactMatch[1].ToString();
                     var matchName = exactMatch[2].ToString();

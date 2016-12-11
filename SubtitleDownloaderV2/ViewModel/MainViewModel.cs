@@ -1,12 +1,11 @@
-using System.ComponentModel;
-using System.Reflection;
+using System.Deployment.Application;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Practices.ServiceLocation;
-using System.Deployment.Application;
+using SubtitleDownloader.ViewModel.SubtitleSearch.Search;
+using SubtitleDownloader.ViewModel.SubtitleSearch.Settings;
 
-namespace SubtitleDownloaderV2.ViewModel
+namespace SubtitleDownloader.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -27,9 +26,9 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand InputSearchCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
 
-        private readonly ListSearchViewModel ListSearchViewModel;
-        private readonly ManualSearchViewModel _manualSearchViewModel;
-        private readonly SettingsViewModel SettingsViewModel;
+        private readonly SearchViewModel _searchViewModel;
+        private readonly ManualViewModel _manualViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
 
         #region Observables
 
@@ -40,7 +39,7 @@ namespace SubtitleDownloaderV2.ViewModel
             set
             {
                 this.Set(() => this.Width, ref this.width, value);
-                SettingsViewModel.Width = this.width;
+                _settingsViewModel.Width = this.width;
             }
         }
 
@@ -51,7 +50,7 @@ namespace SubtitleDownloaderV2.ViewModel
             set
             {
                 this.Set(() => this.Height, ref this.height, value);
-                SettingsViewModel.Height = this.height;
+                _settingsViewModel.Height = this.height;
             }
         }
 
@@ -95,17 +94,17 @@ namespace SubtitleDownloaderV2.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(
-            ListSearchViewModel listSearchViewModel, 
-            ManualSearchViewModel manualSearchViewModel,
+            SearchViewModel searchViewModel, 
+            ManualViewModel manualViewModel,
             SettingsViewModel settingsViewModel)
         {
             this.Version = ApplicationDeployment.IsNetworkDeployed 
                 ? $"ver. {ApplicationDeployment.CurrentDeployment.CurrentVersion}" 
                 : "ver. DEBUG";
 
-            this.ListSearchViewModel = listSearchViewModel;
-            this._manualSearchViewModel = manualSearchViewModel;
-            this.SettingsViewModel = settingsViewModel;
+            this._searchViewModel = searchViewModel;
+            this._manualViewModel = manualViewModel;
+            this._settingsViewModel = settingsViewModel;
 
             this.Width = settingsViewModel.Width;
             this.Height = settingsViewModel.Height;
@@ -126,8 +125,8 @@ namespace SubtitleDownloaderV2.ViewModel
             IsListSearchNotSelected = false;
             IsInputSearchNotSelected = true;
             IsSettingsNotSelected = true;
-            SelectedViewModel = ListSearchViewModel;
-            ListSearchViewModel.OnPresented();
+            SelectedViewModel = _searchViewModel;
+            _searchViewModel.OnPresented();
         }
 
         /// <summary>
@@ -138,8 +137,8 @@ namespace SubtitleDownloaderV2.ViewModel
             IsListSearchNotSelected = true;
             IsInputSearchNotSelected = false;
             IsSettingsNotSelected = true;
-            SelectedViewModel = _manualSearchViewModel;
-            _manualSearchViewModel.OnPresented();
+            SelectedViewModel = _manualViewModel;
+            _manualViewModel.OnPresented();
         }
 
         /// <summary>
@@ -150,8 +149,8 @@ namespace SubtitleDownloaderV2.ViewModel
             IsListSearchNotSelected = true;
             IsInputSearchNotSelected = true;
             IsSettingsNotSelected = false;
-            SelectedViewModel = SettingsViewModel;
-            SettingsViewModel.OnPresented();
+            SelectedViewModel = _settingsViewModel;
+            _settingsViewModel.OnPresented();
         }
 
         #endregion

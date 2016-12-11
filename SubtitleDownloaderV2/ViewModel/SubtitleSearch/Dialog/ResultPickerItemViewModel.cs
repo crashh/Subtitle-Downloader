@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 
-namespace SubtitleDownloader.ViewModel.Dialog
+namespace SubtitleDownloader.ViewModel.SubtitleSearch.Dialog
 {
     public class ResultPickerItemViewModel : ViewModelBase
     {

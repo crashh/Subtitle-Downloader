@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="SubtitleDownloaderV2.View.ManualSearchView"
+﻿<UserControl x:Class="SubtitleDownloader.View.SubtitleSearch.Search.ManualView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewModel="clr-namespace:SubtitleDownloaderV2.ViewModel"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
+             xmlns:search="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Search"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModel:ManualSearchViewModel}"
+             d:DataContext="{d:DesignInstance search:ManualViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
@@ -14,47 +14,26 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left menu -->
-        <Grid>
+        <Grid Margin="-210 0 0 25" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <!-- Logo and title -->
-            <Image Grid.Row="0" Source="../../icon.ico" Height="120" Margin="0 15 0 0" >
-                <Image.OpacityMask>
-                    <ImageBrush ImageSource="../../icon.ico"/>
-                </Image.OpacityMask>
-            </Image>
-            <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>
 
-            <Button Grid.Row="3" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Margin="0 0 0 7" Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
-
-            <!-- DIY buttons -->
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-            </Grid>
-
-            <!-- Search -->
-            <Button Grid.Row="5" Height="90" Content="Search" Command="{Binding SearchCommand}" Style="{DynamicResource LeftMenuButton}" Margin="0 40 0 0" />
-            <Label Grid.Row="6" Content="" FontSize="10"/>
+            <Button Grid.Row="0" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
+            <Button Grid.Row="1" Content="Search"       Style="{DynamicResource LeftMenuButton}" Command="{Binding SearchCommand}" Height="90"  />
+            <Label  Grid.Row="2" Content="" FontSize="10"/>
         </Grid>
 
+
         <!-- Main window -->
-        <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black">
+        <Border Grid.Column="0" BorderThickness="1" BorderBrush="Black">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -99,7 +78,7 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="Auto" />

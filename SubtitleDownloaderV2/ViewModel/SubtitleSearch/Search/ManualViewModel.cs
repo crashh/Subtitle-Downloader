@@ -8,9 +8,9 @@ using GalaSoft.MvvmLight.Command;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
 
-namespace SubtitleDownloaderV2.ViewModel
+namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 {
-    public class ManualSearchViewModel : ViewModelBase
+    public class ManualViewModel : ViewModelBase
     {
         const bool SUCCESS = true;
         const bool FAILURE = false;
@@ -19,7 +19,7 @@ namespace SubtitleDownloaderV2.ViewModel
         public ICommand OpenBrowserCommand { get; set; }
         public ICommand BrowseCommand { get; set; }
 
-        private readonly ListSearchViewModel listSearchViewModel;
+        private readonly SearchViewModel searchViewModel;
 
         #region Observables
 
@@ -63,9 +63,9 @@ namespace SubtitleDownloaderV2.ViewModel
         /// <summary>
         /// Constructor
         /// </summary>
-        public ManualSearchViewModel(ListSearchViewModel listSearchViewModel)
+        public ManualViewModel(SearchViewModel searchViewModel)
         {
-            this.listSearchViewModel = listSearchViewModel;
+            this.searchViewModel = searchViewModel;
 
             this.OpenBrowserCommand = new RelayCommand(OpenBrowser);
             this.SearchCommand = new RelayCommand(DoSearch);
@@ -79,7 +79,7 @@ namespace SubtitleDownloaderV2.ViewModel
         /// </summary>
         public void OnPresented()
         {
-            FileEntry selectedEntry = listSearchViewModel.SelectedEntry;
+            FileEntry selectedEntry = searchViewModel.SelectedEntry;
 
             if (selectedEntry != null)
             {

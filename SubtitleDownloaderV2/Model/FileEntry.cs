@@ -23,7 +23,7 @@ namespace SubtitleDownloaderV2.Model
         public bool subtitleExists { get; set; }
 
         public string url { get; set; }
-
+        
         private bool isDirectory;
         public bool IsDirectory {
             get { return (AllEntries?.Count ?? 0) > 1; }
@@ -32,6 +32,7 @@ namespace SubtitleDownloaderV2.Model
 
         public ObservableCollection<FileEntry> AllEntries { get; set; }
 
+        #region Initialize
         public FileEntry(string path)
         {
             this.path = path;
@@ -60,7 +61,10 @@ namespace SubtitleDownloaderV2.Model
 
         public void DefineEntriesFromPath()
         {
-            if (string.IsNullOrEmpty(filename)) return;
+            if (string.IsNullOrEmpty(filename))
+            {
+                return;
+            }
 
             var split = filename.Split('.', '-', '_', '[', ']', ' ', '(', ')');
             ExtractName(split);
@@ -89,7 +93,9 @@ namespace SubtitleDownloaderV2.Model
                 this.title = episode;
             }
         }
+        #endregion Initialize
 
+        #region ExtractMethods
         private void ExtractName(string[] split)
         {
             string concatName = split[0];
@@ -134,6 +140,7 @@ namespace SubtitleDownloaderV2.Model
                 episode = singleMatch.ToString();
             }
         }
+        #endregion ExtractMethods
 
         public string GetFullPath()
         {
