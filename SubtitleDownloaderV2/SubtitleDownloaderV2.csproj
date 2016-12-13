@@ -135,6 +135,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Converters\NullOrWhitespaceToVisibility.cs" />
     <Compile Include="Converters\VisibilityToBooleanConverter.cs" />
     <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Dialogs\SearchPickerDialogHandler.cs" />
@@ -157,11 +158,14 @@
     <Compile Include="View\SubtitleSearch\Dialog\ResultPickerView.xaml.cs">
       <DependentUpon>ResultPickerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SubtitleSearch\Search\ListRowDetails.xaml.cs">
-      <DependentUpon>ListRowDetails.xaml</DependentUpon>
+    <Compile Include="View\SubtitleSearch\Search\ListViewDetails.xaml.cs">
+      <DependentUpon>ListViewDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SubtitleSearch\Search\ListDetails.xaml.cs">
-      <DependentUpon>ListDetails.xaml</DependentUpon>
+    <Compile Include="View\SubtitleSearch\Search\ListGridRowDetails.xaml.cs">
+      <DependentUpon>ListGridRowDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SubtitleSearch\Search\ListGridDetails.xaml.cs">
+      <DependentUpon>ListGridDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SubtitleSearch\Search\ManualView.xaml.cs">
       <DependentUpon>ManualView.xaml</DependentUpon>
@@ -192,11 +196,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SubtitleSearch\Search\ListRowDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\ListViewDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SubtitleSearch\Search\ListDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\ListGridRowDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SubtitleSearch\Search\ListGridDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -259,9 +267,15 @@
     <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="information.ico" />
+    <Resource Include="Resources\details_open.png" />
+    <Resource Include="Resources\information.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\details_image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\search.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

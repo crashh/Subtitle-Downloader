@@ -25,6 +25,7 @@
         <DataTemplate DataType="{x:Type settingsVM:SettingsViewModel}">
             <settings:SettingsView/>
         </DataTemplate>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Background="#FF272424" ClipToBounds="True">
@@ -35,7 +36,12 @@
         </Grid.ColumnDefinitions>
 
         <!-- Left menu -->
-        <Grid Column="0" Background="Black">
+        <Grid Column="0" Background="#26201d"/>
+
+        <!-- Content -->
+        <ContentControl x:Name="Pages" Grid.Column="1" Content="{Binding SelectedViewModel}"/>
+
+        <Grid Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -49,22 +55,25 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Image Grid.Row="0" Source="icon.ico" Height="120" Margin="0 15 0 0" >
-                <Image.OpacityMask>
-                    <ImageBrush ImageSource="icon.ico"/>
-                </Image.OpacityMask>
+            <Label Grid.Row="0" Content="{Binding Version }" Padding="10,5,0,0" HorizontalAlignment="Left" 
+                   Foreground="DimGray" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>
+            <Image Grid.Row="0" Source="../Resources/search.png" Height="150" Margin="5 15 0 0" HorizontalAlignment="Center">
+
             </Image>
-            <Label Grid.Row="1" Content="Auto Subs"  Foreground="White" HorizontalAlignment="Center" FontSize="26.667" FontWeight="Bold" FontFamily="Tekton Pro"/>
 
-            <Button Grid.Row="3" Content="Find subtitles" Style="{DynamicResource MenuBigButtons}"   Command="{Binding ListSearchCommand}"/>
+            <Button Grid.Row="3" Content="Find subtitles" Style="{DynamicResource MenuBigButtons}"   Command="{Binding ListSearchCommand}"  Margin="60,3,-3,3"/>
+            <Button Grid.Row="3" Content="Find subtitles" Style="{DynamicResource MenuBigButtons}"   Command="{Binding ListSearchCommand}"
+                    Visibility="{Binding IsListSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
             <Button Grid.Row="4" Content="Manual"         Style="{DynamicResource MenuSmallButtons}" Command="{Binding InputSearchCommand}"/>
-            <Button Grid.Row="5" Content="New episodes"   Style="{DynamicResource MenuBigButtons}" />
-            <Button Grid.Row="6" Content="Settings"       Style="{DynamicResource MenuBigButtons}"   Command="{Binding SettingsCommand}"/>
 
-            <Label  Grid.Row="9" Content="{Binding Version }" Foreground="LightGray" HorizontalAlignment="Left" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>
+            <Button Grid.Row="5" Content="New episodes"   Style="{DynamicResource MenuBigButtons}"   Visibility="Collapsed"                 Margin="60,3,-3,3"/>
+            <Button Grid.Row="5" Content="New episodes"   Style="{DynamicResource MenuBigButtons}"   Visibility="Collapsed"/>
+
+            <Button Grid.Row="6" Content="Settings"       Style="{DynamicResource MenuBigButtons}"   Command="{Binding SettingsCommand}"    Margin="60,3,-3,3"/>
+            <Button Grid.Row="6" Content="Settings"       Style="{DynamicResource MenuBigButtons}"   Command="{Binding SettingsCommand}"
+                    Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
         </Grid>
-
-        <!-- Content -->
-        <ContentControl x:Name="Pages" Grid.Column="1" Content="{Binding SelectedViewModel}"/>
     </Grid>
 </Window>

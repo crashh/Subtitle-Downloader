@@ -39,7 +39,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             get
             {
-                return !string.IsNullOrEmpty(this.customEntry?.url);
+                return !string.IsNullOrEmpty(this.customEntry?.Url);
             }
             set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
         }
@@ -83,7 +83,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 
             if (selectedEntry != null)
             {
-                this.customEntry = new FileEntry(selectedEntry.GetFullPath(), selectedEntry.title, selectedEntry.release, selectedEntry.episode);
+                this.customEntry = new FileEntry(selectedEntry.GetFullPath(), selectedEntry.Title, selectedEntry.Release, selectedEntry.Episode);
             }
             else
             {
@@ -98,7 +98,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             try
             {
-                Process.Start(customEntry.url);
+                Process.Start(customEntry.Url);
             }
             catch (Exception)
             {
@@ -123,7 +123,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                CustomEntry = new FileEntry(dialog.SelectedPath, customEntry.title, customEntry.release, customEntry.episode);
+                CustomEntry = new FileEntry(dialog.SelectedPath, customEntry.Title, customEntry.Release, customEntry.Episode);
             }
         }
    

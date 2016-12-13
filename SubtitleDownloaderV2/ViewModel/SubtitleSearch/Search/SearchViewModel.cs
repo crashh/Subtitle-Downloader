@@ -50,7 +50,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             set
             {
                 this.Set(() => this.SelectedEntry, ref this.selectedEntry, value);
-                IsURLset = !string.IsNullOrEmpty(this.SelectedEntry?.url);
             }
 
         }
@@ -63,16 +62,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             get { return allEntries; }
             set { this.Set(() => this.AllEntries, ref this.allEntries, value); }
-        }
-
-        private bool isURLset;
-        public bool IsURLset
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(this.SelectedEntry?.url);
-            }
-            set { this.Set(() => this.IsURLset, ref this.isURLset, value); }
         }
 
         private bool showFirstColumn;
@@ -107,15 +96,18 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         public void OnPresented()
         {
             this.ShowFirstColumn = SubtitleDownloaderV2.Util.Settings.ShowFirstColumn;
+
             AllEntries.Clear();
 
-            if (Directory.Exists(SubtitleDownloaderV2.Util.Settings.DirectoryPath))
+            var directoryPath = SubtitleDownloaderV2.Util.Settings.DirectoryPath;
+            if (Directory.Exists(directoryPath))
             {
-                AddDirectoryContent(AllEntries, SubtitleDownloaderV2.Util.Settings.DirectoryPath);
+                AddDirectoryContent(AllEntries, directoryPath);
             }
+            this.SelectedEntry = AllEntries.FirstOrDefault();
         }
 
-        private void AddDirectoryContent(ObservableCollection<FileEntry> parent, string directory)
+        private void AddDirectoryContent(ICollection<FileEntry> parent, string directory)
         {
             var ignoredFiles = new List<String> { "desktop", "thumbs", "movies", "series", "sample" };
 
@@ -168,14 +160,14 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 
                     if (isDirectoryAndContainsSeveralCorrectFileTypes)
                     {
-                        this.AddDirectoryContent(fileEntry.AllEntries, fileEntry.path);
+                        this.AddDirectoryContent(fileEntry.AllEntries, fileEntry.Path);
                     }
                     else
                     {
                         if (AllEntries != parent)
                         {
                             var parentEntry = AllEntries.Count > 0 ? AllEntries.Last() : fileEntry;
-                            fileEntry.DefineEntriesWithDefault("", parentEntry.release ?? "", "");
+                            fileEntry.DefineEntriesWithDefault("", parentEntry.Release ?? "", "");
                         }
                     }
                 } catch(Exception)
@@ -216,7 +208,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             try
             {
-                Process.Start(selectedEntry.url);
+                Process.Start(selectedEntry.Url);
             }
             catch (Exception)
             {

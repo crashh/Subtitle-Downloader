@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using SubtitleDownloaderV2.Util;
 
 namespace SubtitleDownloaderV2.Model
 {
     public class FileEntry
     {
-        public string path { get; set; } 
+        public string Path { get; set; } 
 
-        public string filename { get; set; }
+        public string Filename { get; set; }
 
-        public string title { get; set; }
+        public string Title { get; set; }
 
-        public string release { get; set; }
+        public string Release { get; set; }
 
-        public string episode { get; set; }
+        public string Episode { get; set; }
 
-        public bool subtitleExists { get; set; }
+        public bool SubtitleExists { get; set; }
 
-        public string url { get; set; }
+        public string Url { get; set; }
         
         private bool isDirectory;
         public bool IsDirectory {
@@ -30,43 +33,40 @@ namespace SubtitleDownloaderV2.Model
             private set { this.isDirectory = value; }
         }
 
+        public ICommand OpenFolderCmd { get; }
+
         public ObservableCollection<FileEntry> AllEntries { get; set; }
 
         #region Initialize
         public FileEntry(string path)
         {
-            this.path = path;
-            this.subtitleExists = false;
+            this.Path = path;
+            this.SubtitleExists = false;
             this.AllEntries = new ObservableCollection<FileEntry>();
             this.IsDirectory = isDirectory;
 
             if (string.IsNullOrEmpty(path)) throw new NullReferenceException("domain");
 
-            this.filename = Path.GetFileName(path);
+            this.Filename = System.IO.Path.GetFileName(path);
+
+            this.OpenFolderCmd = new RelayCommand(this.OpenFolder);
         }
 
-        public FileEntry(string path, string title, string release, string episode)
+        public FileEntry(string path, string title, string release, string episode) : this(path)
         {
-            this.path = path;
-            this.title = title;
-            this.release = release;
-            this.episode = episode;
-            this.subtitleExists = false;
-            this.IsDirectory = isDirectory;
-
-            this.AllEntries = new ObservableCollection<FileEntry>();
-
-            this.filename = Path.GetFileName(path);
+            this.Title = title;
+            this.Release = release;
+            this.Episode = episode;
         }
 
         public void DefineEntriesFromPath()
         {
-            if (string.IsNullOrEmpty(filename))
+            if (string.IsNullOrEmpty(Filename))
             {
                 return;
             }
 
-            var split = filename.Split('.', '-', '_', '[', ']', ' ', '(', ')');
+            var split = Filename.Split('.', '-', '_', '[', ']', ' ', '(', ')');
             ExtractName(split);
             ExtractRelease(split);
             ExtractEpisode();
@@ -76,21 +76,21 @@ namespace SubtitleDownloaderV2.Model
         {
             if (string.IsNullOrEmpty(name) == false)
             {
-                this.title = name;
+                this.Title = name;
             }
             if (string.IsNullOrEmpty(release) == false)
             {
-                var primaryFound = ExpectedNames.ReleaseNames.Contains(this.release);
-                var secondaryFound = ExpectedNames.ReleaseNamesSecondary.Contains(this.release);
+                var primaryFound = ExpectedNames.ReleaseNames.Contains(this.Release);
+                var secondaryFound = ExpectedNames.ReleaseNamesSecondary.Contains(this.Release);
 
                 if (primaryFound == false && secondaryFound == false)
                 {
-                    this.release = release;
+                    this.Release = release;
                 }
             }
             if (string.IsNullOrEmpty(episode) == false)
             {
-                this.title = episode;
+                this.Title = episode;
             }
         }
         #endregion Initialize
@@ -106,22 +106,22 @@ namespace SubtitleDownloaderV2.Model
                     break;
                 concatName += " " + del;
             }
-            title = concatName.TrimStart();
+            Title = concatName.TrimStart();
         }
 
         private void ExtractRelease(string[] split)
         {
-            release = "";
-            release = split.FirstOrDefault(x => ExpectedNames.ReleaseNames.Contains(x));
+            Release = "";
+            Release = split.FirstOrDefault(x => ExpectedNames.ReleaseNames.Contains(x));
 
-            if (string.IsNullOrEmpty(release))
+            if (string.IsNullOrEmpty(Release))
             {
-                release = split.FirstOrDefault(x => ExpectedNames.ReleaseNamesSecondary.Contains(x));
+                Release = split.FirstOrDefault(x => ExpectedNames.ReleaseNamesSecondary.Contains(x));
             }
 
-            if (string.IsNullOrEmpty(release))
+            if (string.IsNullOrEmpty(Release))
             {
-                release = ExpectedNames.FileTypeNames.Contains(split[split.Length - 1]) 
+                Release = ExpectedNames.FileTypeNames.Contains(split[split.Length - 1]) 
                     ? split[split.Length - 2] 
                     : split[split.Length - 1];
             }
@@ -129,22 +129,34 @@ namespace SubtitleDownloaderV2.Model
 
         private void ExtractEpisode()
         {
-            Match singleMatch = Regex.Match(filename, @"S\d{2}E\d{2}");
+            Match singleMatch = Regex.Match(Filename, @"S\d{2}E\d{2}");
             if (singleMatch.Success)
             {
-                episode = singleMatch.ToString();
+                Episode = singleMatch.ToString();
             }
             else
             {
-                singleMatch = Regex.Match(filename, @"\d{1}x\d{2}");
-                episode = singleMatch.ToString();
+                singleMatch = Regex.Match(Filename, @"\d{1}x\d{2}");
+                Episode = singleMatch.ToString();
             }
         }
         #endregion ExtractMethods
 
         public string GetFullPath()
         {
-            return path;
+            return Path;
+        }
+
+        private void OpenFolder()
+        {
+            try
+            {
+                Process.Start(this.GetFullPath());
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
         }
 
     }

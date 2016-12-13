@@ -61,25 +61,18 @@ namespace SubtitleDownloader.ViewModel
             set { this.Set(() => this.Version, ref this.version, value); }
         }
 
-        private bool isListSearchNotSelected;
-        public bool IsListSearchNotSelected
+        private bool _isListSearchSelected;
+        public bool IsListSearchSelected
         {
-            get { return isListSearchNotSelected; }
-            set { this.Set(() => this.IsListSearchNotSelected, ref this.isListSearchNotSelected, value); }
+            get { return _isListSearchSelected; }
+            set { this.Set(() => this.IsListSearchSelected, ref this._isListSearchSelected, value); }
         }
 
-        private bool isInputSearchNotSelected;
-        public bool IsInputSearchNotSelected
+        private bool _isSettingsSelected;
+        public bool IsSettingsSelected
         {
-            get { return isInputSearchNotSelected; }
-            set { this.Set(() => this.IsInputSearchNotSelected, ref this.isInputSearchNotSelected, value); }
-        }
-
-        private bool isSettingsNotSelected;
-        public bool IsSettingsNotSelected
-        {
-            get { return isSettingsNotSelected; }
-            set { this.Set(() => this.IsSettingsNotSelected, ref this.isSettingsNotSelected, value); }
+            get { return _isSettingsSelected; }
+            set { this.Set(() => this.IsSettingsSelected, ref this._isSettingsSelected, value); }
         }
 
         private object selectedViewModel;
@@ -122,9 +115,8 @@ namespace SubtitleDownloader.ViewModel
         /// </summary>
         private void OpenListSearch()
         {
-            IsListSearchNotSelected = false;
-            IsInputSearchNotSelected = true;
-            IsSettingsNotSelected = true;
+            IsListSearchSelected = true;
+            IsSettingsSelected = false;
             SelectedViewModel = _searchViewModel;
             _searchViewModel.OnPresented();
         }
@@ -134,9 +126,8 @@ namespace SubtitleDownloader.ViewModel
         /// </summary>
         private void OpenInputSearch()
         {
-            IsListSearchNotSelected = true;
-            IsInputSearchNotSelected = false;
-            IsSettingsNotSelected = true;
+            IsListSearchSelected = true;
+            IsSettingsSelected = false;
             SelectedViewModel = _manualViewModel;
             _manualViewModel.OnPresented();
         }
@@ -146,9 +137,8 @@ namespace SubtitleDownloader.ViewModel
         /// </summary>
         private void OpenSettings()
         {
-            IsListSearchNotSelected = true;
-            IsInputSearchNotSelected = true;
-            IsSettingsNotSelected = false;
+            IsListSearchSelected = false;
+            IsSettingsSelected = true;
             SelectedViewModel = _settingsViewModel;
             _settingsViewModel.OnPresented();
         }

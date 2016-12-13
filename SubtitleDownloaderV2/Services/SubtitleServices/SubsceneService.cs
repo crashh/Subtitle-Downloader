@@ -72,7 +72,7 @@ namespace SubtitleDownloaderV2.Services
             {
                 var singleMatch = allMatches[i].ToString();
                 if (singleMatch.Contains(Settings.Language) && singleMatch.Contains("positive-icon") &&
-                    singleMatch.Contains(selected.release) && singleMatch.Contains(selected.episode))
+                    singleMatch.Contains(selected.Release) && singleMatch.Contains(selected.Episode))
                 {
                     chosenResult = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").Groups[1].ToString();
 
@@ -94,9 +94,9 @@ namespace SubtitleDownloaderV2.Services
 
         public void Search()
         {
-            WriteProgress($"Looking for {selected.title} in {Settings.Language} ...", SUCCESS);
+            WriteProgress($"Looking for {selected.Title} in {Settings.Language} ...", SUCCESS);
 
-            RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selected.title + "&l=");
+            RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selected.Title + "&l=");
             var searchResult = FindSearchResults();
             if (searchResult.Length < 1)
             {
@@ -114,7 +114,7 @@ namespace SubtitleDownloaderV2.Services
 
             WriteProgress($"Querying for subtitles to {searchResultPicked}...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
-            selected.url = "http://subscene.com/subtitles/" + searchResultPicked;
+            selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
             var correctSub = PickCorrectSubtitle();
             if (correctSub.Length < 1)
             {
@@ -136,7 +136,7 @@ namespace SubtitleDownloaderV2.Services
             }
             WriteProgress("SUCCESS! Subtitle downloaded!", SUCCESS);
 
-            WriteProgress($"Unpacking rar file at {selected.path}..", SUCCESS);
+            WriteProgress($"Unpacking rar file at {selected.Path}..", SUCCESS);
             UtilityService.UnrarFile(selected.GetFullPath());
         }
 
@@ -162,7 +162,7 @@ namespace SubtitleDownloaderV2.Services
 
             WriteProgress($"User picked {searchResultPicked}...", SUCCESS);
 
-            selected.url = "http://subscene.com/subtitles/" + searchResultPicked;
+            selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
             return searchResultPicked;
         }
 

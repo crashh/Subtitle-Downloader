@@ -11,22 +11,8 @@
         <BooleanToVisibilityConverter x:Key="boolToVisConverter"/>
     </UserControl.Resources>
     <Grid>
-        <!-- Left menu -->
-        <Grid Margin="-210 0 0 25" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-
-            <Button Grid.Row="0" Content="Open settings file" Style="{DynamicResource LeftMenuButton}"  ToolTip="Manually manipulate settings. Restart requried." Command="{Binding OpenFileCommand}"/>
-            <Button Grid.Row="1" Content="Save" Command="{Binding SaveCommand}" Style="{DynamicResource LeftMenuButton}" />
-            <Button Grid.Row="2" Content="Reset" Command="{Binding ResetCommand}" Style="{DynamicResource LeftMenuButton}" />
-        </Grid>
-
         <!-- Main window -->
-        <Border HorizontalAlignment="Stretch">
+        <Border HorizontalAlignment="Stretch" BorderBrush="#191515" BorderThickness="1,0,0,0">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -65,9 +51,9 @@
                             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The directory to scan when using list search." Margin="0" Padding="5 0 0 0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Path to folder</TextBlock>
-                                    <Image Source="../../information.ico" Margin="5 0 0 0" >
+                                    <Image Source="../../Resources/information.ico" Margin="5 0 0 0" >
                                         <Image.OpacityMask>
-                                            <ImageBrush ImageSource="../../information.ico"/>
+                                            <ImageBrush ImageSource="../../Resources/information.ico"/>
                                         </Image.OpacityMask>
                                     </Image>
                                 </StackPanel>
@@ -93,16 +79,16 @@
                             <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The language of subtitles it should be looking for." Margin="5 10 0 0" Padding="0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Subtitle language</TextBlock>
-                                    <Image Source="../../information.ico" Margin="5 0 0 0" >
+                                    <Image Source="../../Resources/information.ico" Margin="5 0 0 0" >
                                         <Image.OpacityMask>
-                                            <ImageBrush ImageSource="../../information.ico"/>
+                                            <ImageBrush ImageSource="../../Resources/information.ico"/>
                                         </Image.OpacityMask>
                                     </Image>
                                 </StackPanel>
                             </Label>
                             <ComboBox Grid.Row="4" Grid.Column="0" ItemsSource="{Binding Languages}" SelectedValue="{Binding Language}" 
-                          Style="{StaticResource ComboBoxStyle}"
-                          IsEditable="False" Margin="5 0 0 0" VerticalAlignment="Top">
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      IsEditable="False" Margin="5 0 0 0" VerticalAlignment="Top">
                             </ComboBox>
                         </Grid>
                     </Expander>
@@ -122,16 +108,16 @@
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12" >
                                                 Expected release names
                                             </TextBlock>
-                                            <Image Source="../../information.ico" Margin="10 3 0 0" Width="10">
+                                            <Image Source="../../Resources/information.ico" Margin="10 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
                                     </Label>
 
                                     <ListBox Height="250" Style="{DynamicResource ListBoxStyle}" ItemsSource="{Binding ReleaseNames}" SelectedItem="{Binding SelectedReleaseName}"
-                                 SelectionMode="Single" Margin="5 0 0 0 "/>
+                                             SelectionMode="Single" Margin="5 0 0 0 "/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Margin="20 0" VerticalAlignment="Center">
@@ -152,9 +138,9 @@
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
                                                 Secondary release names
                                             </TextBlock>
-                                            <Image Source="../../information.ico" Margin="3 3 0 0" Width="10">
+                                            <Image Source="../../Resources/information.ico" Margin="3 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
@@ -181,9 +167,9 @@
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
                                                 File types
                                             </TextBlock>
-                                            <Image Source="../../information.ico" Margin="87 3 0 0" Width="10">
+                                            <Image Source="../../Resources/information.ico" Margin="87 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../information.ico"/>
+                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
@@ -214,5 +200,19 @@
                 </Grid>
             </ScrollViewer>
         </Border>
+
+        <!-- Left menu -->
+        <Grid Margin="-210 0 0 25" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <Button Grid.Row="0" Content="Open settings file" Command="{Binding OpenFileCommand}" Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3" ToolTip="Manually manipulate settings. Restart requried."/>
+            <Button Grid.Row="1" Content="Reset"              Command="{Binding ResetCommand}"    Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3"/>
+            <Button Grid.Row="2" Content="Save"               Command="{Binding SaveCommand}"     Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3"/>
+        </Grid>
     </Grid>
 </UserControl>

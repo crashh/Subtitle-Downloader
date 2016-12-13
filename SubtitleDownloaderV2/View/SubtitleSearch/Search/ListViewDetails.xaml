@@ -3,92 +3,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              xmlns:search="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
              mc:Ignorable="d" 
-             d:DesignHeight="640" d:DesignWidth="1000" Name="_userControl">
+             d:DesignHeight="640" d:DesignWidth="1000">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
-        <Style x:Key="GridHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="BorderThickness" Value="0 0 0 1"/>
-            <Setter Property="FontWeight" Value="Bold" />
+        <Style x:Key="detailLabelStyle" TargetType="Label">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
         </Style>
-        <Style x:Key="DataGridStyle" TargetType="DataGrid">
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="GridLinesVisibility" Value="None"/>
-            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderThickness" Value="1 1 0 1" />
-            <Setter Property="BorderBrush" Value="Black" />
-            <Setter Property="SelectionMode" Value="Single" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Padding" Value="0 0 0 0"/>
-            <Setter Property="SelectionUnit" Value="FullRow" />
+        <Style x:Key="detailHeaderLabelStyle" TargetType="Label" BasedOn="{StaticResource detailLabelStyle}">
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
-        <converters:VisibilityToBooleanConverter x:Key="VisibilityToBool"/>
-        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*" 
-                            Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
     </UserControl.Resources>
     
     <Grid>
-        <DataGrid ItemsSource="{Binding AllEntries}"
-                  SelectedItem="{Binding SelectedEntry}" 
-                  Style="{StaticResource DataGridStyle}"
-                  ColumnHeaderStyle="{StaticResource GridHeaderStyle}"
-                  IsReadOnly="True" 
-                  RowDetailsVisibilityMode="Collapsed">
-            <DataGrid.Columns>
-                <StaticResource ResourceKey="DataGridFilenameColumn" />
-                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
-                <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="100" Width="*"/>
-                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="90" Width="*"/>
-                <DataGridTemplateColumn Header="">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <!-- Tie button to row details visibility, and hide button if not relevant. -->
-                            <ToggleButton Name="ShowDetails" Content="+"
-                                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
-                                                      Path=DetailsVisibility, 
-                                                      Converter={StaticResource VisibilityToBool}, 
-                                                      Mode=TwoWay}"
-                                          Visibility="{Binding IsDirectory, Converter={StaticResource BoolToVis}}"
-                                          FontSize="8"
-                                          Width="18"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-
-            <DataGrid.RowDetailsTemplate>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ListView ItemsSource="{Binding AllEntries}" SelectedItem="{Binding SelectedEntry}" HorizontalAlignment="Stretch">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid MaxHeight="175">
-                        <ScrollViewer>
-                            <search:ListGridRowDetails DataContext="{Binding}"/>
-                        </ScrollViewer>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Image Grid.Column="0" Source="../../../Resources/details_image.png" VerticalAlignment="Center" Stretch="Uniform"/>
+
+                        <Grid  Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="Filename: " Style="{StaticResource detailHeaderLabelStyle}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding filename}" Style="{StaticResource detailLabelStyle}" Visibility="{Binding DataContext.ShowFirstColumn, Converter={StaticResource BoolToVis}}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0" Content="Title: " Style="{StaticResource detailHeaderLabelStyle}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding title}" Style="{StaticResource detailLabelStyle}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Content="Release: " Style="{StaticResource detailHeaderLabelStyle}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding release}" Style="{StaticResource detailLabelStyle}"/>
+
+                            <Label Grid.Row="3" Grid.Column="0" Content="Episode: " Style="{StaticResource detailHeaderLabelStyle}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding episode}" Style="{StaticResource detailLabelStyle}"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Image Source="../../../Resources/details_open.png" />
+                            <Image Source="../../../Resources/details_open.png" />
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                   Color="#FF272424"/>
-            </DataGrid.Resources>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="FontSize" Value="14" />
-                </Style>
-            </DataGrid.RowStyle>
-
-        </DataGrid>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

@@ -29,8 +29,12 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <converters:VisibilityToBooleanConverter x:Key="VisibilityToBool"/>
-        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding filename}" Width="1.5*" 
+        <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding Filename}" Width="1.5*" 
                             Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
+
+        <ImageBrush x:Key="OpenFolderButton" ImageSource="../../../Resources/details_open.png" Stretch="UniformToFill"/>
+        <ImageBrush x:Key="PictureImageButton" ImageSource="../../../Resources/details_image.png" Stretch="UniformToFill"/>
+
     </UserControl.Resources>
     
     <Grid>
@@ -41,10 +45,31 @@
                   IsReadOnly="True" 
                   RowDetailsVisibilityMode="Collapsed">
             <DataGrid.Columns>
+                <!--Image-->
+                <DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="../../../Resources/details_image.png" Width="25"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--Path-->
                 <StaticResource ResourceKey="DataGridFilenameColumn" />
-                <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="1*"/>
-                <DataGridTextColumn Header="Release" Binding="{Binding release}" MaxWidth="100" Width="*"/>
-                <DataGridTextColumn Header="Episode" Binding="{Binding episode}" MaxWidth="90" Width="*"/>
+                <!--Title-->
+                <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="1*"/>
+                <!--Release-->
+                <DataGridTextColumn Header="Release" Binding="{Binding Release}" MaxWidth="100" Width="*"/>
+                <!--Episode-->
+                <DataGridTextColumn Header="Episode" Binding="{Binding Episode}" MaxWidth="90" Width="*"/>
+                <!--Open folder command-->
+                <DataGridTemplateColumn Header="">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Background="{StaticResource OpenFolderButton}" Command="{Binding OpenFolderCmd}" Width="18" Height="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--Expand button command-->
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -55,8 +80,7 @@
                                                       Converter={StaticResource VisibilityToBool}, 
                                                       Mode=TwoWay}"
                                           Visibility="{Binding IsDirectory, Converter={StaticResource BoolToVis}}"
-                                          FontSize="8"
-                                          Width="18"/>
+                                          FontSize="8" Width="18" Height="18"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -66,15 +90,14 @@
                 <DataTemplate>
                     <Grid MaxHeight="175">
                         <ScrollViewer>
-                            <search:ListRowDetails DataContext="{Binding}"/>
+                            <search:ListGridRowDetails DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
 
             <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                   Color="#FF272424"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF272424"/>
             </DataGrid.Resources>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
