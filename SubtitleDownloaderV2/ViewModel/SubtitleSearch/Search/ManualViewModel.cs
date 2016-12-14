@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -12,9 +13,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 {
     public class ManualViewModel : ViewModelBase
     {
-        const bool SUCCESS = true;
-        const bool FAILURE = false;
-
         public ICommand SearchCommand { get; set; }
         public ICommand OpenBrowserCommand { get; set; }
         public ICommand BrowseCommand { get; set; }
@@ -55,11 +53,9 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             }
             set { this.Set(() => this.CustomEntry, ref this.customEntry, value); }
         }
-
         #endregion
 
         #region Initialize
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -90,7 +86,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                 this.customEntry = new FileEntry(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "", "", "");
             }
         }
-
         #endregion
 
         #region Methods
@@ -113,9 +108,12 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             Progress = string.Empty;
 
-            var subscene = new SubsceneService(customEntry) {WriteProgress = WriteToProgressWindow};
-            Thread thread = new Thread(subscene.Search);
-            thread.Start();
+            var subscene = new SubsceneService(customEntry)
+            {
+                WriteProgress = WriteToProgressWindow
+            };
+
+            Task.Run(() => subscene.Search());
         }
 
         public void OpenFileDialogBrowser()
@@ -135,7 +133,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             }
             Progress += message + "\r\n\r\n";
         }
-
         #endregion
     }
 }

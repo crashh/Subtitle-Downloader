@@ -41,7 +41,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="1" Grid.Column="1" Content="Manual Search" Foreground="White" FontSize="30" Margin="0 3 0 30"/>
-                <!-- Path to folder -->
+                
                 <Label Grid.Row="2" Grid.Column="1" Content="Title" Foreground="White"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CustomEntry.Title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
@@ -72,12 +72,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Margin="60,3,-3,3"
+            <Button Grid.Row="0" Content="Open Browser" Style="{DynamicResource MenuBigButtons}" Command="{Binding OpenBrowserCommand}"
                     Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
-            <Button Grid.Row="1" Content="Search" Height="90" FontSize="30" Style="{DynamicResource LeftMenuButton}" Command="{Binding SearchCommand}" Margin="60,3,-3,3"/>
+            <Button Grid.Row="1" Content="Search" Height="90" FontSize="30" Style="{DynamicResource MenuBigButtons}" Command="{Binding SearchCommand}"/>
             <Label  Grid.Row="2" Content="" FontSize="10"/>
         </Grid>
 
+        <!-- Progress popin -->
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />

@@ -32,7 +32,10 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Title -->
                     <Label Grid.Row="1" Grid.Column="1" Content="Settings" Foreground="White" FontSize="30"/>
+                    
+                    <!-- General settings -->
                     <Expander Grid.Row="2" Grid.Column="1" Header="General" IsExpanded="True" Foreground="White" FontSize="16" Margin="0 30 0 0" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -47,6 +50,7 @@
                                 <ColumnDefinition Width="*" MaxWidth="700"/>
                                 <ColumnDefinition Width="0.1*"/>
                             </Grid.ColumnDefinitions>
+                            
                             <!-- Path to folder -->
                             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The directory to scan when using list search." Margin="0" Padding="5 0 0 0">
                                 <StackPanel Orientation="Horizontal">
@@ -74,7 +78,6 @@
                             </Grid>
                             <CheckBox Grid.Row="2" Grid.Column="0" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
 
-
                             <!-- Language box -->
                             <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The language of subtitles it should be looking for." Margin="5 10 0 0" Padding="0">
                                 <StackPanel Orientation="Horizontal">
@@ -93,7 +96,6 @@
                         </Grid>
                     </Expander>
                     
-
                     <!-- Release names -->
                     <Expander Grid.Row="3" Grid.Column="1" Header="File estimation lists" IsExpanded="False" Foreground="White" FontSize="16" Margin="0 30 0 0">
                         <WrapPanel  Orientation="Horizontal" FlowDirection="LeftToRight">
@@ -210,9 +212,9 @@
             </Grid.RowDefinitions>
 
 
-            <Button Grid.Row="0" Content="Open settings file" Command="{Binding OpenFileCommand}" Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3" ToolTip="Manually manipulate settings. Restart requried."/>
-            <Button Grid.Row="1" Content="Reset"              Command="{Binding ResetCommand}"    Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3"/>
-            <Button Grid.Row="2" Content="Save"               Command="{Binding SaveCommand}"     Style="{DynamicResource LeftMenuButton}"  Margin="60,3,-3,3"/>
+            <Button Grid.Row="0" Content="Open settings file" Command="{Binding OpenFileCommand}" Style="{DynamicResource MenuBigButtons}"  ToolTip="Manually manipulate settings. Restart requried."/>
+            <Button Grid.Row="1" Content="Reset"              Command="{Binding ResetCommand}"    Style="{DynamicResource MenuBigButtons}"  />
+            <Button Grid.Row="2" Content="Save"               Command="{Binding SaveCommand}"     Style="{DynamicResource MenuBigButtons}"  />
         </Grid>
     </Grid>
 </UserControl>

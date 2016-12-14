@@ -144,14 +144,26 @@ namespace SubtitleDownloaderV2.Model
 
         public string GetFullPath()
         {
-            return Path;
+            var path = this.Path;
+
+            if (System.IO.Path.HasExtension(path))
+            {
+                var fileName = System.IO.Path.GetFileName(path);
+                if (fileName != null)
+                {
+                    path = path.Replace(fileName, string.Empty);
+                }
+            }
+
+            return path;
         }
 
         private void OpenFolder()
         {
             try
             {
-                Process.Start(this.GetFullPath());
+                var path = this.GetFullPath();
+                Process.Start(path);
             }
             catch (Exception)
             {

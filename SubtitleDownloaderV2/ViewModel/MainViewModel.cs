@@ -32,33 +32,33 @@ namespace SubtitleDownloader.ViewModel
 
         #region Observables
 
-        private int width;
+        private int _width;
         public int Width
         {
-            get { return width; }
+            get { return _width; }
             set
             {
-                this.Set(() => this.Width, ref this.width, value);
-                _settingsViewModel.Width = this.width;
+                this.Set(() => this.Width, ref this._width, value);
+                _settingsViewModel.Width = this._width;
             }
         }
 
-        private int height;
+        private int _height;
         public int Height
         {
-            get { return height; }
+            get { return _height; }
             set
             {
-                this.Set(() => this.Height, ref this.height, value);
-                _settingsViewModel.Height = this.height;
+                this.Set(() => this.Height, ref this._height, value);
+                _settingsViewModel.Height = this._height;
             }
         }
 
-        private string version;
+        private string _version;
         public string Version
         {
-            get { return this.version; }
-            set { this.Set(() => this.Version, ref this.version, value); }
+            get { return this._version; }
+            set { this.Set(() => this.Version, ref this._version, value); }
         }
 
         private bool _isListSearchSelected;
@@ -75,11 +75,11 @@ namespace SubtitleDownloader.ViewModel
             set { this.Set(() => this.IsSettingsSelected, ref this._isSettingsSelected, value); }
         }
 
-        private object selectedViewModel;
+        private object _selectedViewModel;
         public object SelectedViewModel
         {
-            get { return selectedViewModel; }
-            set { this.Set(() => this.SelectedViewModel, ref this.selectedViewModel, value); }
+            get { return _selectedViewModel; }
+            set { this.Set(() => this.SelectedViewModel, ref this._selectedViewModel, value); }
         }
         #endregion
 
@@ -105,6 +105,7 @@ namespace SubtitleDownloader.ViewModel
             ListSearchCommand = new RelayCommand(OpenListSearch);
             InputSearchCommand = new RelayCommand(OpenInputSearch);
             SettingsCommand = new RelayCommand(OpenSettings);
+
             OpenListSearch(); //Default open window
         }
 

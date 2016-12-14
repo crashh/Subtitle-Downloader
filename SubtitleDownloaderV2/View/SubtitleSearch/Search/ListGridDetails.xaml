@@ -65,7 +65,7 @@
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Background="{StaticResource OpenFolderButton}" Command="{Binding OpenFolderCmd}" Width="18" Height="18"/>
+                            <Button Background="{StaticResource OpenFolderButton}" Command="{Binding OpenFolderCmd}" Style="{StaticResource DataGridButton}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

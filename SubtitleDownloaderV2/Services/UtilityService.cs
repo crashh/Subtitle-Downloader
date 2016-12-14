@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace SubtitleDownloaderV2.Services
@@ -11,10 +10,10 @@ namespace SubtitleDownloaderV2.Services
         /// </summary>
         public static String GetPath(String path)
         {
-            if (path.Contains(".mkv") || path.Contains(".mp4") || path.Contains(".avi"))
+            if (Path.HasExtension(path))
             {
                 // Path points directly to a file:
-                String newPath = path.Substring(0, (path.Length - Path.GetFileName(path).Length) - 1);
+                string newPath = path.Substring(0, (path.Length - Path.GetFileName(path).Length) - 1);
                 return newPath + @"\";
             }
             // Path already points to a folder:

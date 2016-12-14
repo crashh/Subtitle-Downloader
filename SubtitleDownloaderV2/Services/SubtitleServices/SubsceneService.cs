@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Dialog;
@@ -30,7 +27,6 @@ namespace SubtitleDownloaderV2.Services
 
         public ResultPickerItemViewModel[] FindSearchResults()
         {
-            //var matchesWithoutDuplicates = new HashSet<string>();
             var result = new List<ResultPickerItemViewModel>();
 
             // Look if we got an exact match:
@@ -94,6 +90,11 @@ namespace SubtitleDownloaderV2.Services
 
         public void Search()
         {
+            if (selected == null)
+            {
+                return;
+            }
+
             WriteProgress($"Looking for {selected.Title} in {Settings.Language} ...", SUCCESS);
 
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selected.Title + "&l=");
@@ -127,8 +128,7 @@ namespace SubtitleDownloaderV2.Services
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + correctSub);
             var downloadLink = FindDownloadUrl();
 
-            var result = InitiateDownload("http://subscene.com/subtitle/download" + downloadLink, selected.GetFullPath()
-            );
+            var result = InitiateDownload("http://subscene.com/subtitle/download" + downloadLink, selected.GetFullPath());
             if (!result)
             {
                 WriteProgress("FAILURE! Error downloading subtitle!", FAILURE);
@@ -157,8 +157,11 @@ namespace SubtitleDownloaderV2.Services
                     searchResultPicked = result != -1 ? searchResult[result].Address : "";
                 });
             });
-            
-            if (string.IsNullOrEmpty(searchResultPicked)) return string.Empty;
+
+            if (string.IsNullOrEmpty(searchResultPicked))
+            {
+                return string.Empty;
+            }
 
             WriteProgress($"User picked {searchResultPicked}...", SUCCESS);
 
