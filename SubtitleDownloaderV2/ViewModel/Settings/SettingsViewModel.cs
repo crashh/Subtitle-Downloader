@@ -25,8 +25,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
         public ICommand RemoveReleaseNameSecondaryCommand { get; set; }
         public ICommand AddFileTypeCommand { get; set; }
         public ICommand RemoveFileTypeCommand { get; set; }
-
-
+        
 
         #region Observables
         public List<string> Languages { get; set; }

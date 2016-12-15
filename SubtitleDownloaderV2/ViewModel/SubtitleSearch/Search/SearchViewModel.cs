@@ -10,6 +10,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Threading;
+using SubtitleDownloader.ViewModel.SubtitleSearch.Settings;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
 using SubtitleDownloaderV2.Util;
@@ -22,9 +24,10 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         public ICommand OpenBrowserCommand { get; set; }
         public ICommand ModifyEntryCommand { get; set; }
         public ICommand SearchCommand { get; set; }
+        public ICommand SetDirectoryCommand { get; set; }
 
         #region Observables
-        
+
         /// <summary>
         /// Displays how the search went.
         /// </summary>
@@ -39,7 +42,14 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         /// <summary>
         /// Returns the full path to the current directory.
         /// </summary>
-        public string GetFullPath => $"Current directory: {SubtitleDownloaderV2.Util.Settings.DirectoryPath}";
+        ///         private string progress;
+        private string getFullPath;
+        public string GetFullPath
+        {
+            get { return getFullPath; }
+            set { this.Set(() => this.GetFullPath, ref this.getFullPath, value); }
+
+        }
 
         /// <summary>
         /// The last selected item in the datagrid.
@@ -72,6 +82,13 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             set { this.Set(() => this.ShowFirstColumn, ref this.showFirstColumn, value); }
         }
 
+        private bool isPathSet;
+        public bool IsPathSet
+        {
+            get { return isPathSet; }
+            set { this.Set(() => this.IsPathSet, ref this.isPathSet, value); }
+        }
+
         #endregion
 
         #region Initialize
@@ -87,6 +104,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             OpenBrowserCommand = new RelayCommand(OpenBrowser);
             SearchCommand = new RelayCommand(DoSearch);
             ModifyEntryCommand = new RelayCommand(DoModifyEntry);
+            SetDirectoryCommand = new RelayCommand(DoSetDirectory);
         }
 
         /// <summary>
@@ -101,9 +119,14 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             var directoryPath = SubtitleDownloaderV2.Util.Settings.DirectoryPath;
             if (Directory.Exists(directoryPath))
             {
-                AddDirectoryContent(AllEntries, directoryPath);
+                Task.Run(() =>
+                {
+                    AddDirectoryContent(AllEntries, directoryPath);
+                });
             }
             this.SelectedEntry = AllEntries.FirstOrDefault();
+            this.IsPathSet = string.IsNullOrWhiteSpace(SubtitleDownloaderV2.Util.Settings.DirectoryPath);
+            this.GetFullPath = $"Current directory: {SubtitleDownloaderV2.Util.Settings.DirectoryPath}";
         }
 
         private void AddDirectoryContent(ICollection<FileEntry> parent, string directory)
@@ -158,7 +181,10 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                     var fileEntry = new FileEntry(entry);
                     fileEntry.DefineEntriesFromPath();
 
-                    parent.Add(fileEntry);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                        {
+                            parent.Add(fileEntry);
+                        });
 
                     if (isDirectoryAndContainsCorrectFileTypes)
                     {
@@ -245,19 +271,31 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             main.InputSearchCommand.Execute(null);
         }
 
+        private void DoSetDirectory()
+        {
+            var settings = SimpleIoc.Default.GetInstance<SettingsViewModel>();
+            settings.OnPresented();
+            settings.OpenFileDialogBrowser();
+            settings.SaveCurrentSettings();
+
+            this.OnPresented();
+        }
+
         /// <summary>
         /// Perform the search for selected entry.
         /// </summary>
         private void DoSearch()
         {
             Progress = string.Empty;
-
-            var subscene = new SubsceneService(selectedEntry)
+            Task.Run(() =>
             {
-                WriteProgress = WriteToProgressWindow
-            };
+                new SubsceneService(selectedEntry)
+                {
+                    WriteProgress = WriteToProgressWindow
+                }.Search();
 
-            Task.Run(() => subscene.Search());
+                this.RaisePropertyChanged(nameof(this.SelectedEntry));
+            });
         }
 
         private void WriteToProgressWindow(string message, bool success)

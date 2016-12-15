@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
 using SubtitleDownloader.ViewModel;
 
@@ -16,6 +17,8 @@ namespace SubtitleDownloaderV2
 
             ViewModelLocator vml = new ViewModelLocator();
             this.DataContext = ServiceLocator.Current.GetInstance<MainViewModel>();
+            
+            DispatcherHelper.Initialize();
 
             AppContext.MainWindow = this;
         }
