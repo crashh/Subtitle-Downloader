@@ -2,33 +2,23 @@ using System.Deployment.Application;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using SubtitleDownloader.ViewModel.ShowTracker;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Search;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Settings;
 
 namespace SubtitleDownloader.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class MainViewModel : ViewModelBase
     {
-
         public ICommand ListSearchCommand { get; set; }
         public ICommand InputSearchCommand { get; set; }
         public ICommand SettingsCommand { get; set; }
+        public ICommand ShowTrackerCommand { get; set; }
 
-        private readonly SearchViewModel _searchViewModel;
-        private readonly ManualViewModel _manualViewModel;
-        private readonly SettingsViewModel _settingsViewModel;
+        public SearchViewModel SearchViewModel { get; }
+        public ManualViewModel ManualViewModel { get; }
+        public SettingsViewModel SettingsViewModel { get; }
+        public ShowTrackerViewModel ShowTrackerViewModel { get; }
 
         #region Observables
 
@@ -39,7 +29,8 @@ namespace SubtitleDownloader.ViewModel
             set
             {
                 this.Set(() => this.Width, ref this._width, value);
-                _settingsViewModel.Width = this._width;
+                Properties.Settings.Default.WindowWidth = this._width;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -50,7 +41,8 @@ namespace SubtitleDownloader.ViewModel
             set
             {
                 this.Set(() => this.Height, ref this._height, value);
-                _settingsViewModel.Height = this._height;
+                Properties.Settings.Default.WindowHeight = this._height;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -68,12 +60,27 @@ namespace SubtitleDownloader.ViewModel
             set { this.Set(() => this.IsListSearchSelected, ref this._isListSearchSelected, value); }
         }
 
+        private bool _isManualSearchSelected;
+        public bool IsManualSearchSelected
+        {
+            get { return _isManualSearchSelected; }
+            set { this.Set(() => this.IsManualSearchSelected, ref this._isManualSearchSelected, value); }
+        }
+
         private bool _isSettingsSelected;
         public bool IsSettingsSelected
         {
             get { return _isSettingsSelected; }
             set { this.Set(() => this.IsSettingsSelected, ref this._isSettingsSelected, value); }
         }
+
+        private bool _isShowTrackerSelected;
+        public bool IsShowTrackerSelected
+        {
+            get { return _isShowTrackerSelected; }
+            set { this.Set(() => this.IsShowTrackerSelected, ref this._isShowTrackerSelected, value); }
+        }
+
 
         private object _selectedViewModel;
         public object SelectedViewModel
@@ -89,22 +96,25 @@ namespace SubtitleDownloader.ViewModel
         public MainViewModel(
             SearchViewModel searchViewModel, 
             ManualViewModel manualViewModel,
-            SettingsViewModel settingsViewModel)
+            SettingsViewModel settingsViewModel,
+            ShowTrackerViewModel showTrackerViewModel)
         {
             this.Version = ApplicationDeployment.IsNetworkDeployed 
                 ? $"ver. {ApplicationDeployment.CurrentDeployment.CurrentVersion}" 
                 : "ver. DEBUG";
 
-            this._searchViewModel = searchViewModel;
-            this._manualViewModel = manualViewModel;
-            this._settingsViewModel = settingsViewModel;
+            this.SearchViewModel = searchViewModel;
+            this.ManualViewModel = manualViewModel;
+            this.SettingsViewModel = settingsViewModel;
+            this.ShowTrackerViewModel = showTrackerViewModel;
 
-            this.Width = settingsViewModel.Width;
-            this.Height = settingsViewModel.Height;
+            this.Width = Properties.Settings.Default.WindowWidth;
+            this.Height = Properties.Settings.Default.WindowHeight;
 
             ListSearchCommand = new RelayCommand(OpenListSearch);
             InputSearchCommand = new RelayCommand(OpenInputSearch);
             SettingsCommand = new RelayCommand(OpenSettings);
+            ShowTrackerCommand = new RelayCommand(OpenShowTracker);
 
             OpenListSearch(); //Default open window
         }
@@ -117,9 +127,11 @@ namespace SubtitleDownloader.ViewModel
         private void OpenListSearch()
         {
             IsListSearchSelected = true;
+            IsManualSearchSelected = false;
             IsSettingsSelected = false;
-            SelectedViewModel = _searchViewModel;
-            _searchViewModel.OnPresented();
+            IsShowTrackerSelected = false;
+            SelectedViewModel = SearchViewModel;
+            SearchViewModel.OnPresented();
         }
 
         /// <summary>
@@ -127,10 +139,12 @@ namespace SubtitleDownloader.ViewModel
         /// </summary>
         private void OpenInputSearch()
         {
-            IsListSearchSelected = true;
+            IsListSearchSelected = false;
+            IsManualSearchSelected = true;
             IsSettingsSelected = false;
-            SelectedViewModel = _manualViewModel;
-            _manualViewModel.OnPresented();
+            IsShowTrackerSelected = false;
+            SelectedViewModel = ManualViewModel;
+            ManualViewModel.OnPresented();
         }
 
         /// <summary>
@@ -139,9 +153,24 @@ namespace SubtitleDownloader.ViewModel
         private void OpenSettings()
         {
             IsListSearchSelected = false;
+            IsManualSearchSelected = false;
             IsSettingsSelected = true;
-            SelectedViewModel = _settingsViewModel;
-            _settingsViewModel.OnPresented();
+            IsShowTrackerSelected = false;
+            SelectedViewModel = SettingsViewModel;
+            SettingsViewModel.OnPresented();
+        }
+
+        /// <summary>
+        /// Displays the Show Tracker View.
+        /// </summary>
+        private void OpenShowTracker()
+        {
+            IsListSearchSelected = false;
+            IsManualSearchSelected = false;
+            IsSettingsSelected = false;
+            IsShowTrackerSelected = true;
+            SelectedViewModel = ShowTrackerViewModel;
+            ShowTrackerViewModel.OnPresented();
         }
 
         #endregion

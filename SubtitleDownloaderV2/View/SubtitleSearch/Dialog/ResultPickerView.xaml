@@ -16,7 +16,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <Label Grid.Row="0" Content="Pick correct search result" Background="#FF272424" Foreground="White"/>
+        <Label Grid.Row="0" Content="Pick correct search result" Background="#FF272424"   Foreground="{StaticResource DefaultFontDarkColor}"/>
         <ListView Grid.Row="1" ItemsSource="{Binding AllResults}" SelectedIndex="{Binding SelectedEntry}"
                   MinHeight="150" MaxHeight="500">
             <ListView.ItemTemplate>

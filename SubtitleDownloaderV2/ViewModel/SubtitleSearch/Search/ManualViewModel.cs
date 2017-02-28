@@ -108,12 +108,12 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         {
             Progress = string.Empty;
 
-            var subscene = new SubsceneService(customEntry)
-            {
-                WriteProgress = WriteToProgressWindow
-            };
+            var subscene = new SubsceneService(customEntry, WriteToProgressWindow);
 
-            Task.Run(() => subscene.Search());
+            Task.Run(() =>
+            {
+                subscene.Search();
+            });
         }
 
         public void OpenFileDialogBrowser()

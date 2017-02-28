@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using SubtitleDownloader.Properties;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Dialog;
 using SubtitleDownloaderV2.Dialogs;
 using SubtitleDownloaderV2.Model;
@@ -15,14 +16,15 @@ namespace SubtitleDownloaderV2.Services
         private const bool SUCCESS = true;
         private const bool FAILURE = false;
 
-        private readonly FileEntry selected;
+        private readonly FileEntry _selected;
 
         internal delegate void WriteToProgressWindow(string message, bool success);
-        public WriteToProgressWindow WriteProgress;
+        private readonly WriteToProgressWindow _writeProgress;
         
-        public SubsceneService(FileEntry selected)
+        public SubsceneService(FileEntry selected, WriteToProgressWindow writeToProgressWindow)
         {
-            this.selected = selected;
+            _selected = selected;
+            _writeProgress = writeToProgressWindow;
         }
 
         public ResultPickerItemViewModel[] FindSearchResults()
@@ -67,8 +69,8 @@ namespace SubtitleDownloaderV2.Services
             for (var i = 0; i < allMatches.Count; i++)
             {
                 var singleMatch = allMatches[i].ToString();
-                if (singleMatch.Contains(Settings.Language) && singleMatch.Contains("positive-icon") &&
-                    singleMatch.Contains(selected.Release) && singleMatch.Contains(selected.Episode))
+                if (singleMatch.Contains(SubSearchSettings.Default.SelectedLanguage) && singleMatch.Contains("positive-icon") &&
+                    singleMatch.Contains(_selected.Release) && singleMatch.Contains(_selected.Episode))
                 {
                     chosenResult = Regex.Match(singleMatch, @"/subtitles/(.+?)"">").Groups[1].ToString();
 
@@ -90,54 +92,54 @@ namespace SubtitleDownloaderV2.Services
 
         public void Search()
         {
-            if (selected == null)
+            if (_selected == null)
             {
                 return;
             }
 
-            WriteProgress($"Looking for {selected.Title} in {Settings.Language} ...", SUCCESS);
+            _writeProgress($"Looking for {_selected.Title} in {SubSearchSettings.Default.SelectedLanguage} ...", SUCCESS);
 
-            RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + selected.Title + "&l=");
+            RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + _selected.Title + "&l=");
             var searchResult = FindSearchResults();
             if (searchResult.Length < 1)
             {
-                WriteProgress("FAILURE! Search result gave no hits...", FAILURE);
+                _writeProgress("FAILURE! Search result gave no hits...", FAILURE);
                 return;
             }
-            WriteProgress($"Found {searchResult.Length} possible results...", SUCCESS);
+            _writeProgress($"Found {searchResult.Length} possible results...", SUCCESS);
 
             var searchResultPicked = PickCorrectSearchResult(searchResult);
             if (string.IsNullOrEmpty(searchResultPicked))
             {
-                WriteProgress("User cancelled the search..", FAILURE);
+                _writeProgress("User cancelled the search..", FAILURE);
                 return;
             }
 
-            WriteProgress($"Querying for subtitles to {searchResultPicked}...", SUCCESS);
+            _writeProgress($"Querying for subtitles to {searchResultPicked}...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + searchResultPicked);
-            selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
+            _selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
             var correctSub = PickCorrectSubtitle();
             if (correctSub.Length < 1)
             {
-                WriteProgress("FAILURE! Could not find any subtitles for this release...", FAILURE);
+                _writeProgress("FAILURE! Could not find any subtitles for this release...", FAILURE);
                 return;
             }
-            WriteProgress($"Found possible match: \"{correctSub}\"...", SUCCESS);
+            _writeProgress($"Found possible match: \"{correctSub}\"...", SUCCESS);
 
-            WriteProgress("Querying download page...", SUCCESS);
+            _writeProgress("Querying download page...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + correctSub);
             var downloadLink = FindDownloadUrl();
 
-            var result = InitiateDownload("http://subscene.com/subtitle/download" + downloadLink, selected.GetFullPath());
+            var result = InitiateDownload("http://subscene.com/subtitle/download" + downloadLink, _selected.GetFullPath());
             if (!result)
             {
-                WriteProgress("FAILURE! Error downloading subtitle!", FAILURE);
+                _writeProgress("FAILURE! Error downloading subtitle!", FAILURE);
                 return;
             }
-            WriteProgress("SUCCESS! Subtitle downloaded!", SUCCESS);
+            _writeProgress("SUCCESS! Subtitle downloaded!", SUCCESS);
 
-            WriteProgress($"Unpacking rar file at {selected.Path}..", SUCCESS);
-            UtilityService.UnrarFile(selected.GetFullPath());
+            _writeProgress($"Unpacking rar file at {_selected.Path}..", SUCCESS);
+            UtilityService.UnrarFile(_selected.GetFullPath());
         }
 
 
@@ -163,9 +165,9 @@ namespace SubtitleDownloaderV2.Services
                 return string.Empty;
             }
 
-            WriteProgress($"User picked {searchResultPicked}...", SUCCESS);
+            _writeProgress($"User picked {searchResultPicked}...", SUCCESS);
 
-            selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
+            _selected.Url = "http://subscene.com/subtitles/" + searchResultPicked;
             return searchResultPicked;
         }
 

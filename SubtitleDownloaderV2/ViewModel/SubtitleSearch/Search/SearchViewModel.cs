@@ -112,27 +112,29 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         /// </summary>
         public void OnPresented()
         {
-            this.ShowFirstColumn = SubtitleDownloaderV2.Util.Settings.ShowFirstColumn;
+            this.ShowFirstColumn = Properties.SubSearchSettings.Default.ShowFirstColumn;
+            this.GetFullPath = Properties.SubSearchSettings.Default.TargetDirectory;
+            this.IsPathSet = string.IsNullOrWhiteSpace(GetFullPath);
 
             AllEntries.Clear();
 
-            var directoryPath = SubtitleDownloaderV2.Util.Settings.DirectoryPath;
-            if (Directory.Exists(directoryPath))
+            if (Directory.Exists(GetFullPath))
             {
                 Task.Run(() =>
                 {
-                    AddDirectoryContent(AllEntries, directoryPath);
+                    // Fill grid content async:
+                    AddDirectoryContent(AllEntries, GetFullPath);
                 });
             }
-            this.SelectedEntry = AllEntries.FirstOrDefault();
-            this.IsPathSet = string.IsNullOrWhiteSpace(SubtitleDownloaderV2.Util.Settings.DirectoryPath);
-            this.GetFullPath = $"Current directory: {SubtitleDownloaderV2.Util.Settings.DirectoryPath}";
+            this.SelectedEntry = AllEntries.FirstOrDefault() ?? new FileEntry("temp");
         }
 
+        /// <summary>
+        /// A recursive method, which traverse parent directory, and any first level sub directories it meets.
+        /// </summary>
         private void AddDirectoryContent(ICollection<FileEntry> parent, string directory)
         {
-            //Somebody should really do something about the method.. but i said somebody...
-            var ignoredFiles = new List<String> { "desktop", "thumbs", "movies", "series", "sample" };
+            var ignoredFiles = new List<string> { "desktop", "thumbs", "movies", "series", "sample" };
 
             foreach (var entry in Directory.GetFileSystemEntries(directory))
             {
@@ -145,13 +147,17 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                     var isDirectoryAndContainsCorrectFileTypes = false;
                     const int fileExtensionLength = 4;
                     var isCorrectFileType = ExpectedNames.FileTypeNames.Contains(fileName.Substring(fileName.Length - fileExtensionLength));
-
-                    var subtitleExist = false;
+                    
                     if (isDirectory)
                     {
-                        if (SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders)
+                        //Check if folder already contains a subtitle:
+                        if (Properties.SubSearchSettings.Default.IgnoreSubbedFolders)
                         {
-                            subtitleExist = LookForSubtitle(entry);
+                            var subtitleExist = LookForSubtitle(entry);
+                            if (subtitleExist)
+                            {
+                                continue;
+                            }
                         }
 
                         //Check if correct file type is present in first level of dir:
@@ -160,6 +166,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                         {
                             if (ExpectedNames.FileTypeNames.Contains(Path.GetExtension(dirEntry)) == false)
                             {
+                                //Content in directory is not a file type we look for.
                                 continue;
                             }
                             if (isCorrectFileType)
@@ -170,36 +177,27 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                         }
                     }
 
-
-                    if ((SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders && subtitleExist) ||
-                        ignoredFiles.Contains(fileName.ToLower().Split('.')[0]) || !isCorrectFileType)
+                    var matchesIgnoredFile = ignoredFiles.Contains(fileName.ToLower().Split('.')[0]);
+                    if (matchesIgnoredFile || !isCorrectFileType)
                     {
-                        //Dont add this file, so continue with next.
                         continue;
                     }
 
                     var fileEntry = new FileEntry(entry);
                     fileEntry.DefineEntriesFromPath();
-
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            parent.Add(fileEntry);
-                        });
-
+                    
+                    
                     if (isDirectoryAndContainsCorrectFileTypes)
                     {
-                        //Add contents within directory.
+                        //Add contents within directory (recursive call).
                         this.AddDirectoryContent(fileEntry.AllEntries, fileEntry.Path);
                     }
-                    else
+
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
-                        if (AllEntries != parent)
-                        {
-                            //Set release field to the same as the parent.
-                            var parentEntry = AllEntries.Count > 0 ? AllEntries.Last() : fileEntry;
-                            fileEntry.DefineEntriesWithDefault("", parentEntry.Release ?? "", "");
-                        }
-                    }
+                        parent.Add(fileEntry);
+                    });
+
                 } catch(Exception)
                 {
                     //ignored and continue with next (meaning that this entry will not be shown.)
@@ -217,14 +215,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                     return true;
                 }
             }
-            if (entry != SubtitleDownloaderV2.Util.Settings.DirectoryPath)
-            {
-                return Directory.GetDirectories(entry).Any(LookForSubtitle);
-            }
-            else
-            {
-                return false;
-            }
+            return entry != this.GetFullPath && Directory.GetDirectories(entry).Any(LookForSubtitle);
         }
 
         #endregion
@@ -267,6 +258,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         /// </summary>
         private void DoModifyEntry()
         {
+            //TODO (do this properly)
             var main = SimpleIoc.Default.GetInstance<MainViewModel>();
             main.InputSearchCommand.Execute(null);
         }
@@ -287,14 +279,13 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         private void DoSearch()
         {
             Progress = string.Empty;
+
+            var subscene = new SubsceneService(selectedEntry, WriteToProgressWindow);
+
             Task.Run(() =>
             {
-                new SubsceneService(selectedEntry)
-                {
-                    WriteProgress = WriteToProgressWindow
-                }.Search();
-
-                this.RaisePropertyChanged(nameof(this.SelectedEntry));
+                subscene.Search();
+                this.RaisePropertyChanged(() => this.SelectedEntry);
             });
         }
 

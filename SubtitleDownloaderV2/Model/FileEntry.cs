@@ -146,7 +146,7 @@ namespace SubtitleDownloaderV2.Model
         {
             var path = this.Path;
 
-            if (System.IO.Path.HasExtension(path))
+            if (File.Exists(path))
             {
                 var fileName = System.IO.Path.GetFileName(path);
                 if (fileName != null)

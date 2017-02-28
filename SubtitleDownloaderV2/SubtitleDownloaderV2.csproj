@@ -29,7 +29,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>2.3.2.%2a</ApplicationVersion>
+    <ApplicationVersion>2.5.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -140,18 +140,26 @@
     <Compile Include="Converters\StringToBoolConverter.cs" />
     <Compile Include="Dialogs\SearchPickerDialogHandler.cs" />
     <Compile Include="Model\FileEntry.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Services\SubtitleServices\SubsceneService.cs" />
     <Compile Include="Services\UtilityService.cs" />
     <Compile Include="Services\WebAccessService.cs" />
     <Compile Include="Util\ExpectedNames.cs" />
-    <Compile Include="Util\Settings.cs" />
+    <Compile Include="ViewModel\ShowTracker\ShowTrackerViewModel.cs" />
     <Compile Include="ViewModel\SubtitleSearch\Dialog\ResultPickerItemViewModel.cs" />
     <Compile Include="ViewModel\SubtitleSearch\Dialog\ResultPickerViewModel.cs" />
     <Compile Include="ViewModel\SubtitleSearch\Search\ManualViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SubtitleSearch\Search\SearchViewModel.cs" />
-    <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\SubtitleSearch\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ShowTracker\ShowTrackerView.xaml.cs">
+      <DependentUpon>ShowTrackerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml.cs">
       <DependentUpon>ResultPickerItem.xaml</DependentUpon>
     </Compile>
@@ -173,7 +181,7 @@
     <Compile Include="View\SubtitleSearch\Search\SearchView.xaml.cs">
       <DependentUpon>SearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Settings\SettingsView.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -188,6 +196,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\ShowTracker\ShowTrackerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -216,7 +228,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Settings\SettingsView.xaml">
+    <Page Include="View\SubtitleSearch\Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -230,9 +242,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Include="Properties\SubSearchSettings.Designer.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
+      <DependentUpon>SubSearchSettings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -244,6 +256,10 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\SubSearchSettings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>SubSearchSettings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="SubtitleDownloaderV2_TemporaryKey.pfx" />
@@ -275,6 +291,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\exit.png" />
+    <Resource Include="Resources\maximize.png" />
+    <Resource Include="Resources\minus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

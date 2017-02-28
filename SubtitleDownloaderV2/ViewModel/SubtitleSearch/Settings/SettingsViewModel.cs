@@ -17,7 +17,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
         public ICommand SaveCommand { get; set; }
         public ICommand ResetCommand { get; set; }
         public ICommand BrowseCommand { get; set; }
-        public ICommand OpenFileCommand { get; set; }
 
         public ICommand AddReleaseNameCommand { get; set; }
         public ICommand RemoveReleaseNameCommand { get; set; }
@@ -26,16 +25,9 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
         public ICommand AddFileTypeCommand { get; set; }
         public ICommand RemoveFileTypeCommand { get; set; }
         
-
         #region Observables
         public List<string> Languages { get; set; }
-
-        public int Width
-        {
-            get;
-            set;
-        }
-        public int Height { get; set; }
+        
 
         /// <summary>
         /// Selected language to look for subtitles in.
@@ -74,9 +66,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
             set { this.Set(() => this.ShowFirstColumn, ref this.showFirstColumn, value); }
         }
 
-        /// <summary>
-        /// Result of the action to save or reset.
-        /// </summary>
         private string result;
         public string Result
         {
@@ -125,14 +114,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
             get { return fileTypes; }
             set { this.Set(() => this.FileTypes, ref this.fileTypes, value); }
         }
-        
-        public bool ChangePerformed => 
-            SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders != this.IgnoreAlreadySubbedFolders ||
-            SubtitleDownloaderV2.Util.Settings.ShowFirstColumn != this.ShowFirstColumn ||
-            string.CompareOrdinal(SubtitleDownloaderV2.Util.Settings.DirectoryPath, this.WorkingFolderPath) != 0 ||
-            string.CompareOrdinal(SubtitleDownloaderV2.Util.Settings.Language, this.Language) != 0 ||
-            ExpectedNames.ReleaseNames.Except(this.ReleaseNames).Any() ||
-            this.ReleaseNames.Except(ExpectedNames.ReleaseNames).Any();
         #endregion
 
         /// <summary>
@@ -143,7 +124,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
             this.SaveCommand = new RelayCommand(SaveCurrentSettings);
             this.ResetCommand = new RelayCommand(LoadSettingsFile);
             this.BrowseCommand = new RelayCommand(OpenFileDialogBrowser);
-            this.OpenFileCommand = new RelayCommand(OpenSettingsFile);
 
             this.AddReleaseNameCommand = new RelayCommand(DoAddReleaseName);
             this.RemoveReleaseNameCommand = new RelayCommand(DoRemoveReleaseName);
@@ -158,10 +138,6 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
                 "French", "Finnish", "Greek", "Italian", "Norwegian", "Indonesian", "Italian", "Norwegian", "Japanese", "Romanian", "Russian", "Romanian",
                 "Spanish", "Swedish", "Turkish", "Vietnamese"
             };
-
-            SubtitleDownloaderV2.Util.Settings.ApplicationPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\Settings";
-
-            OnPresented(); // Need this information immediately
         }
 
         /// <summary>
@@ -169,77 +145,29 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
         /// </summary>
         public void OnPresented()
         {
-            // Get _settings file, or create new one:
-            if (File.Exists(SubtitleDownloaderV2.Util.Settings.ApplicationPath))
-            {
-                try
-                {
-                    LoadSettingsFile();
-                    this.Result = "Settings loaded from file.";
-                }
-                catch (Exception)
-                {
-                    GenerateSettingsFile();
-                    LoadSettingsFile();
-                    this.Result = "Failed to retrieve settings, all settings reset to default.";
-                }
-            }
-            else
-            {
-                GenerateSettingsFile();
-                LoadSettingsFile();
-                this.Result = "No settings file found, all settings reset to default.";
-            }
+            LoadSettingsFile();
         }
 
         #region Methods
-
-        /// <summary>
-        /// Generates a new settingsfile, with some preset values.
-        /// Either called because non existed, or that the format was unexpected.
-        /// </summary>
-        private void GenerateSettingsFile()
-        {
-            //TODO: Find out how not to clear previous settings.
-            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\SubtitleDownloader\");
-            TextWriter settingsFile = new StreamWriter(SubtitleDownloaderV2.Util.Settings.ApplicationPath, false);
-
-            settingsFile.WriteLine("No directory path set");
-            settingsFile.WriteLine("true");
-            settingsFile.WriteLine("true");
-            settingsFile.WriteLine("English");
-            settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNames));
-            settingsFile.WriteLine(string.Join(",", ExpectedNames.ReleaseNamesSecondary));
-            settingsFile.WriteLine(string.Join(",", ExpectedNames.FileTypeNames));
-            settingsFile.WriteLine("1000");
-            settingsFile.WriteLine("700");
-            settingsFile.WriteLine(string.Join(",", ExpectedNames.FileTypeNames));
-            settingsFile.Close();
-        }
-
         /// <summary>
         /// Reads _settings and stores them into public variables.
         /// Note: These variables are read by the program to handle several requests.
         /// </summary>
         private void LoadSettingsFile()
         {
-            string[] settings = File.ReadAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
-
-            this.WorkingFolderPath          = SubtitleDownloaderV2.Util.Settings.DirectoryPath              = settings[0];
-            this.IgnoreAlreadySubbedFolders = SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            this.ShowFirstColumn            = SubtitleDownloaderV2.Util.Settings.ShowFirstColumn            = bool.Parse(settings[2]);
-            this.Language                   = SubtitleDownloaderV2.Util.Settings.Language                   = settings[3];
-            ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
-            ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
-            ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
-            this.Width = int.Parse(settings[7]);
-            this.Height = int.Parse(settings[8]);
+            this.WorkingFolderPath          = Properties.SubSearchSettings.Default.TargetDirectory;
+            this.IgnoreAlreadySubbedFolders = Properties.SubSearchSettings.Default.IgnoreSubbedFolders;
+            this.ShowFirstColumn            = Properties.SubSearchSettings.Default.ShowFirstColumn;
+            this.Language                   = Properties.SubSearchSettings.Default.SelectedLanguage;
+            ExpectedNames.ReleaseNames          = Properties.SubSearchSettings.Default.ReleaseNames.Split(',').ToList();
+            ExpectedNames.ReleaseNamesSecondary = Properties.SubSearchSettings.Default.ReleaseNamesSecondary.Split(',').ToList();
+            ExpectedNames.FileTypeNames         = Properties.SubSearchSettings.Default.FileTypes.Split(',').ToList();
 
             this.ReleaseNames = new ObservableCollection<string>(ExpectedNames.ReleaseNames);
             this.ReleaseNamesSecondary = new ObservableCollection<string>(ExpectedNames.ReleaseNamesSecondary);
             this.FileTypes = new ObservableCollection<string>(ExpectedNames.FileTypeNames);
 
-            Result = "Settings restored!";
+            Result = "Settings loaded!";
         }
 
         /// <summary>
@@ -247,49 +175,33 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Settings
         /// </summary>
         public void SaveCurrentSettings()
         {
-            string[] settings = new string[9];
-
-            settings[0] = this.WorkingFolderPath;
-            settings[1] = this.IgnoreAlreadySubbedFolders.ToString();
-            settings[2] = this.ShowFirstColumn.ToString();
-            settings[3] = this.Language;
-            settings[4] = string.Join(",", this.ReleaseNames);
-            settings[5] = string.Join(",", this.ReleaseNamesSecondary);
-            settings[6] = string.Join(",", this.FileTypes);
-            settings[7] = this.Width.ToString();
-            settings[8] = this.Height.ToString();
-
-            File.WriteAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath, settings);
+            Properties.SubSearchSettings.Default.TargetDirectory = this.WorkingFolderPath;
+            Properties.SubSearchSettings.Default.IgnoreSubbedFolders = this.IgnoreAlreadySubbedFolders;
+            Properties.SubSearchSettings.Default.ShowFirstColumn = this.ShowFirstColumn;
+            Properties.SubSearchSettings.Default.SelectedLanguage = this.Language;
+            Properties.SubSearchSettings.Default.ReleaseNames = string.Join(",", this.ReleaseNames);
+            Properties.SubSearchSettings.Default.ReleaseNamesSecondary = string.Join(",", this.ReleaseNamesSecondary);
+            Properties.SubSearchSettings.Default.FileTypes = string.Join(",", this.FileTypes);
+            Properties.SubSearchSettings.Default.Save();
             Result = "Settings saved!";
-
-            // Load back in settings, in case user manually edited file too.
-            settings = File.ReadAllLines(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
-            SubtitleDownloaderV2.Util.Settings.DirectoryPath              = settings[0];
-            SubtitleDownloaderV2.Util.Settings.IgnoreAlreadySubbedFolders = bool.Parse(settings[1]);
-            SubtitleDownloaderV2.Util.Settings.ShowFirstColumn            = bool.Parse(settings[2]);
-            SubtitleDownloaderV2.Util.Settings.Language                   = settings[3];
-            ExpectedNames.ReleaseNames          = settings[4].Split(',').ToList();
-            ExpectedNames.ReleaseNamesSecondary = settings[5].Split(',').ToList();
-            ExpectedNames.FileTypeNames         = settings[6].Split(',').ToList();
         }
-
         #endregion
 
         #region Commands
 
         public void OpenFileDialogBrowser()
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 WorkingFolderPath = dialog.SelectedPath;
             }
         }
 
-        public void OpenSettingsFile()
-        {
-            Process.Start(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
-        }
+        //public void OpenSettingsFile()
+        //{
+        //    Process.Start(SubtitleDownloaderV2.Util.Settings.ApplicationPath);
+        //}
 
         public void DoAddReleaseName()
         {

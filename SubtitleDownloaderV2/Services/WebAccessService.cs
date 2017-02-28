@@ -58,11 +58,9 @@ namespace SubtitleDownloaderV2.Services
             {
                 try
                 {
-                    String pathToFolder = UtilityService.GetPath(path);
+                    if (!Directory.Exists(path)) { return false; }
 
-                    if (!Directory.Exists(pathToFolder)) { return false; }
-
-                    client.DownloadFile(url, pathToFolder + "/" + name);
+                    client.DownloadFile(url, path + "/" + name);
                 }
                 catch (Exception e)
                 {

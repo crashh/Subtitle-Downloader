@@ -9,12 +9,17 @@
         xmlns:search="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
         xmlns:settingsVM="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Settings"
         xmlns:settings="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Settings"
+        xmlns:showTrackerVM="clr-namespace:SubtitleDownloader.ViewModel.ShowTracker"
+        xmlns:showTracker="clr-namespace:SubtitleDownloader.View.ShowTracker"
+        xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModel:MainViewModel}"
         Title="SubtitleDownloader" 
         Width="{Binding Width, Mode=TwoWay}" Height="{Binding Height, Mode=TwoWay}" 
-        MinWidth="950" MinHeight="650"
-        ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Icon="icon.ico">
+        MinWidth="950" MinHeight="650" WindowStyle="None"
+        ResizeMode="CanResizeWithGrip" AllowsTransparency="True" 
+        WindowStartupLocation="CenterScreen" Icon="icon.ico"
+        BorderBrush="Gray" BorderThickness="1">
     <Window.Resources>
         <DataTemplate DataType="{x:Type searchVM:SearchViewModel}">
             <search:SearchView/>
@@ -25,27 +30,61 @@
         <DataTemplate DataType="{x:Type settingsVM:SettingsViewModel}">
             <settings:SettingsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type showTrackerVM:ShowTrackerViewModel}">
+            <showTracker:ShowTrackerView/>
+        </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NullOrWhitespaceToVisibility x:Key="NullOrWhitespaceToVisibility" />
     </Window.Resources>
 
-    <Grid Background="#FF272424" ClipToBounds="True">
-
+    <Grid Background="{StaticResource BackgroundBrush}" ClipToBounds="True">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="5"/>
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="210"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        
+        <!-- Top menu -->
+        <Grid Grid.Row="0" Grid.Column="1" MouseLeftButtonDown="WindowMouseLeftButtonDown" Background="White">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Minimize_OnClick">
+                    <Image Source="/Resources/minus.png" Width="30"/>
+                </Button>
+                <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Maximize_OnClick">
+                    <Image Source="/Resources/maximize.png" Width="20"/>
+                </Button>
+                <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Close_OnClick">
+                    <Image Source="/Resources/exit.png" Width="25"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="0" MouseLeftButtonDown="WindowMouseLeftButtonDown" Background="#a9bdd5">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Resources/search.png" Height="40" Margin="12 0 0 0" HorizontalAlignment="Left"/>
+                <StackPanel VerticalAlignment="Center">
+                    <Label Content="Subtitle" FontSize="16" Padding="0" Margin="22 0 0 -5" FontStyle="Italic"/>
+                    <Label Content="Downloader" FontSize="20" Padding="0" Margin="22 -5 0 0" FontStyle="Italic"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
 
         <!-- Left menu -->
-        <Grid Column="0" Background="#26201d"/>
-
-        <!-- Content -->
-        <ContentControl x:Name="Pages" Grid.Column="1" Content="{Binding SelectedViewModel}"/>
-
-        <Grid Column="0">
+        <Grid Column="0" Grid.Row="1" Background="#182037">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="0.5*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -55,25 +94,73 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Content="{Binding Version }" Padding="10,5,0,0" HorizontalAlignment="Left" 
-                   Foreground="DimGray" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>
-            <Image Grid.Row="0" Source="../Resources/search.png" Height="150" Margin="5 15 0 0" HorizontalAlignment="Center">
+            <!--<Label Grid.Row="0" Content="{Binding Version }" Padding="10,5,0,0" HorizontalAlignment="Left" 
+                   Foreground="DimGray" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>-->
 
-            </Image>
+            <Button Grid.Row="1" Style="{DynamicResource MenuBigButtons}" Command="{Binding ListSearchCommand}"
+                    BorderBrush="PaleVioletRed">
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="Find subtitles"/>
+                        <TextBlock Text="Search for subtitles" Style="{StaticResource ButtonDescriptionStyle}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <StackPanel Grid.Row="2" Background="{StaticResource DefaultSelectedButtonColor}"
+                        Visibility="{Binding IsListSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button Content="Open Browser" Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.OpenBrowserCommand}"
+                        Visibility="{Binding SearchViewModel.SelectedEntry.Url, Converter={StaticResource NullOrWhitespaceToVisibility}}"/>
+                <Button Content="Modify Entry" Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.ModifyEntryCommand}"/>
+                <Button Content="Search"       Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.SearchCommand}"/>
+            </StackPanel>
 
-            <Button Grid.Row="3" Content="Find subtitles" Style="{DynamicResource MenuBigButtons}"   Command="{Binding ListSearchCommand}"/>
-            <Button Grid.Row="3" Content="Find subtitles" Style="{DynamicResource MenuBigButtonsSelected}"   Command="{Binding ListSearchCommand}"
-                    Visibility="{Binding IsListSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Style="{DynamicResource MenuBigButtons}" Command="{Binding InputSearchCommand}"
+                    BorderBrush="CornflowerBlue">
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="Manual"/>
+                        <TextBlock Text="Manual search" Style="{StaticResource ButtonDescriptionStyle}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <StackPanel Grid.Row="4" Background="{StaticResource DefaultSelectedButtonColor}"
+                        Visibility="{Binding IsManualSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button Content="Search" Command="{Binding ManualViewModel.SearchCommand}" Style="{DynamicResource MenuSmallButtons}"/>
+            </StackPanel>
 
-            <Button Grid.Row="4" Content="Manual"         Style="{DynamicResource MenuSmallButtons}" Command="{Binding InputSearchCommand}"/>
+            <Button Grid.Row="5" Style="{DynamicResource MenuBigButtons}"   Command="{Binding ShowTrackerCommand}"
+                    BorderBrush="Orange">
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="Show tracker"/>
+                        <TextBlock Text="Stay up-to-date with shows" Style="{StaticResource ButtonDescriptionStyle}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <StackPanel Grid.Row="6" Background="{StaticResource DefaultSelectedButtonColor}"
+                        Visibility="{Binding IsShowTrackerSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-            <Button Grid.Row="5" Content="New episodes"   Style="{DynamicResource MenuBigButtons}"   Visibility="Collapsed"/>
-            <Button Grid.Row="5" Content="New episodes"   Style="{DynamicResource MenuBigButtonsSelected}"   Visibility="Collapsed"/>
+            </StackPanel>
 
-            <Button Grid.Row="6" Content="Settings"       Style="{DynamicResource MenuBigButtons}"   Command="{Binding SettingsCommand}"/>
-            <Button Grid.Row="6" Content="Settings"       Style="{DynamicResource MenuBigButtonsSelected}"   Command="{Binding SettingsCommand}"
-                    Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="7" Style="{DynamicResource MenuBigButtons}"   Command="{Binding SettingsCommand}"
+                    BorderBrush="MediumPurple">
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="Settings"/>
+                        <TextBlock Text="Customize the details" Style="{StaticResource ButtonDescriptionStyle}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <StackPanel Grid.Row="8" Background="{StaticResource DefaultSelectedButtonColor}"
+                        Visibility="{Binding IsSettingsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button Content="Save"  Command="{Binding SettingsViewModel.SaveCommand}"  Style="{DynamicResource MenuSmallButtons}"  />
+                <Button Content="Reset" Command="{Binding SettingsViewModel.ResetCommand}" Style="{DynamicResource MenuSmallButtons}"  />
+            </StackPanel>
 
         </Grid>
+
+        <!-- Content -->
+        <ContentControl Grid.Row="1" x:Name="Pages" Grid.Column="1" Content="{Binding SelectedViewModel}"/>
+
     </Grid>
 </Window>

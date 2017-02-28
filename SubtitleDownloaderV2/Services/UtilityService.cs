@@ -26,12 +26,11 @@ namespace SubtitleDownloaderV2.Services
         /// </summary>
         public static void UnrarFile(string location)
         {
-            var pathToFolder = GetPath(location);
 
             try
             {
-                System.IO.Compression.ZipFile.ExtractToDirectory(pathToFolder + "\\autosub-pull.rar", pathToFolder);
-                System.IO.File.Delete(pathToFolder + "\\autosub-pull.rar");
+                System.IO.Compression.ZipFile.ExtractToDirectory(location + "\\autosub-pull.rar", location);
+                System.IO.File.Delete(location + "\\autosub-pull.rar");
             }
             catch (IOException)
             {

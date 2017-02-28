@@ -22,7 +22,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Main window --> <!---->
+        <!-- Main window -->
         <search:ListGridDetails Grid.Column="0"/>
         <Border Grid.Column="0" Visibility="{Binding IsPathSet, Converter={StaticResource BooleanToVisibilityConverter}}"
                 BorderBrush="Black" BorderThickness="1" Width="400" Height="200" CornerRadius="40" Background="WhiteSmoke">
@@ -33,9 +33,7 @@
                     <Button Content="Set directory" Command="{Binding SetDirectoryCommand}" Style="{DynamicResource TextBoxButton}" Width="100" Height="30" Margin="5 15 0 0" HorizontalAlignment="Left"/>
 
             </StackPanel>
-            
         </Border>
-        <!--<search:ListViewDetails Grid.Column="0"/>-->
 
         <!-- Popup window -->
         <Grid Grid.Column="1">
@@ -55,22 +53,7 @@
 
         <!-- Left menu -->
         <Grid Margin="-210 0 0 0" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Button Grid.Row="1" Content="Open Browser" Style="{DynamicResource LeftMenuButton}" Command="{Binding OpenBrowserCommand}" Width="150" Margin="60,3,-3,3"
-                    Visibility="{Binding SelectedEntry.Url, Converter={StaticResource NullOrWhitespaceToVisibility}}"/>
-
-            <Button Grid.Row="2" Content="Modify Entry" Style="{DynamicResource LeftMenuButton}" Command="{Binding ModifyEntryCommand}" Width="150" Margin="60,3,-3,3"/>
-
-            <Button Grid.Row="3" Content="Search" Height="90" FontSize="30" Style="{DynamicResource LeftMenuButton}" Command="{Binding SearchCommand}" Margin="60,3,-3,3"/>
-
-            <Label  Grid.Row="4" Content="{Binding GetFullPath}" Foreground="White" FontSize="10" />
+            <Label  Content="{Binding GetFullPath, StringFormat='Current directory: {0}'}"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="10" />
         </Grid>
     </Grid>
 </UserControl>

@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SubtitleDownloader.Properties" GeneratedClassName="SubSearchSettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TargetDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IgnoreSubbedFolders" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShowFirstColumn" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SelectedLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">English</Value>
+    </Setting>
+    <Setting Name="ReleaseNames" Type="System.String" Scope="User">
+      <Value Profile="(Default)">KILLERS,DIMENSION,SPARKS,MAJESTiC,YIFY,JYK,Hive,ROVERS,LOL,GHOULS,EVO,ETRG,FUM,BATV,W4F</Value>
+    </Setting>
+    <Setting Name="ReleaseNamesSecondary" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TLA,FoV,720p,1080p,x264</Value>
+    </Setting>
+    <Setting Name="FileTypes" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.mkv,.mp4,.avi</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

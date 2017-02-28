@@ -14,6 +14,7 @@
 
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using SubtitleDownloader.ViewModel.ShowTracker;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Search;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Settings;
 
@@ -46,6 +47,7 @@ namespace SubtitleDownloader.ViewModel
             SimpleIoc.Default.Register<SearchViewModel>();
             SimpleIoc.Default.Register<ManualViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
+            SimpleIoc.Default.Register<ShowTrackerViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
 

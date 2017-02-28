@@ -22,7 +22,6 @@
         <Border Grid.Column="0" BorderBrush="#191515" BorderThickness="1,0,0,0">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -40,19 +39,19 @@
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="1" Grid.Column="1" Content="Manual Search" Foreground="White" FontSize="30" Margin="0 3 0 30"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Manual Search"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="30" Margin="0 3 0 30"/>
                 
-                <Label Grid.Row="2" Grid.Column="1" Content="Title" Foreground="White"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CustomEntry.Title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="Title"   Foreground="{StaticResource DefaultFontDarkColor}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CustomEntry.Title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="4" Grid.Column="1" Content="Release" Foreground="White"/>
-                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CustomEntry.Release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="3" Grid.Column="1" Content="Release"   Foreground="{StaticResource DefaultFontDarkColor}"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CustomEntry.Release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="6" Grid.Column="1" Content="Episode" Foreground="White"/>
-                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CustomEntry.Episode}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <Label Grid.Row="5" Grid.Column="1" Content="Episode"   Foreground="{StaticResource DefaultFontDarkColor}"/>
+                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CustomEntry.Episode}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
-                <Label Grid.Row="8" Grid.Column="1" Content="Path to folder" Foreground="White"/>
-                <Grid Grid.Row="9" Grid.Column="1">
+                <Label Grid.Row="7" Grid.Column="1" Content="Path to folder"   Foreground="{StaticResource DefaultFontDarkColor}"/>
+                <Grid Grid.Row="8" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -63,20 +62,6 @@
                 </Grid>
             </Grid>
         </Border>
-
-        <!-- Left menu -->
-        <Grid Margin="-210 0 0 0" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Button Grid.Row="0" Content="Open Browser" Style="{DynamicResource MenuBigButtons}" Command="{Binding OpenBrowserCommand}"
-                    Visibility="{Binding IsURLset, Converter={StaticResource BoolToVis}}"/>
-            <Button Grid.Row="1" Content="Search" Height="90" FontSize="30" Style="{DynamicResource MenuBigButtons}" Command="{Binding SearchCommand}"/>
-            <Label  Grid.Row="2" Content="" FontSize="10"/>
-        </Grid>
 
         <!-- Progress popin -->
         <Grid Grid.Column="1">

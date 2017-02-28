@@ -16,7 +16,6 @@
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" >
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -33,10 +32,10 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Title -->
-                    <Label Grid.Row="1" Grid.Column="1" Content="Settings" Foreground="White" FontSize="30"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Settings"  Foreground="{StaticResource DefaultFontDarkColor}" FontSize="30"/>
                     
                     <!-- General settings -->
-                    <Expander Grid.Row="2" Grid.Column="1" Header="General" IsExpanded="True" Foreground="White" FontSize="16" Margin="0 30 0 0" HorizontalAlignment="Stretch">
+                    <Expander Grid.Row="1" Grid.Column="1" Header="General" IsExpanded="True"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="16" Margin="0 30 0 0" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -52,12 +51,12 @@
                             </Grid.ColumnDefinitions>
                             
                             <!-- Path to folder -->
-                            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The directory to scan when using list search." Margin="0" Padding="5 0 0 0">
+                            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"   Foreground="{StaticResource DefaultFontDarkColor}" ToolTip="The directory to scan when using list search." Margin="0" Padding="5 0 0 0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Path to folder</TextBlock>
-                                    <Image Source="../../Resources/information.ico" Margin="5 0 0 0" >
+                                    <Image Source="/Resources/information.ico" Margin="5 0 0 0" >
                                         <Image.OpacityMask>
-                                            <ImageBrush ImageSource="../../Resources/information.ico"/>
+                                            <ImageBrush ImageSource="/Resources/information.ico"/>
                                         </Image.OpacityMask>
                                     </Image>
                                 </StackPanel>
@@ -74,17 +73,17 @@
 
                                 <TextBox Grid.Column="0" Grid.Row="0" Text="{Binding WorkingFolderPath}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}" BorderThickness="1 1 0 1"/>
                                 <Button Grid.Column="1" Grid.Row="0" Content="Browse" Command="{Binding BrowseCommand}" Style="{DynamicResource TextBoxButton}"/>
-                                <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
+                                <CheckBox Grid.Column="0" Grid.Row="1" Content="Ignore folders already containing subtitles" IsChecked="{Binding IgnoreAlreadySubbedFolders}" Margin="4 0 0 0"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="12"/>
                             </Grid>
-                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0" Foreground="White" FontSize="12"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Show first column (filename)" IsChecked="{Binding ShowFirstColumn}" Margin="4 0 0 0"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="12"/>
 
                             <!-- Language box -->
-                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="White" ToolTip="The language of subtitles it should be looking for." Margin="5 10 0 0" Padding="0">
+                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"   Foreground="{StaticResource DefaultFontDarkColor}" ToolTip="The language of subtitles it should be looking for." Margin="5 10 0 0" Padding="0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Subtitle language</TextBlock>
-                                    <Image Source="../../Resources/information.ico" Margin="5 0 0 0" >
+                                    <Image Source="/Resources/information.ico" Margin="5 0 0 0" >
                                         <Image.OpacityMask>
-                                            <ImageBrush ImageSource="../../Resources/information.ico"/>
+                                            <ImageBrush ImageSource="/Resources/information.ico"/>
                                         </Image.OpacityMask>
                                     </Image>
                                 </StackPanel>
@@ -97,7 +96,7 @@
                     </Expander>
                     
                     <!-- Release names -->
-                    <Expander Grid.Row="3" Grid.Column="1" Header="File estimation lists" IsExpanded="False" Foreground="White" FontSize="16" Margin="0 30 0 0">
+                    <Expander Grid.Row="2" Grid.Column="1" Header="File estimation lists" IsExpanded="False"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="16" Margin="0 30 0 0">
                         <WrapPanel  Orientation="Horizontal" FlowDirection="LeftToRight">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -105,14 +104,14 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <Label Foreground="White" ToolTip="Will pick the first match from this list, as release name." Margin="0" Padding="4 10 0 0">
+                                    <Label   Foreground="{StaticResource DefaultFontDarkColor}" ToolTip="Will pick the first match from this list, as release name." Margin="0" Padding="4 10 0 0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12" >
                                                 Expected release names
                                             </TextBlock>
-                                            <Image Source="../../Resources/information.ico" Margin="10 3 0 0" Width="10">
+                                            <Image Source="/Resources/information.ico" Margin="10 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
+                                                    <ImageBrush ImageSource="/Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
@@ -135,14 +134,14 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <Label Foreground="White" ToolTip="If non from 'expected release names' match, this list will be scanned." Margin="0" Padding="4 10 0 0">
+                                    <Label   Foreground="{StaticResource DefaultFontDarkColor}" ToolTip="If non from 'expected release names' match, this list will be scanned." Margin="0" Padding="4 10 0 0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
                                                 Secondary release names
                                             </TextBlock>
-                                            <Image Source="../../Resources/information.ico" Margin="3 3 0 0" Width="10">
+                                            <Image Source="/Resources/information.ico" Margin="3 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
+                                                    <ImageBrush ImageSource="/Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
@@ -164,14 +163,14 @@
                                     <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <Label Foreground="White" ToolTip="Only show files which contain these file types." Margin="0" Padding="4 10 0 0">
+                                    <Label   Foreground="{StaticResource DefaultFontDarkColor}" ToolTip="Only show files which contain these file types." Margin="0" Padding="4 10 0 0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock TextWrapping="WrapWithOverflow"  FontSize="12">
                                                 File types
                                             </TextBlock>
-                                            <Image Source="../../Resources/information.ico" Margin="87 3 0 0" Width="10">
+                                            <Image Source="/Resources/information.ico" Margin="87 3 0 0" Width="10">
                                                 <Image.OpacityMask>
-                                                    <ImageBrush ImageSource="../../Resources/information.ico"/>
+                                                    <ImageBrush ImageSource="/Resources/information.ico"/>
                                                 </Image.OpacityMask>
                                             </Image>
                                         </StackPanel>
@@ -189,32 +188,18 @@
                         </WrapPanel>
                     </Expander>
                     
-                    <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid Grid.Row="6" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1.8*"/>
                             <ColumnDefinition Width="200"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Column="0" Content="(Click 'Save' in order for changes to take effect!)" Visibility="{Binding ChangePerformed, Converter={StaticResource boolToVisConverter}, FallbackValue=Hidden}" Foreground="White"/>
-                        <Label Grid.Column="1" Content="{Binding Result}" Foreground="White" HorizontalAlignment="Right"/>
+                        <Label Grid.Column="0" Content="(Click 'Save' in order for changes to take effect!)" Visibility="{Binding ChangePerformed, Converter={StaticResource boolToVisConverter}, FallbackValue=Hidden}"   Foreground="{StaticResource DefaultFontDarkColor}"/>
+                        <Label Grid.Column="1" Content="{Binding Result}"   Foreground="{StaticResource DefaultFontDarkColor}" HorizontalAlignment="Right"/>
 
                     </Grid>
                 </Grid>
             </ScrollViewer>
         </Border>
-
-        <!-- Left menu -->
-        <Grid Margin="-210 0 0 25" Width="210" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-
-            <Button Grid.Row="0" Content="Open settings file" Command="{Binding OpenFileCommand}" Style="{DynamicResource MenuBigButtons}"  ToolTip="Manually manipulate settings. Restart requried."/>
-            <Button Grid.Row="1" Content="Reset"              Command="{Binding ResetCommand}"    Style="{DynamicResource MenuBigButtons}"  />
-            <Button Grid.Row="2" Content="Save"               Command="{Binding SaveCommand}"     Style="{DynamicResource MenuBigButtons}"  />
-        </Grid>
     </Grid>
 </UserControl>
