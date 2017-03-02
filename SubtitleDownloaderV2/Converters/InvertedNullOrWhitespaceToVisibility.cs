@@ -9,15 +9,12 @@ using System.Windows.Data;
 
 namespace SubtitleDownloaderV2.Converters
 {
-    internal class NullOrWhitespaceToVisibility : IValueConverter
+    internal class InvertedNullOrWhitespaceToVisibility : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var toString = value as string;
-            if (toString != null)
-                return string.IsNullOrWhiteSpace(toString) ? Visibility.Collapsed : Visibility.Visible;
-            else
-                return value == null ? Visibility.Collapsed : Visibility.Visible;
+            return string.IsNullOrWhiteSpace(toString) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

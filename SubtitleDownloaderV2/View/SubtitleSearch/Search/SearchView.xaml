@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              xmlns:search="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
              xmlns:search1="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Search"
+             xmlns:userControls="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search.UserControls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance search1:SearchViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
@@ -23,17 +24,16 @@
         </Grid.ColumnDefinitions>
 
         <!-- Main window -->
-        <search:ListGridDetails Grid.Column="0"/>
+        <userControls:ListGridDetails Grid.Column="0"/>
         <Border Grid.Column="0" Visibility="{Binding IsPathSet, Converter={StaticResource BooleanToVisibilityConverter}}"
                 BorderBrush="Black" BorderThickness="1" Width="400" Height="200" CornerRadius="40" Background="WhiteSmoke">
             <StackPanel Margin="30,30">
                 <Label Content="No directory set" FontSize="24" FontWeight="Bold"/>
                 <TextBlock Text="Go to settings to set a directory to scan. Or select a directory from below." TextWrapping="Wrap" FontSize="14" Padding="5"/>
-
-                    <Button Content="Set directory" Command="{Binding SetDirectoryCommand}" Style="{DynamicResource TextBoxButton}" Width="100" Height="30" Margin="5 15 0 0" HorizontalAlignment="Left"/>
-
+                <Button Content="Set directory" Command="{Binding SetDirectoryCommand}" Style="{DynamicResource TextBoxButton}" Width="100" Height="30" Margin="5 15 0 0" HorizontalAlignment="Left"/>
             </StackPanel>
         </Border>
+        <userControls:SearchButton Grid.Column="0" Visibility="{Binding SelectedEntry, Converter={StaticResource NullOrWhitespaceToVisibility}}"/>
 
         <!-- Popup window -->
         <Grid Grid.Column="1">
@@ -48,7 +48,6 @@
             <TextBox Grid.Column="1" x:Name="textBoxProgress" Text="{Binding Progress}" 
                  Style="{StaticResource TextProgressBoxStyle}"
                  Visibility="{Binding ElementName=toggleVis, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
-
         </Grid>
 
         <!-- Left menu -->

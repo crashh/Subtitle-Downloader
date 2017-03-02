@@ -5,12 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              xmlns:search="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Search"
+             xmlns:search1="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
+             xmlns:userControls="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search.UserControls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance search:ManualViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
     <UserControl.Resources>
         <BooleanToVisibilityConverter  x:Key="BoolToVis" />
         <converters:StringToBoolConverter x:Key="StringToBool" />
+        <converters:NullOrWhitespaceToVisibility x:Key="NullOrWhitespaceToVisibility" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,7 +45,7 @@
                 <Label Grid.Row="0" Grid.Column="1" Content="Manual Search"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="30" Margin="0 3 0 30"/>
                 
                 <Label Grid.Row="1" Grid.Column="1" Content="Title"   Foreground="{StaticResource DefaultFontDarkColor}"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CustomEntry.Title, Mode=TwoWay}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CustomEntry.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
 
                 <Label Grid.Row="3" Grid.Column="1" Content="Release"   Foreground="{StaticResource DefaultFontDarkColor}"/>
                 <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CustomEntry.Release}" Margin="5 0 0 0" Style="{DynamicResource TextBoxStyle}"/>
@@ -62,6 +65,8 @@
                 </Grid>
             </Grid>
         </Border>
+
+        <userControls:SearchButton Grid.Column="0" Visibility="{Binding CustomEntry.Title, Converter={StaticResource NullOrWhitespaceToVisibility}}"/>
 
         <!-- Progress popin -->
         <Grid Grid.Column="1">

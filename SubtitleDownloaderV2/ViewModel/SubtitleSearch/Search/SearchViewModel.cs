@@ -8,13 +8,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Threading;
 using SubtitleDownloader.ViewModel.SubtitleSearch.Settings;
 using SubtitleDownloaderV2.Model;
 using SubtitleDownloaderV2.Services;
 using SubtitleDownloaderV2.Util;
+using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
 {
@@ -25,6 +26,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         public ICommand ModifyEntryCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand SetDirectoryCommand { get; set; }
+        public ICommand ClearSearchCommand { get; set; }
 
         #region Observables
 
@@ -42,13 +44,23 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
         /// <summary>
         /// Returns the full path to the current directory.
         /// </summary>
-        ///         private string progress;
         private string getFullPath;
         public string GetFullPath
         {
             get { return getFullPath; }
             set { this.Set(() => this.GetFullPath, ref this.getFullPath, value); }
 
+        }
+
+        private string searchText;
+        public string SearchText
+        {
+            get { return searchText; }
+            set
+            {
+                this.DoSearch(value, (value?.Length ?? 0) > (searchText?.Length ?? 0));
+                this.Set(() => this.SearchText, ref this.searchText, value);
+            }
         }
 
         /// <summary>
@@ -64,6 +76,9 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             }
 
         }
+
+
+        private ObservableCollection<FileEntry> TotalEntries;
 
         /// <summary>
         /// All entries to display in datagrid.
@@ -105,6 +120,7 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
             SearchCommand = new RelayCommand(DoSearch);
             ModifyEntryCommand = new RelayCommand(DoModifyEntry);
             SetDirectoryCommand = new RelayCommand(DoSetDirectory);
+            ClearSearchCommand = new RelayCommand(DoClearSearch);
         }
 
         /// <summary>
@@ -126,7 +142,8 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                     AddDirectoryContent(AllEntries, GetFullPath);
                 });
             }
-            this.SelectedEntry = AllEntries.FirstOrDefault() ?? new FileEntry("temp");
+            this.SelectedEntry = null;
+            this.TotalEntries = AllEntries;
         }
 
         /// <summary>
@@ -297,6 +314,34 @@ namespace SubtitleDownloader.ViewModel.SubtitleSearch.Search
                 // todo: convert to proper mvvm design. (using an observable flag to see from view.)
             }
             Progress += message + "\r\n\r\n";
+        }
+
+        private void DoSearch(string value, bool incrementing)
+        {
+            if (value == null) return;
+            if (value == string.Empty)
+            {
+                this.AllEntries = TotalEntries;
+                return;
+            }
+
+            var searchFrom = incrementing ? this.AllEntries : this.TotalEntries;
+
+            if (Properties.SubSearchSettings.Default.ShowFirstColumn)
+            {
+                var sorted = searchFrom.Where(x => x.Title.ToLower().Contains(value.ToLower()) || x.Filename.ToLower().Contains(value.ToLower()));
+                this.AllEntries = new ObservableCollection<FileEntry>(sorted);
+            }
+            else
+            {
+                var sorted = this.TotalEntries.Where(x => x.Title.ToLower().Contains(value.ToLower()));
+                this.AllEntries = new ObservableCollection<FileEntry>(sorted);
+            }
+        }
+
+        private void DoClearSearch()
+        {
+            this.SearchText = string.Empty;
         }
         #endregion
     }

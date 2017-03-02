@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace SubtitleDownloader.View.SubtitleSearch.Search
+namespace SubtitleDownloader.View.SubtitleSearch.Search.UserControls
 {
     /// <summary>
     /// Interaction logic for ListDetails.xaml
     /// </summary>
-    public partial class ListGridRowDetails : UserControl
+    public partial class ListViewDetails : UserControl
     {
-        public ListGridRowDetails()
+        public ListViewDetails()
         {
             InitializeComponent();
         }

@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="SubtitleDownloader.View.SubtitleSearch.Search.ListGridDetails"
+﻿<UserControl x:Class="SubtitleDownloader.View.SubtitleSearch.Search.UserControls.ListGridDetails"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:SubtitleDownloaderV2.Converters"
              xmlns:search="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search"
+             xmlns:userControls="clr-namespace:SubtitleDownloader.View.SubtitleSearch.Search.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="640" d:DesignWidth="1000" Name="_userControl">
     <UserControl.Resources>
@@ -32,8 +33,8 @@
         <DataGridTextColumn x:Key="DataGridFilenameColumn" Header="Filename" Binding="{Binding Filename}" Width="1.5*" 
                             Visibility="{Binding DataContext.ShowFirstColumn, Source={x:Reference _userControl}, Converter={StaticResource BoolToVis}}" />
 
-        <ImageBrush x:Key="OpenFolderButton" ImageSource="../../../Resources/details_open.png" Stretch="UniformToFill"/>
-        <ImageBrush x:Key="PictureImageButton" ImageSource="../../../Resources/details_image.png" Stretch="UniformToFill"/>
+        <ImageBrush x:Key="OpenFolderButton" ImageSource="/Resources/details_open.png" Stretch="UniformToFill"/>
+        <ImageBrush x:Key="PictureImageButton" ImageSource="/Resources/details_image.png" Stretch="UniformToFill"/>
 
     </UserControl.Resources>
     
@@ -43,13 +44,13 @@
                   Style="{StaticResource DataGridStyle}"
                   ColumnHeaderStyle="{StaticResource GridHeaderStyle}"
                   IsReadOnly="True" 
-                  RowDetailsVisibilityMode="Collapsed">
+                  RowDetailsVisibilityMode="Collapsed" MouseLeftButtonDown="UIElement_ClearSelection">
             <DataGrid.Columns>
                 <!--Image-->
                 <DataGridTemplateColumn Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="../../../Resources/details_image.png" Width="25"/>
+                            <Image Source="/Resources/details_image.png" Width="25"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -90,7 +91,7 @@
                 <DataTemplate>
                     <Grid MaxHeight="175">
                         <ScrollViewer>
-                            <search:ListGridRowDetails DataContext="{Binding}"/>
+                            <userControls:ListGridRowDetails DataContext="{Binding}"/>
                         </ScrollViewer>
                     </Grid>
                 </DataTemplate>

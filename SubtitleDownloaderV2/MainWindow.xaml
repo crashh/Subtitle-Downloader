@@ -35,6 +35,7 @@
         </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NullOrWhitespaceToVisibility x:Key="NullOrWhitespaceToVisibility" />
+        <converters:InvertedNullOrWhitespaceToVisibility x:Key="InvertedNullOrWhitespaceToVisibility" />
     </Window.Resources>
 
     <Grid Background="{StaticResource BackgroundBrush}" ClipToBounds="True">
@@ -52,19 +53,36 @@
         
         <!-- Top menu -->
         <Grid Grid.Row="0" Grid.Column="1" MouseLeftButtonDown="WindowMouseLeftButtonDown" Background="White">
+
+            <Grid Width="250" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center"
+                  Visibility="{Binding IsListSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Image Source="/Resources/icon_search.png" HorizontalAlignment="Left" Margin="10"/>
+                <Image Source="/Resources/icon_exit.png" HorizontalAlignment="Right" Margin="10"/>
+                <TextBox Text="{Binding SearchViewModel.SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxStyle}" GotFocus="UIElement_OnGotFocus"
+                         FontSize="22" Height="45" BorderBrush="{StaticResource DefaultFontDarkColorInfo}" BorderThickness="1" Padding="40,0" Background="Transparent"/>
+                <Button Command="{Binding SearchViewModel.ClearSearchCommand}" Width="22" Height="25" HorizontalAlignment="Right" Margin="10" Opacity="0"/>
+                <TextBlock Name="SearchTextPlaceholder" Text="Type to search.." Style="{StaticResource DefaultHeaderTextBlockStyle}" 
+                           FontStyle="Oblique" FontSize="22" Margin="40,0,0,0" IsHitTestVisible="False" Foreground="{StaticResource DefaultFontLightColor}" FontWeight="Light"
+                           Visibility="{Binding SearchViewModel.SearchText, Converter={StaticResource InvertedNullOrWhitespaceToVisibility}}"/>
+            </Grid>
+            
+            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Minimize_OnClick">
-                    <Image Source="/Resources/minus.png" Width="30"/>
+                    <Image Source="/Resources/icon_minus.png" Width="30"/>
                 </Button>
                 <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Maximize_OnClick">
-                    <Image Source="/Resources/maximize.png" Width="20"/>
+                    <Image Source="/Resources/icon_maximize.png" Width="20"/>
                 </Button>
                 <Button Width="65" Height="65" Style="{StaticResource ToolbarMenuButtons}" Click="Close_OnClick">
-                    <Image Source="/Resources/exit.png" Width="25"/>
+                    <Image Source="/Resources/icon_exit.png" Width="25"/>
                 </Button>
             </StackPanel>
         </Grid>
+        <!-- Border to even out left menu lines -->
+        <Border Grid.Row="0" Grid.Column="1" BorderBrush="#a9bdd5" BorderThickness="1,0,0,0"/>
 
+        <!-- Top left logo -->
         <Grid Grid.Row="0" Grid.Column="0" MouseLeftButtonDown="WindowMouseLeftButtonDown" Background="#a9bdd5">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Resources/search.png" Height="40" Margin="12 0 0 0" HorizontalAlignment="Left"/>
@@ -73,6 +91,8 @@
                     <Label Content="Downloader" FontSize="20" Padding="0" Margin="22 -5 0 0" FontStyle="Italic"/>
                 </StackPanel>
             </StackPanel>
+            <Label Grid.Row="0" Content="{Binding Version }" Padding="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                   Foreground="DimGray" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>
         </Grid>
 
         <!-- Left menu -->
@@ -94,9 +114,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!--<Label Grid.Row="0" Content="{Binding Version }" Padding="10,5,0,0" HorizontalAlignment="Left" 
-                   Foreground="DimGray" ToolTip="Created by Crashh. See more at https://github.com/crashh/Subtitle-Downloader/"/>-->
-
             <Button Grid.Row="1" Style="{DynamicResource MenuBigButtons}" Command="{Binding ListSearchCommand}"
                     BorderBrush="PaleVioletRed">
                 <Button.Content>
@@ -109,7 +126,7 @@
             <StackPanel Grid.Row="2" Background="{StaticResource DefaultSelectedButtonColor}"
                         Visibility="{Binding IsListSearchSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button Content="Open Browser" Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.OpenBrowserCommand}"
-                        Visibility="{Binding SearchViewModel.SelectedEntry.Url, Converter={StaticResource NullOrWhitespaceToVisibility}}"/>
+                        Visibility="{Binding SearchViewModel.SelectedEntry.Url, Converter={StaticResource NullOrWhitespaceToVisibility}, FallbackValue=Collapsed, TargetNullValue=Collapsed}"/>
                 <Button Content="Modify Entry" Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.ModifyEntryCommand}"/>
                 <Button Content="Search"       Style="{DynamicResource MenuSmallButtons}" Command="{Binding SearchViewModel.SearchCommand}"/>
             </StackPanel>

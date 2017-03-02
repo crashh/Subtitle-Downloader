@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:settings="clr-namespace:SubtitleDownloader.ViewModel.SubtitleSearch.Settings"
+             xmlns:userControls="clr-namespace:SubtitleDownloader.View.ShowTracker.UserControls"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance settings:SettingsViewModel}"
              d:DesignHeight="653" d:DesignWidth="1200">
@@ -39,5 +40,6 @@
                 </Grid>
             </ScrollViewer>
         </Border>
+        <userControls:AddNewButton/>
     </Grid>
 </UserControl>

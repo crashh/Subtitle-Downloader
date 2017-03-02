@@ -92,12 +92,12 @@ namespace SubtitleDownloaderV2.Services
 
         public void Search()
         {
-            if (_selected == null)
+            if (string.IsNullOrWhiteSpace(_selected?.Title))
             {
                 return;
             }
 
-            _writeProgress($"Looking for {_selected.Title} in {SubSearchSettings.Default.SelectedLanguage} ...", SUCCESS);
+            _writeProgress($"Looking for '{_selected.Title}' in {SubSearchSettings.Default.SelectedLanguage} ...", SUCCESS);
 
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/title?q=" + _selected.Title + "&l=");
             var searchResult = FindSearchResults();
@@ -124,7 +124,7 @@ namespace SubtitleDownloaderV2.Services
                 _writeProgress("FAILURE! Could not find any subtitles for this release...", FAILURE);
                 return;
             }
-            _writeProgress($"Found possible match: \"{correctSub}\"...", SUCCESS);
+            _writeProgress($"Found possible match: '{correctSub}'...", SUCCESS);
 
             _writeProgress("Querying download page...", SUCCESS);
             RetrieveHtmlAtUrl("http://subscene.com/subtitles/" + correctSub);
@@ -138,7 +138,7 @@ namespace SubtitleDownloaderV2.Services
             }
             _writeProgress("SUCCESS! Subtitle downloaded!", SUCCESS);
 
-            _writeProgress($"Unpacking rar file at {_selected.Path}..", SUCCESS);
+            _writeProgress($"Unpacking rar file at {_selected.GetFullPath()}..", SUCCESS);
             UtilityService.UnrarFile(_selected.GetFullPath());
         }
 

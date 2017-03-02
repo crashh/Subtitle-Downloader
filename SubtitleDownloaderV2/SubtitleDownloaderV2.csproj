@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>D:\Dropbox\Programmering\C#\VisualStudio\SubtitleDownloader\Lastest Build\</PublishUrl>
+    <PublishUrl>C:\Users\crashh\Dropbox\Programmering\C#\VisualStudio\SubtitleDownloader\Lastest Build\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,8 +28,8 @@
     <InstallUrl>http://crashh.me:8082/clickonce/subtitledownloader/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>2.5.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.5.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -135,6 +135,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Converters\InvertedNullOrWhitespaceToVisibility.cs" />
     <Compile Include="Converters\NullOrWhitespaceToVisibility.cs" />
     <Compile Include="Converters\VisibilityToBooleanConverter.cs" />
     <Compile Include="Converters\StringToBoolConverter.cs" />
@@ -160,23 +161,29 @@
     <Compile Include="View\ShowTracker\ShowTrackerView.xaml.cs">
       <DependentUpon>ShowTrackerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ShowTracker\UserControls\AddNewButton.xaml.cs">
+      <DependentUpon>AddNewButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml.cs">
       <DependentUpon>ResultPickerItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SubtitleSearch\Dialog\ResultPickerView.xaml.cs">
       <DependentUpon>ResultPickerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SubtitleSearch\Search\ListViewDetails.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Search\UserControls\ListViewDetails.xaml.cs">
       <DependentUpon>ListViewDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SubtitleSearch\Search\ListGridRowDetails.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Search\UserControls\ListGridRowDetails.xaml.cs">
       <DependentUpon>ListGridRowDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SubtitleSearch\Search\ListGridDetails.xaml.cs">
+    <Compile Include="View\SubtitleSearch\Search\UserControls\ListGridDetails.xaml.cs">
       <DependentUpon>ListGridDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SubtitleSearch\Search\ManualView.xaml.cs">
       <DependentUpon>ManualView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SubtitleSearch\Search\UserControls\SearchButton.xaml.cs">
+      <DependentUpon>SearchButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SubtitleSearch\Search\SearchView.xaml.cs">
       <DependentUpon>SearchView.xaml</DependentUpon>
@@ -200,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ShowTracker\UserControls\AddNewButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\SubtitleSearch\Dialog\ResultPickerItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -208,21 +219,25 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SubtitleSearch\Search\ListViewDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\UserControls\ListViewDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SubtitleSearch\Search\ListGridRowDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\UserControls\ListGridRowDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\SubtitleSearch\Search\ListGridDetails.xaml">
+    <Page Include="View\SubtitleSearch\Search\UserControls\ListGridDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SubtitleSearch\Search\ManualView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SubtitleSearch\Search\UserControls\SearchButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SubtitleSearch\Search\SearchView.xaml">
       <SubType>Designer</SubType>
@@ -293,9 +308,21 @@
     <Resource Include="Resources\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\exit.png" />
-    <Resource Include="Resources\maximize.png" />
-    <Resource Include="Resources\minus.png" />
+    <Resource Include="Resources\icon_exit.png" />
+    <Resource Include="Resources\icon_maximize.png" />
+    <Resource Include="Resources\icon_minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon_search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dosearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\addnew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\removeold.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

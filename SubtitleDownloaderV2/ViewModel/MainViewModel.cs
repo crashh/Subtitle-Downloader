@@ -28,6 +28,7 @@ namespace SubtitleDownloader.ViewModel
             get { return _width; }
             set
             {
+                if (this.IsMaximized) return;
                 this.Set(() => this.Width, ref this._width, value);
                 Properties.Settings.Default.WindowWidth = this._width;
                 Properties.Settings.Default.Save();
@@ -40,8 +41,21 @@ namespace SubtitleDownloader.ViewModel
             get { return _height; }
             set
             {
+                if (this.IsMaximized) return;
                 this.Set(() => this.Height, ref this._height, value);
                 Properties.Settings.Default.WindowHeight = this._height;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private bool _isMaximized;
+        public bool IsMaximized
+        {
+            get { return _isMaximized; }
+            set
+            {
+                this.Set(() => this.IsMaximized, ref this._isMaximized, value);
+                Properties.Settings.Default.IsMaximized = value;
                 Properties.Settings.Default.Save();
             }
         }

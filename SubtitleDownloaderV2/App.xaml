@@ -179,12 +179,46 @@
             </Setter>
         </Style>
 
-        <Style x:Key="ConfirmButton" TargetType="{x:Type Button}" BasedOn="{StaticResource MenuBigButtons}">
+        <Style x:Key="ConfirmButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource DefaultFontLightColor}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="Padding" Value="10"/>
             <Setter Property="Margin" Value="0"/>
+            <Setter Property="Height" Value="50" />
             <Setter Property="Width" Value="150" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="grid" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  
+                                SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="grid" Value="#0b1020" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="grid" Value="#0b1020" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="grid" Value="{StaticResource Button.Disabled.Background}" />
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="ButtonDescriptionStyle" TargetType="{x:Type TextBlock}">
@@ -210,6 +244,7 @@
         </Style>
         
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Background" Value="White" />
             <Setter Property="Foreground" Value="Black" />
@@ -368,6 +403,47 @@
                                 <Setter Property="IsTabStop" Value="false" />
                                 <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
                                 <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DefaultTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="Foreground" Value="{StaticResource DefaultFontDarkColor}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="DefaultHeaderTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="Foreground" Value="{StaticResource DefaultFontDarkColor}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+        <Style x:Key="HiddenButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0"/>
+                            <Ellipse x:Name="Filler" Stroke="{StaticResource DefaultFontDarkColorInfo}" StrokeThickness="1" Opacity="0.5"
+                                     Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Fill" TargetName="Filler" Value="{StaticResource DefaultFontDarkColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Fill" TargetName="Filler" Value="Black"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

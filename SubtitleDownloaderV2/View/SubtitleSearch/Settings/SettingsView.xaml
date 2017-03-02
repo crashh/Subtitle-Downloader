@@ -96,7 +96,7 @@
                     </Expander>
                     
                     <!-- Release names -->
-                    <Expander Grid.Row="2" Grid.Column="1" Header="File estimation lists" IsExpanded="False"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="16" Margin="0 30 0 0">
+                    <Expander Grid.Row="2" Grid.Column="1" Header="File estimation lists" IsExpanded="True"   Foreground="{StaticResource DefaultFontDarkColor}" FontSize="16" Margin="0 30 0 0">
                         <WrapPanel  Orientation="Horizontal" FlowDirection="LeftToRight">
                             <Grid>
                                 <Grid.ColumnDefinitions>

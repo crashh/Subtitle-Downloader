@@ -14,7 +14,13 @@ namespace SubtitleDownloaderV2
         public MainWindow()
         {
             // Application startup point.
+            // TODO Move to app.xaml.cs.
             InitializeComponent();
+
+            if (SubtitleDownloader.Properties.Settings.Default.IsMaximized)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
 
             ViewModelLocator vml = new ViewModelLocator();
             this.DataContext = ServiceLocator.Current.GetInstance<MainViewModel>();
@@ -22,6 +28,11 @@ namespace SubtitleDownloaderV2
             DispatcherHelper.Initialize();
 
             AppContext.MainWindow = this;
+        }
+
+        private MainViewModel ViewModel()
+        {
+            return this.DataContext as MainViewModel;
         }
 
         private void Close_OnClick(object sender, RoutedEventArgs e)
@@ -33,10 +44,12 @@ namespace SubtitleDownloaderV2
         {
             if (this.WindowState == WindowState.Maximized)
             {
+                this.ViewModel().IsMaximized = false;
                 this.WindowState = WindowState.Normal;
                 return;
             }
 
+            this.ViewModel().IsMaximized = true;
             this.WindowState = WindowState.Maximized;
         }
 
@@ -54,6 +67,11 @@ namespace SubtitleDownloaderV2
             }
 
             DragMove();
+        }
+
+        private void UIElement_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            this.SearchTextPlaceholder.Visibility = Visibility.Collapsed;
         }
     }
 }
